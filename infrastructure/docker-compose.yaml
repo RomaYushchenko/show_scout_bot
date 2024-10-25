@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.4
+    container_name: show-scout-db
+    restart: always
+    ports:
+      - "5432-5433:5432-5433"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    volumes:
+      - "./postgres/init.sql:/docker-entrypoint-initdb.d/create_db.sql"
