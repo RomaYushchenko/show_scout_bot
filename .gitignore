@@ -1,4 +1,5 @@
 # Log file
+logs/
 *.log
 
 # Package Files #
@@ -19,4 +20,4 @@ tokens/
 
 .env
 
-infrastructure
+/infrastructure/
