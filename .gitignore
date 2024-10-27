@@ -20,4 +20,5 @@ tokens/
 
 .env
 
-/infrastructure/
+infrastructure/
+infrastructure/*.yaml
