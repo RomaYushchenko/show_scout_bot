@@ -1,11 +1,15 @@
 package com.ua.yushchenko.controller;
 
+import java.util.Objects;
+
 import com.ua.yushchenko.api.UserApi;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
 import com.ua.yushchenko.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author romanyushchenko
  * @version 0.1
  */
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -37,10 +42,17 @@ public class UserController {
      */
     @GetMapping("/users/{userId}")
     public UserApi getUser(@PathVariable("userId") final Long userID) {
+        log.info("getUser.E: Get User by ID:{}", userID);
 
         final User user = userService.getUserById(userID);
+
+        if (Objects.isNull(user)) {
+            throw new EntityNotFoundException("User doesn't exist in system");
+        }
+
         final UserApi userApi = userMapper.toUserApi(user);
 
+        log.info("getUser.X: user:{}", userApi);
         return userApi;
     }
 
@@ -52,11 +64,13 @@ public class UserController {
      */
     @PostMapping("/users")
     public UserApi createUser(@RequestBody final UserApi userApi) {
+        log.info("createUser.E: Create user");
 
         final User userToCreate = userMapper.toUser(userApi);
         final User createdUser = userService.createUser(userToCreate);
         final UserApi createdUserApi = userMapper.toUserApi(createdUser);
 
+        log.info("createUser.X: Created user:{}", createdUserApi);
         return createdUserApi;
     }
 
@@ -70,11 +84,18 @@ public class UserController {
     @PutMapping("/users/{userId}")
     public UserApi updateUser(@PathVariable("userId") final Long userID,
                               @RequestBody final UserApi userApi) {
+        log.info("updateUser.E: Update user by ID:{}", userID);
 
         final User userToUpdate = userMapper.toUser(userApi);
         final User updatedUser = userService.updateUser(userID, userToUpdate);
+
+        if (Objects.isNull(updatedUser)) {
+            throw new EntityNotFoundException("User doesn't exist in system");
+        }
+
         final UserApi updatedUserApi = userMapper.toUserApi(updatedUser);
 
+        log.info("updateUser.X: Updated user:{}", updatedUserApi);
         return updatedUserApi;
     }
 
@@ -86,10 +107,17 @@ public class UserController {
      */
     @DeleteMapping("/users/{userId}")
     public UserApi deleteUser(@PathVariable("userId") final Long userID) {
+        log.info("deleteUser.E: Delete user by ID:{}", userID);
 
         final User deletedUser = userService.deleteUser(userID);
+
+        if (Objects.isNull(deletedUser)) {
+            throw new EntityNotFoundException("User doesn't exist in system");
+        }
+
         final UserApi deletedUserApi = userMapper.toUserApi(deletedUser);
 
+        log.info("deleteUser.X: Deleted user:{}", deletedUserApi);
         return deletedUserApi;
     }
 }
