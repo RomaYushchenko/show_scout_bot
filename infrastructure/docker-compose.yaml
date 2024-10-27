@@ -10,5 +10,4 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
-    volumes:
-      - "./postgres/init.sql:/docker-entrypoint-initdb.d/create_db.sql"
+      - POSTGRES_DB=show_scout_db
