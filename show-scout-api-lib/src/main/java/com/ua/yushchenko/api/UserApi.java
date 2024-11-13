@@ -24,6 +24,7 @@ public class UserApi {
     private String userName;
     private String firstName;
     private String lastName;
+    private String timeZone;
     private long chatId;
 
     @JsonIgnore

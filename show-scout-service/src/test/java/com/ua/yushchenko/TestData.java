@@ -20,6 +20,7 @@ public class TestData {
                    .firstName("TestName")
                    .lastName("TestLastName")
                    .chatId(CHAT_ID)
+                   .timeZone("GMT+0000")
                    .build();
 
         USER_DB = UserDb.builder()
@@ -28,6 +29,7 @@ public class TestData {
                         .firstName("TestName")
                         .lastName("TestLastName")
                         .chatId(CHAT_ID)
+                        .timeZone("GMT+0000")
                         .build();
 
         USER_API = UserApi.builder()
@@ -36,6 +38,7 @@ public class TestData {
                           .firstName("TestName")
                           .lastName("TestLastName")
                           .chatId(CHAT_ID)
+                          .timeZone("GMT+0000")
                           .build();
     }
 

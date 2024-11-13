@@ -30,6 +30,9 @@ public class UserDb {
     @Column(name = "last_name")
     String lastName;
 
+    @Column(name = "time_zone", nullable = false)
+    String timeZone;
+
     @Column(name = "chat_id", nullable = false)
     long chatId;
 }

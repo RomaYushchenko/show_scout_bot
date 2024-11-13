@@ -17,5 +17,6 @@ public class User {
     String userName;
     String firstName;
     String lastName;
+    String timeZone;
     long chatId;
 }
