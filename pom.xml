@@ -22,6 +22,7 @@
     <modules>
         <module>show-scout-api-lib</module>
         <module>show-scout-service</module>
+        <module>tv-maze-client</module>
     </modules>
 
     <properties>
@@ -30,11 +31,25 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-boot.version>3.2.0</spring-boot.version>
+        <spring-context.version>6.1.6</spring-context.version>
+
+        <spring-cloud-starter-openfeign.version>4.1.1</spring-cloud-starter-openfeign.version>
+        <feign.version>12.1</feign.version>
+
+        <commons-lang3.version>3.12.0</commons-lang3.version>
         <show.scout.lombok.version>1.18.26</show.scout.lombok.version>
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
         <!-- Lombok Library -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -50,6 +65,32 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud-starter-openfeign.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-httpclient</artifactId>
+                <version>${feign.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-codec</groupId>
+                        <artifactId>commons-codec</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-hc5</artifactId>
+                <version>${feign.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
     <licenses>
         <license/>

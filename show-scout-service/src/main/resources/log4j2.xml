@@ -29,6 +29,11 @@
             <AppenderRef ref="show-scout-service"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
         </Logger>
+        <!--Logger for org.apache.hc.client5.http package-->
+        <Logger name="org.apache.hc.client5.http" level="WARN" additivity="false">
+            <AppenderRef ref="show-scout-service"/>
+            <AppenderRef ref="RollingFile" level="DEBUG"/>
+        </Logger>
         <!--Logger for org.hibernate package-->
         <Logger name="org.hibernate" level="INFO" additivity="false">
             <AppenderRef ref="show-scout-service"/>
@@ -56,6 +61,11 @@
         </Logger>
         <!--Logger for org.postgresql package-->
         <Logger name="org.postgresql" level="INFO" additivity="false">
+            <AppenderRef ref="show-scout-service"/>
+            <AppenderRef ref="RollingFile" level="DEBUG"/>
+        </Logger>
+        <!--Logger for jdk.event.security package-->
+        <Logger name="jdk.event.security" level="WARN" additivity="false">
             <AppenderRef ref="show-scout-service"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
         </Logger>
