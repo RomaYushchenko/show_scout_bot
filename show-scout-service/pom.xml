@@ -64,6 +64,11 @@
             <artifactId>show-scout-api-lib</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.ua.yushchenko</groupId>
+            <artifactId>open-show-api-client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
