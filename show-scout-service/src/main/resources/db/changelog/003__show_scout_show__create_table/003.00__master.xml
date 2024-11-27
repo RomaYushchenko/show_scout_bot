@@ -3,8 +3,5 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-
-    <include file="001__show_scout_user__create_table/001.00__master.xml" relativeToChangelogFile="true"/>
-    <include file="002__show_scout_user__add_time_zone_column/002.00__master.xml" relativeToChangelogFile="true" />
-    <include file="003__show_scout_show__create_table/003.00__master.xml" relativeToChangelogFile="true" />
+    <include file="003.01__show_scout_show__create_table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

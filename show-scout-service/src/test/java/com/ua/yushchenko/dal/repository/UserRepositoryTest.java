@@ -4,9 +4,7 @@ import static com.ua.yushchenko.TestData.USER;
 import static com.ua.yushchenko.TestData.USER_DB;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
