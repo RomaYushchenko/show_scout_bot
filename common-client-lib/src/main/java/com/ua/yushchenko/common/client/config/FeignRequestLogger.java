@@ -1,4 +1,4 @@
-package com.ua.yushchenko.client.config;
+package com.ua.yushchenko.common.client.config;
 
 import java.io.IOException;
 

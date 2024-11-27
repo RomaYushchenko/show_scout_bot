@@ -1,4 +1,4 @@
-package com.ua.yushchenko.client.config;
+package com.ua.yushchenko.common.client.config;
 
 import feign.Client;
 import feign.hc5.ApacheHttp5Client;

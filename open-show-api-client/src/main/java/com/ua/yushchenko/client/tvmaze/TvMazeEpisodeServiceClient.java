@@ -3,7 +3,7 @@ package com.ua.yushchenko.client.tvmaze;
 import java.util.List;
 
 import com.ua.yushchenko.api.tvmaze.EpisodeApi;
-import com.ua.yushchenko.client.config.FeignConfig;
+import com.ua.yushchenko.common.client.config.FeignConfig;
 import lombok.NonNull;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

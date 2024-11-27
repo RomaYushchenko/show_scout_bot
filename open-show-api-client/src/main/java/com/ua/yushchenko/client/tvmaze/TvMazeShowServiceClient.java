@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.ua.yushchenko.api.tvmaze.ShowDetailsApi;
 import com.ua.yushchenko.api.tvmaze.TvMazeShowApi;
-import com.ua.yushchenko.client.config.FeignConfig;
+import com.ua.yushchenko.common.client.config.FeignConfig;
 import lombok.NonNull;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;

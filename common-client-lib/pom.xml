@@ -9,13 +9,10 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>tv-maze-client</artifactId>
-    <name>TV Maze Client</name>
+    <artifactId>common-client-lib</artifactId>
+    <name>Common Client Lib</name>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -40,14 +37,6 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-hc5</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.ua.yushchenko</groupId>
-            <artifactId>show-scout-api-lib</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
