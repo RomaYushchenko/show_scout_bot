@@ -3,8 +3,6 @@ package com.ua.yushchenko.controller;
 import java.util.Objects;
 
 import com.ua.yushchenko.api.UserApi;
-import com.ua.yushchenko.api.tvmaze.ShowDetailsApi;
-import com.ua.yushchenko.client.tvmaze.TvMazeShowServiceClient;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
 import com.ua.yushchenko.service.UserService;
@@ -32,8 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @NonNull
-    private final TvMazeShowServiceClient showServiceClient;
-    @NonNull
     private final UserService userService;
     @NonNull
     private final UserMapper userMapper;
@@ -49,8 +45,6 @@ public class UserController {
         log.info("getUser.E: Get User by ID:{}", userID);
 
         final User user = userService.getUserById(userID);
-
-        ShowDetailsApi from = showServiceClient.getShowByName("from");
 
         if (Objects.isNull(user)) {
             throw new EntityNotFoundException("User doesn't exist in system");
