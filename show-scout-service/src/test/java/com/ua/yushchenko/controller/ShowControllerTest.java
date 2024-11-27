@@ -1,8 +1,8 @@
 package com.ua.yushchenko.controller;
 
 import static com.ua.yushchenko.TestData.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.api.ShowApi;
@@ -64,38 +64,24 @@ public class ShowControllerTest {
     }
 
     @Test
-    void getShowByName_nominal() {
+    void getShowsByName_nominal() {
         //GIVEN
-        when(mockShowService.getShowByName(SHOW.getShowName())).thenReturn(SHOW);
-        when(mockShowMapper.toShowApi(SHOW)).thenReturn(SHOW_API);
+        final List<ShowApi> showsApi = List.of(SHOW_API);
+        final List<Show> shows = List.of(SHOW);
+        when(mockShowService.getShowsByName(SHOW.getShowName())).thenReturn(shows);
+        when(mockShowMapper.toShowsApiFromShows(shows)).thenReturn(showsApi);
 
         //WHEN
-        final ShowApi result = unit.getShowByName(SHOW.getShowName());
+        final List<ShowApi> result = unit.getShowsByName(SHOW.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(SHOW_API);
+                        .isEqualTo(showsApi);
 
-        verify(mockShowService).getShowByName(SHOW.getShowName());
-        verify(mockShowMapper).toShowApi(SHOW);
+        verify(mockShowService).getShowsByName(SHOW.getShowName());
+        verify(mockShowMapper).toShowsApiFromShows(shows);
 
         verifyNoMoreInteractions(mockShowService, mockShowMapper);
-    }
-
-    @Test
-    void getShowByNameWorkCorrectlyWhenShowWithGivenIdDoesNotExist() {
-        //GIVEN
-        when(mockShowService.getShowByName(SHOW_NAME_DOES_NOT_EXIST)).thenReturn(null);
-
-        //WHEN /THEN
-        assertThatThrownBy(() -> unit.getShowByName(SHOW_NAME_DOES_NOT_EXIST))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Show whit this " + SHOW_NAME_DOES_NOT_EXIST + " doesn't exist in system");
-
-        verify(mockShowService).getShowByName(SHOW_NAME_DOES_NOT_EXIST);
-
-        verifyNoMoreInteractions(mockShowService);
-        verifyNoInteractions(mockShowMapper);
     }
 
     @Test

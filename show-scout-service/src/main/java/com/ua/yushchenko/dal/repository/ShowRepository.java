@@ -11,7 +11,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -49,30 +48,31 @@ public class ShowRepository {
     }
 
     /**
-     * Select {@link Show} by name
+     * Select a list of {@link Show} by the given name.
      *
-     * @param name name of show
-     * @return {@link Show} by name
+     * @param name the name of the show
+     * @return a list of {@link Show} with the given name
      */
-    public Show selectShowByName(final String name) {
-        log.trace("selectShowById.E: Select show from table by name:{}", name);
+    public List<Show> selectShowsByName(final String name) {
+        log.trace("selectShowsByName.E: Select shows from table by name:{}", name);
 
-        final Show show = showDao.findByShowName(name)
+        final List<Show> shows = StreamSupport.stream(showDao.findByShowName(name).spliterator(), false)
                 .map(showMapper::toShow)
-                .orElse(null);
+                .collect(Collectors.toList());
 
-        log.trace("selectShowById.X: Show:{}", show);
-        return show;
+
+        log.trace("selectShowsByName.X: Retrieved {} shows with the name '{}'", shows.size(), name);
+        return shows;
     }
 
     /**
-     * Retrieves all {@link Show} from the database.
+     * Retrieves all {@link Show} from the database
      *
-     * @return a {@link List} of all {@link Show} objects in the database as domain objects.
+     * @return a {@link List} of all {@link Show} objects in the database as domain objects
      */
     public List<Show> selectAllShows() {
         log.trace("selectAllShows.E: Retrieving all shows from the database");
-//TODO: handle when no Show in DB return empty List.
+
         List<Show> shows = StreamSupport.stream(showDao.findAll().spliterator(), false)
                 .map(showMapper::toShow)
                 .collect(Collectors.toList());

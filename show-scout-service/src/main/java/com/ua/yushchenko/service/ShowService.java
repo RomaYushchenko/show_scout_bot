@@ -39,23 +39,24 @@ public class ShowService {
         log.debug("getShowById.X: Show:{}", show);
         return show;
     }
+
     /**
-     * Get {@link Show} by name
+     * Get a list of {@link Show} by the given name
      *
-     * @param name name of {@link Show}
-     * @return {@link Show} by name
+     * @param name the name of the show
+     * @return a list of {@link Show} with the given name
      */
-    public Show getShowByName(final String name){
+    public List<Show> getShowsByName(final String name) {
         log.debug("getShowByName.E: Get Show by name:{}", name);
 
-        final Show show = showRepository.selectShowByName(name);
+        final List<Show> shows = showRepository.selectShowsByName(name);
 
-        log.debug("getShowByName.X: Show:{}",show);
-        return show;
+        log.debug("getShowByName.X: Get {} shows with the name '{}'", shows.size(), name);
+        return shows;
     }
 
     /**
-     * Retrieves all {@link Show} instances from the database.
+     * Get all {@link Show} instances from the database
      *
      * @return a {@link List} of all {@link Show} objects in the database as domain objects.
      */

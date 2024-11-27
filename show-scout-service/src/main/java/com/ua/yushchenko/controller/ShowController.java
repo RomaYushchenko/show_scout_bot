@@ -51,26 +51,21 @@ public class ShowController {
         log.info("getShow.X: show:{}", showId);
         return showApi;
     }
+
     /**
-     * Get {@link ShowApi} by name
+     * Get a list of {@link ShowApi} by the given name
      *
      * @param showName name of the show provided as a query parameter
-     * @return {@link ShowApi}
+     * @return list {@link ShowApi}
      */
     @GetMapping("/shows/name")
-    public ShowApi getShowByName(@RequestParam final String showName) {
-        log.info("getShowByName.E: Get show by name: {}", showName);
+    public List<ShowApi> getShowsByName(@RequestParam final String showName) {
+        log.info("getShowsByName.E: Get shows by name: {}", showName);
 
-        final Show show = showService.getShowByName(showName);
+        final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getShowsByName(showName));
 
-        if (Objects.isNull(show)) {
-            throw new EntityNotFoundException("Show with name '" + showName + "' doesn't exist in the system");
-        }
-
-        final ShowApi showApi = showMapper.toShowApi(show);
-
-        log.info("getShowByName.X: Retrieved show: {}", showName);
-        return showApi;
+        log.info("getShowsByName.X: Get {} shows with the name '{}'", shows.size(), showName);
+        return shows;
     }
 
     /**

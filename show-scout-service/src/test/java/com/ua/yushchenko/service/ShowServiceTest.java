@@ -2,6 +2,7 @@ package com.ua.yushchenko.service;
 
 import static com.ua.yushchenko.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.dal.repository.ShowRepository;
@@ -46,18 +47,18 @@ public class ShowServiceTest {
     }
 
     @Test
-    void getShowByName_nominal() {
+    void getShowsByName_nominal() {
         //GIVEN
-        when(mockShowRepository.selectShowByName(SHOW.getShowName())).thenReturn(SHOW);
+        final List<Show> shows = List.of(SHOW);
+        when(mockShowRepository.selectShowsByName(SHOW.getShowName())).thenReturn(shows);
 
         //WHEN
-        final Show result = unit.getShowByName(SHOW.getShowName());
+        final List<Show> result = unit.getShowsByName(SHOW.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(SHOW);
-
-        verify(mockShowRepository).selectShowByName(SHOW.getShowName());
+                .isEqualTo(shows);
+        verify(mockShowRepository).selectShowsByName(SHOW.getShowName());
 
         verifyNoMoreInteractions(mockShowRepository);
     }

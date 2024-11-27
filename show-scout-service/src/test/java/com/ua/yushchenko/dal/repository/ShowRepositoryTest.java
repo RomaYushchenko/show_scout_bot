@@ -70,34 +70,36 @@ public class ShowRepositoryTest {
     }
 
     @Test
-    void selectShowByName_nominal() {
+    void selectShowsByName_nominal() {
         //GIVEN
-        when(mockShowDao.findByShowName(SHOW.getShowName())).thenReturn(Optional.of(SHOW_DB));
+        final Iterable<ShowDb> showDbList = List.of(SHOW_DB);
+        final List<Show> showList = List.of(SHOW);
+        when(mockShowDao.findByShowName(SHOW_DB.getShowName())).thenReturn(showDbList);
         when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
 
         //WHEN
-        final Show result = unit.selectShowByName(SHOW.getShowName());
+        final List<Show> result = unit.selectShowsByName(SHOW_DB.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(SHOW);
+                .isEqualTo(showList);
 
-        verify(mockShowDao).findByShowName(SHOW.getShowName());
+        verify(mockShowDao).findByShowName(SHOW_DB.getShowName());
         verify(mockShowMapper).toShow(SHOW_DB);
 
         verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
 
     @Test
-    void selectShowByNameWorkCorrectlyWhenShowWithGivenIdDoesNotExist() {
+    void selectShowByNameWorkCorrectlyWhenShowsWithGivenIdDoesNotExist() {
         //GIVEN
-        when(mockShowDao.findByShowName(SHOW_NAME_DOES_NOT_EXIST)).thenReturn(Optional.empty());
+        when(mockShowDao.findByShowName(SHOW_NAME_DOES_NOT_EXIST)).thenReturn(Collections.emptyList());
 
         //WHEN
-        final Show result = unit.selectShowByName(SHOW_NAME_DOES_NOT_EXIST);
+        final List<Show> result = unit.selectShowsByName(SHOW_NAME_DOES_NOT_EXIST);
 
         //THEN
-        assertThat(result).isNull();
+        assertThat(result).isNotNull().hasSize(0);
 
         verify(mockShowDao).findByShowName(SHOW_NAME_DOES_NOT_EXIST);
 

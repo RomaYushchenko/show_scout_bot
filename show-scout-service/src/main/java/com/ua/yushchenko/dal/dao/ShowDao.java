@@ -16,5 +16,5 @@ import java.util.UUID;
  */
 @Repository
 public interface ShowDao extends CrudRepository<ShowDb, UUID> {
-    Optional<ShowDb> findByShowName(String showName);
+    Iterable<ShowDb> findByShowName(String showName);
 }
