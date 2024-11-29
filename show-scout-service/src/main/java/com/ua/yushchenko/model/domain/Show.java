@@ -43,6 +43,5 @@ public class Show {
     String img;
 /*TODO: Add fields:
     ExternalApis externalApis;
-    List<Episode> episodes;
  */
 }

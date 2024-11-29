@@ -134,6 +134,7 @@ public class ShowServiceTest {
 
         verify(mockShowRepository).selectShowById(SHOW_ID_DOES_NOT_EXIST);
         verify(mockShowRepository, never()).updateShow(any());
+
         verifyNoMoreInteractions(mockShowRepository);
     }
 
@@ -152,6 +153,7 @@ public class ShowServiceTest {
 
         verify(mockShowRepository).selectShowById(SHOW_ID);
         verify(mockShowRepository, never()).updateShow(any());
+
         verifyNoMoreInteractions(mockShowRepository);
     }
 

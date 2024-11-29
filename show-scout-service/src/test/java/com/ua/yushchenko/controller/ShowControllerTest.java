@@ -58,53 +58,53 @@ public class ShowControllerTest {
                 .hasMessage("Show doesn't exist in system");
 
         verify(mockShowService).getShowById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockShowMapper, never()).toShowApi(any());
 
         verifyNoMoreInteractions(mockShowService);
-        verifyNoInteractions(mockShowMapper);
     }
 
     @Test
-    void getShowsByName_nominal() {
-        //GIVEN
-        final List<ShowApi> showsApi = List.of(SHOW_API);
-        final List<Show> shows = List.of(SHOW);
-        when(mockShowService.getShowsByName(SHOW.getShowName())).thenReturn(shows);
-        when(mockShowMapper.toShowsApiFromShows(shows)).thenReturn(showsApi);
+    void getShowsReturnShowsWithGivenName() {
+        //GIVE
+        final List<ShowApi> listShowsApi = List.of(SHOW_API);
+        final List<Show> listShows = List.of(SHOW);
+        when(mockShowService.getShowsByName(SHOW.getShowName())).thenReturn(listShows);
+        when(mockShowMapper.toShowsApiFromShows(listShows)).thenReturn(listShowsApi);
 
         //WHEN
-        final List<ShowApi> result = unit.getShowsByName(SHOW.getShowName());
+        final List<ShowApi> result = unit.getShows(SHOW.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                        .isEqualTo(showsApi);
+                .isEqualTo(listShowsApi);
 
         verify(mockShowService).getShowsByName(SHOW.getShowName());
-        verify(mockShowMapper).toShowsApiFromShows(shows);
+        verify(mockShowMapper, times(1)).toShowsApiFromShows(listShows);
+        verify(mockShowService, never()).getAllShows();
 
-        verifyNoMoreInteractions(mockShowService, mockShowMapper);
+        verifyNoMoreInteractions(mockShowMapper, mockShowService);
     }
 
     @Test
-    void getAllShows_nominal() {
-        //GIVEN
-        final List<ShowApi> showsApi = List.of(SHOW_API);
-        final List<Show> shows = List.of(SHOW);
-        when(mockShowService.getAllShows()).thenReturn(shows);
-        when(mockShowMapper.toShowsApiFromShows(shows)).thenReturn(showsApi);
-
+    void gitShowsReturnAllShowsWhenNoRequestParamProvided() {
+        //GIVE
+        final List<ShowApi> listShowsApi = List.of(SHOW_API);
+        final List<Show> listShows = List.of(SHOW);
+        when(mockShowService.getAllShows()).thenReturn(listShows);
+        when(mockShowMapper.toShowsApiFromShows(listShows)).thenReturn(listShowsApi);
         //WHEN
-        final List<ShowApi> result = unit.getAllShows();
+        final List<ShowApi> result = unit.getShows(null);
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(showsApi);
+                .isEqualTo(listShowsApi);
 
         verify(mockShowService).getAllShows();
-        verify(mockShowMapper).toShowsApiFromShows(shows);
+        verify(mockShowMapper, times(1)).toShowsApiFromShows(listShows);
+        verify(mockShowService, never()).getShowsByName(any());
 
         verifyNoMoreInteractions(mockShowService, mockShowMapper);
     }
-
 
     @Test
     void createShow_nominal() {
@@ -201,83 +201,3 @@ public class ShowControllerTest {
         verifyNoMoreInteractions(mockShowService);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

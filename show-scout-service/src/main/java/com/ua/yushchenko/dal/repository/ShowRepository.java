@@ -15,6 +15,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Repository to work with {@link ShowDb}
  *
@@ -58,7 +60,7 @@ public class ShowRepository {
 
         final List<Show> shows = StreamSupport.stream(showDao.findByShowName(name).spliterator(), false)
                 .map(showMapper::toShow)
-                .collect(Collectors.toList());
+                .collect(toList());
 
 
         log.trace("selectShowsByName.X: Retrieved {} shows with the name '{}'", shows.size(), name);
@@ -75,7 +77,7 @@ public class ShowRepository {
 
         List<Show> shows = StreamSupport.stream(showDao.findAll().spliterator(), false)
                 .map(showMapper::toShow)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         log.trace("selectAllShows.X: Retrieved {} shows", shows.size());
         return shows;

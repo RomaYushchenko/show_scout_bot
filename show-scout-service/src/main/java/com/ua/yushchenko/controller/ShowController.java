@@ -53,34 +53,28 @@ public class ShowController {
     }
 
     /**
-     * Get a list of {@link ShowApi} by the given name
+     * Get shows based on the given name or all shows if no name is provided
      *
-     * @param showName name of the show provided as a query parameter
-     * @return list {@link ShowApi}
-     */
-    @GetMapping("/shows/name")
-    public List<ShowApi> getShowsByName(@RequestParam final String showName) {
-        log.info("getShowsByName.E: Get shows by name: {}", showName);
-
-        final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getShowsByName(showName));
-
-        log.info("getShowsByName.X: Get {} shows with the name '{}'", shows.size(), showName);
-        return shows;
-    }
-
-    /**
-     * Get all available {@link ShowApi}
-     *
+     * @param showName optional query parameter for the name of the show
      * @return a list of {@link ShowApi}
      */
     @GetMapping("/shows")
-    public List<ShowApi> getAllShows() {
-        log.info("getAllShow.E: Get all shows");
+    public List<ShowApi> getShows(@RequestParam(required = false) final String showName) {
+        if (showName != null && !showName.isBlank()) {
+            log.info("getShows.E: Get shows by name: {}", showName);
 
-        final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getAllShows());
+            final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getShowsByName(showName));
 
-        log.info("getAllShow.X:  Retrieved {} shows", shows.size());
-        return shows;
+            log.info("getShows.X: Retrieved {} shows with the name '{}'", shows.size(), showName);
+            return shows;
+        } else {
+            log.info("getShows.E: Get all shows");
+
+            final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getAllShows());
+
+            log.info("getShows.X: Retrieved {} shows", shows.size());
+            return shows;
+        }
     }
 
     /**

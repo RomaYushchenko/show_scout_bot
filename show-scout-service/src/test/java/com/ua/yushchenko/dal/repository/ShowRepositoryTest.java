@@ -64,8 +64,8 @@ public class ShowRepositoryTest {
         assertThat(result).isNull();
 
         verify(mockShowDao).findById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockShowMapper, never()).toShow(any(ShowDb.class));
 
-        verifyNoInteractions(mockShowMapper);
         verifyNoMoreInteractions(mockShowDao);
     }
 
@@ -140,9 +140,9 @@ public class ShowRepositoryTest {
         assertThat(result).isNotNull().hasSize(0);
 
         verify(mockShowDao).findAll();
+        verify(mockShowMapper, never()).toShow(any(ShowDb.class));
 
         verifyNoMoreInteractions(mockShowDao);
-        verifyNoInteractions(mockShowMapper);
     }
 
     @Test
@@ -190,8 +190,7 @@ public class ShowRepositoryTest {
     @Test
     void deleteShowById() {
         // GIVEN
-
-        // No setup required for mockShowDao as the deleteById method returns void
+        doNothing().when(mockShowDao).deleteById(SHOW_ID);
 
         // WHEN
         unit.deletedShowById(SHOW_ID);

@@ -51,7 +51,8 @@ public class ShowService {
 
         final List<Show> shows = showRepository.selectShowsByName(name);
 
-        log.debug("getShowByName.X: Get {} shows with the name '{}'", shows.size(), name);
+        log.debug("getShowByName.X: Retrieved {} shows with the name '{}': {}",
+                shows.size(), name, shows);
         return shows;
     }
 
@@ -65,7 +66,7 @@ public class ShowService {
 
         final List<Show> shows = showRepository.selectAllShows();
 
-        log.debug("getAllShow.X:  Retrieved {} shows", shows.size());
+        log.debug("getAllShow.X: Retrieved {} shows: {}", shows.size(), shows);
         return shows;
     }
 
@@ -93,8 +94,9 @@ public class ShowService {
      */
     public Show updateShow(final UUID showId, final Show showToUpdate) {
         log.debug("updateShow.E: Update show by ID:{}", showId);
+
         final Show show = showRepository.selectShowById(showId);
-//TODO: Add validation for showToUpdate.
+
         if (Objects.isNull(show)) {
             log.warn("updateShow.X: Show doesn't find in system");
             return null;
