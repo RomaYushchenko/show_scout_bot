@@ -22,3 +22,7 @@ tokens/
 
 infrastructure/
 infrastructure/*.yaml
+/common-client-lib/common-client-lib.iml
+/open-show-api-client/open-show-api-client.iml
+/show-scout-api-lib/show-scout-api-lib.iml
+/show-scout-service/show-scout-service.iml

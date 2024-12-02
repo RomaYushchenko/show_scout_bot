@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="003.01" author="shalaev" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="show_scout_show"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="show_scout_show">
+            <column name="show_id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="tb_show_pk" nullable="false"/>
+            </column>
+            <column name="show_name" type="VARCHAR(255)"/>
+            <column name="genres" type="jsonb">
+                <constraints nullable="true"/>
+            </column>
+            <column name="summary" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="platform" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="score" type="FLOAT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="status" type="VARCHAR(32)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="img" type="VARCHAR(512)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
