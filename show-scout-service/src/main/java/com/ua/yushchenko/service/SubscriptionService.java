@@ -94,13 +94,13 @@ public class SubscriptionService {
         final var user = userService.getUserById(userId);
 
         if (Objects.isNull(user)) {
-            throw new EntityNotFoundException("User doesn't exist in system");
+            throw new EntityNotFoundException("User [ID="+ userId +"] doesn't exist in system");
         }
 
         final var show = showService.getShowById(showId);
 
         if (Objects.isNull(show)) {
-            throw new EntityNotFoundException("Show doesn't exist in system");
+            throw new EntityNotFoundException("Show [ID="+ showId +"] doesn't exist in system");
         }
 
         final var subscriptionToCreate = Subscription.builder()
@@ -126,7 +126,7 @@ public class SubscriptionService {
         final var subscription = getSubscription(subscriptionId);
 
         if (Objects.isNull(subscription)) {
-            throw new EntityNotFoundException("Subscription doesn't exist in system");
+            throw new EntityNotFoundException("Subscription [ID="+ subscriptionId +"] doesn't exist in system");
         }
 
         subscriptionRepository.deleteSubscription(subscriptionId);

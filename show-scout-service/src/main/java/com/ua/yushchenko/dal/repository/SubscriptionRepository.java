@@ -124,6 +124,7 @@ public class SubscriptionRepository {
      */
     public void deleteSubscription(final UUID subscriptionId) {
         log.trace("deleteSubscription.E: Deleting subscription with id {}", subscriptionId);
+
         subscriptionDao.deleteById(subscriptionId);
 
         log.trace("deleteSubscription.E: Deleted subscription with id {}", subscriptionId);

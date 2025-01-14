@@ -84,14 +84,15 @@ public class SubscriptionController {
      * @return {@link SubscriptionApi} by ID of {@link ShowApi} and {@link UserApi}
      */
     @GetMapping("/subscriptions/show/{showId}/user/{userId}")
-    public SubscriptionApi getSubscriptionsByShowAndUserId(@PathVariable final UUID showId,
-                                                           @PathVariable final Long userId) {
+    public SubscriptionApi getSubscriptionByShowAndUserId(@PathVariable final UUID showId,
+                                                          @PathVariable final Long userId) {
         log.info("getSubscriptionsByShowAndUserId.E: Get Subscription by ShowID:{} and UserID:{}", showId, userId);
 
         final var subscription = subscriptionService.getSubscriptionByShowAndUserId(showId, userId);
 
         if (Objects.isNull(subscription)) {
-            throw new EntityNotFoundException("Subscription doesn't exist in system");
+            throw new EntityNotFoundException(
+                    "Subscription by [showId=" + showId + "] and [userId=" + userId + "] doesn't exist in system");
         }
 
         final var subscriptionApi = subscriptionMapper.toSubscriptionApi(subscription);
