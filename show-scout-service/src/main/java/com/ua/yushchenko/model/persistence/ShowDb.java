@@ -13,6 +13,27 @@ import org.hibernate.annotations.Type;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Entity class representing a TV show in the database.
+ * This class maps to the "show_scout_show" table and contains information
+ * about the show's details, including its name, genres, summary, platform,
+ * score, status, and image URL.
+ * <p>
+ * Fields include:
+ * <ul>
+ *   <li><b>showID</b>: Unique identifier for the show.</li>
+ *   <li><b>showName</b>: Name of the show.</li>
+ *   <li><b>genres</b>: List of genres associated with the show, stored as JSONB in the database.</li>
+ *   <li><b>summary</b>: A brief summary of the show.</li>
+ *   <li><b>platform</b>: The platform where the show is available.</li>
+ *   <li><b>score</b>: The rating score of the show.</li>
+ *   <li><b>showStatus</b>: The current status of the show (e.g., running, ended).</li>
+ *   <li><b>img</b>: URL for the image associated with the show.</li>
+ * </ul>
+ *
+ * @author ivanshalaev
+ * @version 1.0
+ */
 @Table(name = "show_scout_show")
 @Entity
 @Data

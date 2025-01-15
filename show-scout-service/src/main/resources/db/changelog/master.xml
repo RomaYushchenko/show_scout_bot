@@ -7,4 +7,5 @@
     <include file="001__show_scout_user__create_table/001.00__master.xml" relativeToChangelogFile="true"/>
     <include file="002__show_scout_user__add_time_zone_column/002.00__master.xml" relativeToChangelogFile="true" />
     <include file="003__show_scout_show__create_table/003.00__master.xml" relativeToChangelogFile="true" />
+    <include file="005__show_scout_notification__create_table/005.00__master.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>
