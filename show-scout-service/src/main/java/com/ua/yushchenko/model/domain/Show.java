@@ -41,7 +41,4 @@ public class Show {
     Float score;
     ShowStatus showStatus;
     String img;
-/*TODO: Add fields:
-    ExternalApis externalApis;
- */
 }
