@@ -6,8 +6,19 @@ services:
     container_name: show-scout-db
     restart: always
     ports:
-      - "5432-5433:5432-5433"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=show_scout_db
+
+  pgadmin:
+    image: dpage/pgadmin4:7.7
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+
