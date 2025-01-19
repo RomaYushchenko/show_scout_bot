@@ -24,6 +24,11 @@
             <AppenderRef ref="show-scout-service"/>
             <AppenderRef ref="RollingFile" level="DEBUG"/>
         </Logger>
+        <!--Logger for org.apache.coyote.http11 package-->
+        <Logger name="org.apache.coyote.http11" level="INFO" additivity="false">
+            <AppenderRef ref="show-scout-service"/>
+            <AppenderRef ref="RollingFile" level="INFO"/>
+        </Logger>
         <!--Logger for org.apache.catalina package-->
         <Logger name="org.apache.catalina" level="INFO" additivity="false">
             <AppenderRef ref="show-scout-service"/>
