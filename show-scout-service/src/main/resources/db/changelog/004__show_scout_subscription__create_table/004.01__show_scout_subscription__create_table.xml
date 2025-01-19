@@ -17,7 +17,7 @@
             <column name="show_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="UUID">
+            <column name="user_id" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
         </createTable>
