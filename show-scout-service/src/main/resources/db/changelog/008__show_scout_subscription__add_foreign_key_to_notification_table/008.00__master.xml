@@ -3,5 +3,6 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <include file="005.01__show_scout_notification__create_table.xml" relativeToChangelogFile="true"/>
+
+    <include file="008.01__show_scout_subscription__add_foreign_key_to_notification_table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -3,7 +3,7 @@ package com.ua.yushchenko.model.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,9 +28,8 @@ import java.util.UUID;
  */
 @Data
 @Builder(toBuilder = true)
-public class Notification {
-    private UUID notificationId;
-    private UUID userId;
-    private UUID showId;
-    private LocalDateTime notificationTime;
+public class NotificationSettings {
+    UUID notificationSettingsId;
+    List<Integer> notificationSettingsIntervals;
+    boolean enabled;
 }

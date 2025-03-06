@@ -46,7 +46,7 @@ public class UserService {
      */
     public User createUser(final User user) {
         log.debug("createUser.E: Create new user");
-//TODO: Add verification User is not exist
+
         final User createdUser = userRepository.insertUser(user);
 
         log.debug("createUser.X: Created user:{}", createdUser);

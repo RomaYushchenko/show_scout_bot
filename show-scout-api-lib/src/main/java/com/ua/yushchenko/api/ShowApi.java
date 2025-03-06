@@ -23,12 +23,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShowApi {
-    UUID showID;
-    String showName;
-    List<Genre> genres;
-    String summary;
-    String platform;
-    Float score;
-    ShowStatus showStatus;
-    String img;
+    private UUID showID;
+    private String showName;
+    private List<Genre> genres;
+    private String summary;
+    private String platform;
+    private Float score;
+    private ShowStatus showStatus;
+    private String img;
 }

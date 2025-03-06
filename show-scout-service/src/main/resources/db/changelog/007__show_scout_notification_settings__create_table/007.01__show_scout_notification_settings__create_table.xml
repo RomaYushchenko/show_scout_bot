@@ -6,21 +6,18 @@
     <changeSet id="005.01" author="shalaev" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="show_scout_notification"/>
+                <tableExists tableName="show_scout_notification_settings"/>
             </not>
         </preConditions>
 
-        <createTable tableName="show_scout_notification">
-            <column name="notification_id" type="UUID">
+        <createTable tableName="show_scout_notification_settings">
+            <column name="notification_settings_id" type="UUID">
                 <constraints primaryKey="true" primaryKeyName="notification_pk" nullable="false"/>
             </column>
-            <column name="user_id" type="UUID">
+            <column name="notification_settings_intervals" type="INTEGER[]">
                 <constraints nullable="false"/>
             </column>
-            <column name="show_id" type="UUID">
-                <constraints nullable="false"/>
-            </column>
-            <column name="notification_time" type="TIMESTAMP">
+            <column name="enabled" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
         </createTable>

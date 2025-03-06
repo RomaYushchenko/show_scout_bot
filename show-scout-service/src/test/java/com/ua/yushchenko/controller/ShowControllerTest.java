@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.api.ShowApi;
-import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.mapper.ShowMapper;
 import com.ua.yushchenko.service.ShowService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,7 +19,8 @@ import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ShowControllerTest {
+public class
+ShowControllerTest {
     @Mock
     private ShowService mockShowService;
     @Mock
@@ -55,7 +55,7 @@ public class ShowControllerTest {
         //WHEN /THEN
         assertThatThrownBy(() -> unit.getShow(SHOW_ID_DOES_NOT_EXIST))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Show doesn't exist in system");
+                .hasMessage("Show by " + SHOW_ID_DOES_NOT_EXIST + " doesn't exist in system");
 
         verify(mockShowService).getShowById(SHOW_ID_DOES_NOT_EXIST);
         verify(mockShowMapper, never()).toShowApi(any());
@@ -64,44 +64,41 @@ public class ShowControllerTest {
     }
 
     @Test
-    void getShowsReturnShowsWithGivenName() {
+    void getShows_nominal_with_show_name() {
         //GIVE
-        final List<ShowApi> listShowsApi = List.of(SHOW_API);
-        final List<Show> listShows = List.of(SHOW);
-        when(mockShowService.getShowsByName(SHOW.getShowName())).thenReturn(listShows);
-        when(mockShowMapper.toShowsApiFromShows(listShows)).thenReturn(listShowsApi);
+        when(mockShowService.getShowsByFilter(SHOW.getShowName())).thenReturn(List.of(SHOW));
+        when(mockShowMapper.toShowsApiFromShows(List.of(SHOW))).thenReturn(List.of(SHOW_API));
 
         //WHEN
         final List<ShowApi> result = unit.getShows(SHOW.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(listShowsApi);
+                .isEqualTo(List.of(SHOW_API));
 
-        verify(mockShowService).getShowsByName(SHOW.getShowName());
-        verify(mockShowMapper, times(1)).toShowsApiFromShows(listShows);
-        verify(mockShowService, never()).getAllShows();
+        verify(mockShowService).getShowsByFilter(SHOW.getShowName());
+        verify(mockShowMapper).toShowsApiFromShows(List.of(SHOW));
 
         verifyNoMoreInteractions(mockShowMapper, mockShowService);
     }
 
     @Test
-    void gitShowsReturnAllShowsWhenNoRequestParamProvided() {
+    void getShows_nominal_without_show_name() {
         //GIVE
-        final List<ShowApi> listShowsApi = List.of(SHOW_API);
-        final List<Show> listShows = List.of(SHOW);
-        when(mockShowService.getAllShows()).thenReturn(listShows);
-        when(mockShowMapper.toShowsApiFromShows(listShows)).thenReturn(listShowsApi);
+        when(mockShowService.getShowsByFilter(null)).thenReturn(List.of(SHOW));
+        when(mockShowMapper.toShowsApiFromShows(List.of(SHOW))).thenReturn(List.of(SHOW_API));
+
         //WHEN
         final List<ShowApi> result = unit.getShows(null);
 
         //THEN
-        assertThat(result).isNotNull()
-                .isEqualTo(listShowsApi);
+        assertThat(result)
+                .isNotNull()
+                .hasSize(1)
+                .isEqualTo(List.of(SHOW_API));
 
-        verify(mockShowService).getAllShows();
-        verify(mockShowMapper, times(1)).toShowsApiFromShows(listShows);
-        verify(mockShowService, never()).getShowsByName(any());
+        verify(mockShowService).getShowsByFilter(null);
+        verify(mockShowMapper).toShowsApiFromShows(List.of(SHOW));
 
         verifyNoMoreInteractions(mockShowService, mockShowMapper);
     }
@@ -149,21 +146,44 @@ public class ShowControllerTest {
     }
 
     @Test
-    void updateShowWorkCorrectlyWhenShowWithGivenIdDoesNotExist() {
+    void updateShow_nominal_with_show_id_dose_not_exist() {
         //GIVEN
-        when(mockShowMapper.toShow(SHOW_API)).thenReturn(SHOW);
-        when(mockShowService.updateShow(SHOW_ID_DOES_NOT_EXIST, SHOW)).thenReturn(null);
+        final var showToUpdate = SHOW.toBuilder()
+                .showID(SHOW_ID_DOES_NOT_EXIST)
+                .build();
+        final var showToUpdateApi = SHOW_API.toBuilder()
+                .showID(SHOW_ID_DOES_NOT_EXIST)
+                .build();
+        when(mockShowMapper.toShow(showToUpdateApi)).thenReturn(showToUpdate);
+        when(mockShowService.updateShow(SHOW_ID_DOES_NOT_EXIST, showToUpdate)).thenReturn(null);
 
         //WHEN /THEN
-        assertThatThrownBy(() -> unit.updateShow(SHOW_ID_DOES_NOT_EXIST, SHOW_API))
+        assertThatThrownBy(() -> unit.updateShow(SHOW_ID_DOES_NOT_EXIST, showToUpdateApi))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Show doesn't exist in system");
+                .hasMessage("Show by " + SHOW_ID_DOES_NOT_EXIST + " doesn't exist in system");
 
-        verify(mockShowMapper).toShow(SHOW_API);
-        verify(mockShowService).updateShow(SHOW_ID_DOES_NOT_EXIST, SHOW);
+        verify(mockShowMapper).toShow(showToUpdateApi);
+        verify(mockShowService).updateShow(SHOW_ID_DOES_NOT_EXIST, showToUpdate);
         verify(mockShowMapper, never()).toShowApi(any());
 
         verifyNoMoreInteractions(mockShowMapper, mockShowService);
+    }
+
+    @Test
+    void updateShow_nominal_with_show_id_dose_not_match_with_show_id_to_update() {
+        //GIVEN
+        //WHEN /THEN
+        assertThatThrownBy(() -> unit.updateShow(SHOW_ID_DOES_NOT_EXIST, SHOW_API))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("PathVariable showId: " + SHOW_ID_DOES_NOT_EXIST
+                        + " does not match with RequestBody showApi.getShowID(): "
+                        + SHOW_API.getShowID());
+
+        verify(mockShowMapper, never()).toShow(any(ShowApi.class));
+        verify(mockShowMapper, never()).toShowApi(any());
+        verify(mockShowService, never()).updateShow(any(), any());
+
+        verifyNoInteractions(mockShowService, mockShowMapper);
     }
 
     @Test
@@ -193,7 +213,7 @@ public class ShowControllerTest {
         //WHEN /THEN
         assertThatThrownBy(() -> unit.deleteShow(SHOW_ID_DOES_NOT_EXIST))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Show doesn't exist in system");
+                .hasMessage("Show by " + SHOW_ID_DOES_NOT_EXIST + " doesn't exist in system");
 
         verify(mockShowService).deletedShow(SHOW_ID_DOES_NOT_EXIST);
         verify(mockShowMapper, never()).toShowApi(any());

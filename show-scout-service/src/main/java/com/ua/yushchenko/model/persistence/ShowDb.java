@@ -45,20 +45,20 @@ public class ShowDb {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "show_id", nullable = false)
     UUID showID;
-    @Column(name = "show_name")
+    @Column(name = "show_name", nullable = false)
     String showName;
     @Type(JsonBinaryType.class)
-    @Column(name = "genres", columnDefinition = "jsonb")
+    @Column(name = "genres", columnDefinition = "jsonb", nullable = false)
     List<Genre> genres;
-    @Column(name = "summary")
+    @Column(name = "summary", nullable = false)
     String summary;
-    @Column(name = "platform")
+    @Column(name = "platform", nullable = false)
     String platform;
-    @Column(name = "score")
+    @Column(name = "score", nullable = false)
     Float score;
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     ShowStatus showStatus;
-    @Column(name = "img")
+    @Column(name = "img", nullable = false)
     String img;
 }

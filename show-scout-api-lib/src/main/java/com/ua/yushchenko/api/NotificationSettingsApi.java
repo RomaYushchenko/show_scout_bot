@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,9 +21,8 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationApi {
-    private UUID notificationId;
-    private UUID userId;
-    private UUID showId;
-    private LocalDateTime notificationTime;
+public class NotificationSettingsApi {
+    private UUID notificationSettingsId;
+    private List<Integer> notificationSettingsIntervals;
+    private boolean enabled;
 }

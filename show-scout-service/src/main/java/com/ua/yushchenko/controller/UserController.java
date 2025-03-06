@@ -86,11 +86,17 @@ public class UserController {
                               @RequestBody final UserApi userApi) {
         log.info("updateUser.E: Update user by ID:{}", userID);
 
+        if (!Objects.equals(userID, userApi.getUserID())) {
+            throw new IllegalArgumentException("PathVariable userId: " + userID
+                    + " does not match with RequestBody userApi.getUserID(): "
+                    + userApi.getUserID());
+        }
+
         final User userToUpdate = userMapper.toUser(userApi);
         final User updatedUser = userService.updateUser(userID, userToUpdate);
 
         if (Objects.isNull(updatedUser)) {
-            throw new EntityNotFoundException("User doesn't exist in system");
+            throw new EntityNotFoundException("User with userId: " + userID + " doesn't exist in system");
         }
 
         final UserApi updatedUserApi = userMapper.toUserApi(updatedUser);

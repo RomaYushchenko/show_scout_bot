@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,21 +26,19 @@ import java.util.UUID;
  * @author ivanshalaev
  * @version 1.0
  */
-@Table(name = "show_scout_notification")
+@Table(name = "show_scout_notification_settings")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationDb {
+public class NotificationSettingsDb {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "notification_id", nullable = false)
-    private UUID notificationId;
-    @Column(name = "user_id", nullable = false)
-    private UUID userId;
-    @Column(name = "show_id", nullable = false)
-    private UUID showId;
-    @Column(name = "notification_time", nullable = false)
-    private LocalDateTime notificationTime;
+    @Column(name = "notification_settings_id", nullable = false)
+    UUID notificationSettingsId;
+    @Column(name = "notification_settings_intervals", columnDefinition = "INTEGER[]", nullable = false)
+    List<Integer> notificationSettingsIntervals;
+    @Column(name = "enabled", nullable = false)
+    boolean enabled;
 }

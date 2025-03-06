@@ -43,7 +43,7 @@ public class ShowController {
         final Show show = showService.getShowById(showId);
 
         if (Objects.isNull(show)) {
-            throw new EntityNotFoundException("Show doesn't exist in system");
+            throw new EntityNotFoundException("Show by " + showId + " doesn't exist in system");
         }
 
         final ShowApi showApi = showMapper.toShowApi(show);
@@ -53,28 +53,21 @@ public class ShowController {
     }
 
     /**
-     * Get shows based on the given name or all shows if no name is provided
+     * Get {@link List} of {@link Show} based on filter by Show name. If request params aren't provide, the
+     * method will return all exist {@link Show}
      *
      * @param showName optional query parameter for the name of the show
      * @return a list of {@link ShowApi}
      */
     @GetMapping("/shows")
     public List<ShowApi> getShows(@RequestParam(required = false) final String showName) {
-        if (showName != null && !showName.isBlank()) {
-            log.info("getShows.E: Get shows by name: {}", showName);
+        log.info("getShows.E: Get shows by name: {}", showName);
 
-            final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getShowsByName(showName));
+        final var showsByFilter = showService.getShowsByFilter(showName);
+        final var shows = showMapper.toShowsApiFromShows(showsByFilter);
 
-            log.info("getShows.X: Retrieved {} shows with the name '{}'", shows.size(), showName);
-            return shows;
-        } else {
-            log.info("getShows.E: Get all shows");
-
-            final List<ShowApi> shows = showMapper.toShowsApiFromShows(showService.getAllShows());
-
-            log.info("getShows.X: Retrieved {} shows", shows.size());
-            return shows;
-        }
+        log.info("getShows.X: Retrieved {} shows, whit showName: {}", shows.size(), showName);
+        return shows;
     }
 
     /**
@@ -106,11 +99,18 @@ public class ShowController {
     public ShowApi updateShow(@PathVariable final UUID showId,
                               @RequestBody final ShowApi showApi) {
         log.info("updateShow.E: Update show by ID:{}", showId);
+
+        if (!Objects.equals(showId,showApi.getShowID())){
+            throw new IllegalArgumentException("PathVariable showId: " + showId
+                    + " does not match with RequestBody showApi.getShowID(): "
+                    + showApi.getShowID());
+        }
+
         final Show showToUpdate = showMapper.toShow(showApi);
         final Show updatedShow = showService.updateShow(showId, showToUpdate);
 
         if (Objects.isNull(updatedShow)) {
-            throw new EntityNotFoundException("Show doesn't exist in system");
+            throw new EntityNotFoundException("Show by " + showId + " doesn't exist in system");
         }
 
         final ShowApi updatedShowApi = showMapper.toShowApi(updatedShow);
@@ -132,7 +132,7 @@ public class ShowController {
         final Show deletedShow = showService.deletedShow(showId);
 
         if (Objects.isNull(deletedShow)) {
-            throw new EntityNotFoundException("Show doesn't exist in system");
+            throw new EntityNotFoundException("Show by " + showId + " doesn't exist in system");
         }
 
         final ShowApi deletedShowApi = showMapper.toShowApi(deletedShow);

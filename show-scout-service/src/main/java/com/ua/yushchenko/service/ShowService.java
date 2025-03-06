@@ -57,6 +57,25 @@ public class ShowService {
     }
 
     /**
+     * Get a list of {@link Show} by the given name
+     * if name was not provided return all {@link Show}
+     *
+     * @param name the name of the show
+     * @return a list of {@link Show}
+     */
+    public List<Show> getShowsByFilter(final String name){
+        log.debug("getShowsByFilter.E: Get Show by name:{}", name);
+
+        final var shows = Objects.isNull(name)
+                ? showRepository.selectAllShows()
+                : showRepository.selectShowsByName(name);
+
+        log.debug("getShowsByFilter.X: Retrieved {} shows with the name '{}': {}",
+                shows.size(), name, shows);
+        return shows;
+    }
+
+    /**
      * Get all {@link Show} instances from the database
      *
      * @return a {@link List} of all {@link Show} objects in the database as domain objects.

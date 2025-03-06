@@ -60,7 +60,7 @@ public class ShowRepository {
 
         final List<Show> shows = StreamSupport.stream(showDao.findByShowName(name).spliterator(), false)
                 .map(showMapper::toShow)
-                .collect(toList());
+                .toList();
 
 
         log.trace("selectShowsByName.X: Retrieved {} shows with the name '{}'", shows.size(), name);
