@@ -38,13 +38,13 @@ public class NotificationSettingsRepository {
      * @return inserted {@link NotificationSettings}
      */
     public NotificationSettings insertNotificationSettings(final NotificationSettings notificationSettings) {
-        log.trace("createNotificationSettings.E: Creating notificationSettings {}", notificationSettings);
+        log.trace("insertNotificationSettings.E: Inserting notificationSettings {}", notificationSettings);
 
-        final var notificationSettingsDbToCreate = notificationSettingsMapper.toNotificationSettingsDb(notificationSettings);
-        final var createdNotificationSettingsDb = notificationSettingsDao.save(notificationSettingsDbToCreate);
+        final var notificationSettingsDbToInsert = notificationSettingsMapper.toNotificationSettingsDb(notificationSettings);
+        final var insertedNotificationSettingsDb = notificationSettingsDao.save(notificationSettingsDbToInsert);
 
-        log.trace("createNotificationSettings.E: Created notificationSettings {}", createdNotificationSettingsDb);
-        return notificationSettingsMapper.toNotificationSettings(createdNotificationSettingsDb);
+        log.trace("insertNotificationSettings.E: Inserted notificationSettings {}", insertedNotificationSettingsDb);
+        return notificationSettingsMapper.toNotificationSettings(insertedNotificationSettingsDb);
     }
 
     /**
@@ -106,13 +106,13 @@ public class NotificationSettingsRepository {
      * @return {@link List} of {@link NotificationSettings}
      */
     public List<NotificationSettings> selectNotificationSettingsList() {
-        log.trace("selectListNotificationSettings.E: Selecting all NotificationSettings");
+        log.trace("selectNotificationSettingsList.E: Selecting all NotificationSettings");
 
         final var notificationSettings = StreamSupport.stream(notificationSettingsDao.findAll().spliterator(), false)
                 .map(notificationSettingsMapper::toNotificationSettings)
                 .toList();
 
-        log.trace("selectListNotificationSettings.X: Returned all {} NotificationSettings"
+        log.trace("selectNotificationSettingsList.X: Returned all {} NotificationSettings"
                 , notificationSettings.size());
         return notificationSettings;
     }

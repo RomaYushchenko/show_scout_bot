@@ -58,7 +58,7 @@ public class NotificationSettingsService {
     public NotificationSettings updateNotificationSettings(final UUID notificationSettingsId, final NotificationSettings notificationSettingsToUpdate) {
         log.debug("updateNotificationSettings.E: Update NotificationSettings by ID: {}", notificationSettingsId);
 
-        final var notificationSettings = selectNotificationSettings(notificationSettingsId);
+        final var notificationSettings = getNotificationSettings(notificationSettingsId);
 
         if (Objects.isNull(notificationSettings)) {
             log.warn("updateNotificationSettings.X: NotificationSettings with ID: {} doesn't find in system", notificationSettingsId);
@@ -82,7 +82,7 @@ public class NotificationSettingsService {
      * @param notificationSettingsId ID of {@link NotificationSettings}
      * @return {@link NotificationSettings}
      */
-    public NotificationSettings selectNotificationSettings(final UUID notificationSettingsId) {
+    public NotificationSettings getNotificationSettings(final UUID notificationSettingsId) {
         log.debug("getNotificationSettings.E: Get NotificationSettings by id: {}", notificationSettingsId);
 
         final var notificationSettings = notificationSettingsRepository.selectNotificationSettings(notificationSettingsId);
@@ -99,14 +99,14 @@ public class NotificationSettingsService {
      * @param userId ID of {@link User}
      * @return {@link List} of {@link NotificationSettings}
      */
-    public List<NotificationSettings> selectListNotificationSettingsByFilter(final Long userId) {
-        log.debug("selectListNotificationSettingsByUserId.E: Select all NotificationSettings for user: {}", userId);
+    public List<NotificationSettings> getListNotificationSettingsByFilter(final Long userId) {
+        log.debug("getListNotificationSettingsByFilter.E: Get all NotificationSettings for user: {}", userId);
 
         final var notificationSettings = Objects.isNull(userId)
                 ? notificationSettingsRepository.selectNotificationSettingsList()
                 : notificationSettingsRepository.selectNotificationSettingsListByUserId(userId);
 
-        log.debug("selectListNotificationSettingsByUserId.X: Return: {} NotificationSettings for user: {}"
+        log.debug("getListNotificationSettingsByFilter.X: Return: {} NotificationSettings for user: {}"
                 , notificationSettings.size(), userId);
         return notificationSettings;
     }
@@ -118,13 +118,13 @@ public class NotificationSettingsService {
      * @param subscriptionId ID of {@link Subscription}
      * @return {@link NotificationSettings}
      */
-    public NotificationSettings selectNotificationSettingsBySubscriptionId(final UUID subscriptionId) {
-        log.debug("selectNotificationSettingsBySubscriptionId.E: Select NotificationSettings by subscriptionId: {}"
+    public NotificationSettings getNotificationSettingsBySubscriptionId(final UUID subscriptionId) {
+        log.debug("getNotificationSettingsBySubscriptionId.E: Select NotificationSettings by subscriptionId: {}"
                 , subscriptionId);
 
         final var notificationSettings = notificationSettingsRepository.selectNotificationSettingsBySubscriptionId(subscriptionId);
 
-        log.debug("selectNotificationSettingsBySubscriptionId.X: Returned NotificationSettings: {} for subscriptionId: {}"
+        log.debug("getNotificationSettingsBySubscriptionId.X: Returned NotificationSettings: {} for subscriptionId: {}"
                 , notificationSettings, subscriptionId);
         return notificationSettings;
     }
@@ -138,7 +138,7 @@ public class NotificationSettingsService {
     public NotificationSettings deleteNotificationSettings(final UUID notificationSettingsId) {
         log.debug("deleteNotificationSettings.E: Delete NotificationSettings by id: {}", notificationSettingsId);
 
-        final var notificationSettings = selectNotificationSettings(notificationSettingsId);
+        final var notificationSettings = getNotificationSettings(notificationSettingsId);
 
         if (Objects.isNull(notificationSettings)) {
             throw new EntityNotFoundException("NotificationSettings [ID= " + notificationSettingsId + "] doesn't exist in system");

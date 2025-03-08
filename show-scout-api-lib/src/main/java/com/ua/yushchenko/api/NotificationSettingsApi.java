@@ -9,14 +9,13 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Class that represents the API object for a Notification.
- * <p>
+ * Class that represents the API object for a NotificationSettings.
+ *
  * This class is used to transfer show data between the API layer and other application layers.
  *
  * @author ivanshalaiev
  * @version 0.1
  */
-
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor

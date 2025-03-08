@@ -6,22 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Entity class representing a notification in the database.
- * This class maps to the "show_scout_notification" table and
- * contains information about notifications for users related to shows.
+ * Entity class representing notification settings in the database.
+ * This class maps to the "show_scout_notification_settings" table and
+ * contains configuration for how notifications should be delivered to users.
  * <p>
  * Fields include:
  * <ul>
- *   <li><b>notificationId</b>: Unique identifier for the notification.</li>
- *   <li><b>userId</b>: Unique identifier of the user who will receive the notification.</li>
- *   <li><b>showId</b>: Unique identifier of the show associated with the notification.</li>
- *   <li><b>notificationTime</b>: The timestamp when the notification is scheduled to be sent.</li>
+ *   <li><b>notificationSettingsId</b>: Unique identifier for the notification settings.</li>
+ *   <li><b>notificationSettingsIntervals</b>: List of time intervals (in minutes) when notifications should be sent.</li>
+ *   <li><b>enabled</b>: Flag indicating whether notifications are enabled for these settings.</li>
  * </ul>
+ * <p>
  *
  * @author ivanshalaev
  * @version 1.0

@@ -3,11 +3,11 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet id="002.01" author="shalaev" runOnChange="true">
+    <changeSet id="006.01" author="shalaev" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="show_scout_subscription"/>
             <not>
-                <columnExists tableName="show_scout_subscription" columnName="notification_id"/>
+                <columnExists tableName="show_scout_subscription" columnName="notification_settings_id"/>
             </not>
         </preConditions>
 

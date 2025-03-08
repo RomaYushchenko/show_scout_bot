@@ -108,13 +108,13 @@ public class SubscriptionRepository {
      * @return inserted {@link Subscription}
      */
     public Subscription insertSubscription(final Subscription subscription) {
-        log.trace("createSubscription.E: Creating subscription {}", subscription);
+        log.trace("insertSubscription.E: Inserting subscription {}", subscription);
 
-        final var subscriptionDbToCreate = subscriptionMapper.toSubscriptionDb(subscription);
-        final var createdSubscriptionDb = subscriptionDao.save(subscriptionDbToCreate);
+        final var subscriptionDbToInsert = subscriptionMapper.toSubscriptionDb(subscription);
+        final var insertedSubscriptionDb = subscriptionDao.save(subscriptionDbToInsert);
 
-        log.trace("createSubscription.E: Created subscription {}", createdSubscriptionDb);
-        return subscriptionMapper.toSubscription(createdSubscriptionDb);
+        log.trace("insertSubscription.E: Inserted subscription {}", insertedSubscriptionDb);
+        return subscriptionMapper.toSubscription(insertedSubscriptionDb);
     }
 
     /**

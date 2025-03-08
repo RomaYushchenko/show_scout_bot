@@ -1,7 +1,6 @@
 package com.ua.yushchenko.controller;
 
 import com.ua.yushchenko.api.NotificationSettingsApi;
-import com.ua.yushchenko.model.domain.NotificationSettings;
 import com.ua.yushchenko.model.domain.Subscription;
 import com.ua.yushchenko.model.mapper.NotificationSettingsMapper;
 import com.ua.yushchenko.service.NotificationSettingsService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 /**
  * Endpoint for communication with NotificationSettings
@@ -40,9 +38,9 @@ public class NotificationSettingsController {
      */
     @GetMapping("/notificationSettings/{notificationSettingsId}")
     public NotificationSettingsApi getNotificationSettings(@PathVariable final UUID notificationSettingsId) {
-        log.debug("notificationSettingsId.E: Get NotificationSettings by ID: {}", notificationSettingsId);
+        log.debug("getNotificationSettings.E: Get NotificationSettings by ID: {}", notificationSettingsId);
 
-        final var notificationSettings = notificationSettingsService.selectNotificationSettings(notificationSettingsId);
+        final var notificationSettings = notificationSettingsService.getNotificationSettings(notificationSettingsId);
 
         if (Objects.isNull(notificationSettings)) {
             throw new EntityNotFoundException("NotificationSettings by " + notificationSettingsId + " doesn't exist in system");
@@ -50,7 +48,7 @@ public class NotificationSettingsController {
 
         final var notificationSettingsApi = notificationSettingsMapper.toNotificationSettingsApi(notificationSettings);
 
-        log.debug("notificationSettingsId.X: Return NotificationSettings: {} "
+        log.debug("getNotificationSettings.X: Return NotificationSettings: {} "
                 , notificationSettingsApi);
         return notificationSettingsApi;
     }
@@ -66,7 +64,7 @@ public class NotificationSettingsController {
     public List<NotificationSettingsApi> getNotificationSettingsList(@RequestParam(required = false) final Long userId) {
         log.info("getNotificationSettings.E: Get NotificationSettingsApi by userId: {}", userId);
 
-        final var notificationSettings = notificationSettingsService.selectListNotificationSettingsByFilter(userId);
+        final var notificationSettings = notificationSettingsService.getListNotificationSettingsByFilter(userId);
         final var notificationSettingsApi = notificationSettingsMapper.toNotificationSettingsApis(notificationSettings);
 
         log.info("getNotificationSettings.X: Return: {} NotificationSettingsApi for user: {}"
@@ -83,7 +81,7 @@ public class NotificationSettingsController {
     public NotificationSettingsApi getNotificationSettingsBySubscriptionId(@PathVariable final UUID subscriptionId) {
         log.info("getNotificationSettingsBySubscriptionId.E: Get NotificationSettings by subscriptionId: {}", subscriptionId);
 
-        final var notificationSettings = notificationSettingsService.selectNotificationSettingsBySubscriptionId(subscriptionId);
+        final var notificationSettings = notificationSettingsService.getNotificationSettingsBySubscriptionId(subscriptionId);
 
         if (Objects.isNull(notificationSettings)){
             throw new EntityNotFoundException("NotificationSettings by subscriptionId " + subscriptionId + " doesn't exist in system");

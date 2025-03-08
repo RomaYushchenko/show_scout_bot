@@ -31,7 +31,7 @@ class NotificationSettingsControllerTest {
     @Test
     void getNotificationSettings_nominal() {
         //GIVEN
-        when(mockNotificationSettingsService.selectNotificationSettings(NOTIFICATION_SETTINGS_ID))
+        when(mockNotificationSettingsService.getNotificationSettings(NOTIFICATION_SETTINGS_ID))
                 .thenReturn(NOTIFICATION_SETTINGS);
         when(mockNotificationSettingsMapper.toNotificationSettingsApi(NOTIFICATION_SETTINGS))
                 .thenReturn(NOTIFICATION_SETTINGS_API);
@@ -44,7 +44,7 @@ class NotificationSettingsControllerTest {
                 .isNotNull()
                 .isEqualTo(NOTIFICATION_SETTINGS_API);
 
-        verify(mockNotificationSettingsService).selectNotificationSettings(NOTIFICATION_SETTINGS_ID);
+        verify(mockNotificationSettingsService).getNotificationSettings(NOTIFICATION_SETTINGS_ID);
         verify(mockNotificationSettingsMapper).toNotificationSettingsApi(NOTIFICATION_SETTINGS);
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);
@@ -54,14 +54,14 @@ class NotificationSettingsControllerTest {
     void getNotificationSettingsWorksCorrectlyWhenGivenIdDoesNotExist() {
         //GIVEN
         final var uuid_does_not_exist = UUID.randomUUID();
-        when(mockNotificationSettingsService.selectNotificationSettings(uuid_does_not_exist))
+        when(mockNotificationSettingsService.getNotificationSettings(uuid_does_not_exist))
                 .thenReturn(null);
         //WHEN /THEN
         assertThatThrownBy(() -> unit.getNotificationSettings(uuid_does_not_exist))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("NotificationSettings by " + uuid_does_not_exist + " doesn't exist in system");
 
-        verify(mockNotificationSettingsService).selectNotificationSettings(uuid_does_not_exist);
+        verify(mockNotificationSettingsService).getNotificationSettings(uuid_does_not_exist);
         verify(mockNotificationSettingsMapper, never()).toNotificationSettingsApi(any(NotificationSettings.class));
 
         verifyNoMoreInteractions(mockNotificationSettingsService);
@@ -70,7 +70,7 @@ class NotificationSettingsControllerTest {
     @Test
     void getNotificationSettingsList_nominal_with_user_id() {
         //GIVEN
-        when(mockNotificationSettingsService.selectListNotificationSettingsByFilter(USER_ID))
+        when(mockNotificationSettingsService.getListNotificationSettingsByFilter(USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
         when(mockNotificationSettingsMapper.toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS)))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_API));
@@ -84,7 +84,7 @@ class NotificationSettingsControllerTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS_API));
 
-        verify(mockNotificationSettingsService).selectListNotificationSettingsByFilter(USER_ID);
+        verify(mockNotificationSettingsService).getListNotificationSettingsByFilter(USER_ID);
         verify(mockNotificationSettingsMapper).toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS));
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);
@@ -93,7 +93,7 @@ class NotificationSettingsControllerTest {
     @Test
     void getNotificationSettingsList_nominal_without_user_id() {
         //GIVEN
-        when(mockNotificationSettingsService.selectListNotificationSettingsByFilter(null))
+        when(mockNotificationSettingsService.getListNotificationSettingsByFilter(null))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
         when(mockNotificationSettingsMapper.toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS)))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_API));
@@ -107,7 +107,7 @@ class NotificationSettingsControllerTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS_API));
 
-        verify(mockNotificationSettingsService).selectListNotificationSettingsByFilter(null);
+        verify(mockNotificationSettingsService).getListNotificationSettingsByFilter(null);
         verify(mockNotificationSettingsMapper).toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS));
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);
@@ -118,7 +118,7 @@ class NotificationSettingsControllerTest {
         //GIVEN
         when(mockNotificationSettingsMapper.toNotificationSettingsApi(NOTIFICATION_SETTINGS))
                 .thenReturn(NOTIFICATION_SETTINGS_API);
-        when(mockNotificationSettingsService.selectNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID))
+        when(mockNotificationSettingsService.getNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID))
                 .thenReturn(NOTIFICATION_SETTINGS);
 
         //WHEN
@@ -130,7 +130,7 @@ class NotificationSettingsControllerTest {
                 .isEqualTo(NOTIFICATION_SETTINGS_API);
 
         verify(mockNotificationSettingsMapper).toNotificationSettingsApi(NOTIFICATION_SETTINGS);
-        verify(mockNotificationSettingsService).selectNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID);
+        verify(mockNotificationSettingsService).getNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID);
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);
     }
@@ -139,7 +139,7 @@ class NotificationSettingsControllerTest {
     void getNotificationSettingsBySubscriptionId_nominal_when_subscription_id_does_not_exist() {
         //GIVEN
         final var incorrectSubscriptionId = UUID.randomUUID();
-        when(mockNotificationSettingsService.selectNotificationSettingsBySubscriptionId(incorrectSubscriptionId))
+        when(mockNotificationSettingsService.getNotificationSettingsBySubscriptionId(incorrectSubscriptionId))
                 .thenReturn(null);
 
         //WHEN /THEN
@@ -147,7 +147,7 @@ class NotificationSettingsControllerTest {
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("NotificationSettings by subscriptionId " + incorrectSubscriptionId + " doesn't exist in system");
 
-        verify(mockNotificationSettingsService).selectNotificationSettingsBySubscriptionId(incorrectSubscriptionId);
+        verify(mockNotificationSettingsService).getNotificationSettingsBySubscriptionId(incorrectSubscriptionId);
         verify(mockNotificationSettingsMapper, never()).toNotificationSettingsApi(any());
 
         verifyNoMoreInteractions(mockNotificationSettingsService);

@@ -2,7 +2,6 @@ package com.ua.yushchenko.controller;
 
 import static com.ua.yushchenko.TestData.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.api.ShowApi;
@@ -19,8 +18,7 @@ import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
-public class
-ShowControllerTest {
+public class ShowControllerTest {
     @Mock
     private ShowService mockShowService;
     @Mock

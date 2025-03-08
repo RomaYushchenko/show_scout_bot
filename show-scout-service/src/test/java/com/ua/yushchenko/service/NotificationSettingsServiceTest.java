@@ -96,13 +96,13 @@ class NotificationSettingsServiceTest {
     }
 
     @Test
-    void selectNotificationSettings_nominal() {
+    void getNotificationSettings_nominal() {
         //GIVEN
         when(mockNotificationSettingsRepository.selectNotificationSettings(NOTIFICATION_SETTINGS_ID))
                 .thenReturn(NOTIFICATION_SETTINGS);
 
         //WHEN
-        final var notificationSettings = unit.selectNotificationSettings(NOTIFICATION_SETTINGS_ID);
+        final var notificationSettings = unit.getNotificationSettings(NOTIFICATION_SETTINGS_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -115,13 +115,13 @@ class NotificationSettingsServiceTest {
     }
 
     @Test
-    void selectListNotificationSettingsByFilter_nominal_with_user_id() {
+    void getListNotificationSettingsByFilter_nominal_with_user_id() {
         //GIVEN
         when(mockNotificationSettingsRepository.selectNotificationSettingsListByUserId(USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
-        final var notificationSettings = unit.selectListNotificationSettingsByFilter(USER_ID);
+        final var notificationSettings = unit.getListNotificationSettingsByFilter(USER_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -136,13 +136,13 @@ class NotificationSettingsServiceTest {
     }
 
     @Test
-    void selectListNotificationSettingsByFilter_nominal_without_user_id() {
+    void getListNotificationSettingsByFilter_nominal_without_user_id() {
         //GIVEN
         when(mockNotificationSettingsRepository.selectNotificationSettingsList())
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
-        final var notificationSettings = unit.selectListNotificationSettingsByFilter(null);
+        final var notificationSettings = unit.getListNotificationSettingsByFilter(null);
 
         //THEN
         assertThat(notificationSettings)
@@ -157,13 +157,13 @@ class NotificationSettingsServiceTest {
     }
 
     @Test
-    void selectNotificationSettingsBySubscriptionId_nominal() {
+    void getNotificationSettingsBySubscriptionId_nominal() {
         //GIVEN
         when(mockNotificationSettingsRepository.selectNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID))
                 .thenReturn(NOTIFICATION_SETTINGS);
 
         //WHEN
-        final var notificationSettings = unit.selectNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID);
+        final var notificationSettings = unit.getNotificationSettingsBySubscriptionId(SUBSCRIPTION_ID);
 
         //THEN
         assertThat(notificationSettings)
