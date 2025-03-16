@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <changeSet id="008.02" author="shalaev" runOnChange="true">
+    <changeSet id="008.01" author="shalaev" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <and>
                 <tableExists tableName="show_scout_subscription"/>

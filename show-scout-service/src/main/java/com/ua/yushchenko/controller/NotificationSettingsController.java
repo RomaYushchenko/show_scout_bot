@@ -62,12 +62,12 @@ public class NotificationSettingsController {
      */
     @GetMapping("/notificationSettings")
     public List<NotificationSettingsApi> getNotificationSettingsList(@RequestParam(required = false) final Long userId) {
-        log.info("getNotificationSettings.E: Get NotificationSettingsApi by userId: {}", userId);
+        log.info("getNotificationSettingsList.E: Get NotificationSettingsApi by userId: {}", userId);
 
         final var notificationSettings = notificationSettingsService.getListNotificationSettingsByFilter(userId);
         final var notificationSettingsApi = notificationSettingsMapper.toNotificationSettingsApis(notificationSettings);
 
-        log.info("getNotificationSettings.X: Return: {} NotificationSettingsApi for user: {}"
+        log.info("getNotificationSettingsList.X: Return: {} NotificationSettingsApi for user: {}"
                 , notificationSettingsApi.size(), userId);
         return notificationSettingsApi;
     }
