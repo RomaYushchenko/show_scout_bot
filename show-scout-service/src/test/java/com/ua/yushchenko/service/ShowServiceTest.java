@@ -82,6 +82,47 @@ public class ShowServiceTest {
     }
 
     @Test
+    void getShowsByFilter_nominal_with_show_name() {
+        //GIVEN
+        when(mockShowRepository.selectShowsByName(SHOW.getShowName()))
+                .thenReturn(List.of(SHOW));
+
+        //WHEN
+        final var showsByFilter = unit.getShowsByFilter(SHOW.getShowName());
+
+        //THEN
+        assertThat(showsByFilter)
+                .isNotNull()
+                .hasSize(1)
+                .isEqualTo(List.of(SHOW));
+
+        verify(mockShowRepository).selectShowsByName(SHOW.getShowName());
+        verify(mockShowRepository, never()).selectAllShows();
+
+        verifyNoMoreInteractions(mockShowRepository);
+    }
+
+    @Test
+    void getShowsByFilter_nominal_without_show_name() {
+        //GIVE
+        when(mockShowRepository.selectAllShows()).thenReturn(List.of(SHOW));
+
+        //WHEN
+        final var showsByFilter = unit.getShowsByFilter(null);
+
+        //THEN
+        assertThat(showsByFilter)
+                .isNotNull()
+                .hasSize(1)
+                .isEqualTo(List.of(SHOW));
+
+        verify(mockShowRepository).selectAllShows();
+        verify(mockShowRepository, never()).selectShowsByName(any());
+
+        verifyNoMoreInteractions(mockShowRepository);
+    }
+
+    @Test
     void createShow_nominal() {
         //GIVEN
         when(mockShowRepository.insertShow(SHOW)).thenReturn(SHOW);

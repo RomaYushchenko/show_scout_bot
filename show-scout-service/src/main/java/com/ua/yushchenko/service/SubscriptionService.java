@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
+import com.ua.yushchenko.model.domain.NotificationSettings;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.domain.Subscription;
 import com.ua.yushchenko.model.domain.User;
@@ -31,6 +32,8 @@ public class SubscriptionService {
     private final UserService userService;
     @NonNull
     private final ShowService showService;
+    @NonNull
+    private final NotificationSettingsService notificationSettingsService;
 
     /**
      * Get {@link List} of {@link Subscription} based on filter by User ID. If request params aren't provide, the
@@ -77,7 +80,7 @@ public class SubscriptionService {
 
         final var subscription = subscriptionRepository.selectSubscriptionByShowAndUserId(showId, userId);
 
-        log.debug("getSubscriptionByShowAndUserId.E: Subscription:{}", subscription);
+        log.debug("getSubscriptionByShowAndUserId.X: Subscription:{}", subscription);
         return subscription;
     }
 
@@ -94,19 +97,22 @@ public class SubscriptionService {
         final var user = userService.getUserById(userId);
 
         if (Objects.isNull(user)) {
-            throw new EntityNotFoundException("User [ID="+ userId +"] doesn't exist in system");
+            throw new EntityNotFoundException("User [ID=" + userId + "] doesn't exist in system");
         }
 
         final var show = showService.getShowById(showId);
 
         if (Objects.isNull(show)) {
-            throw new EntityNotFoundException("Show [ID="+ showId +"] doesn't exist in system");
+            throw new EntityNotFoundException("Show [ID=" + showId + "] doesn't exist in system");
         }
 
+        final var notificationSettings = notificationSettingsService.createNotificationSettings();
+
         final var subscriptionToCreate = Subscription.builder()
-                                                     .userId(userId)
-                                                     .showId(showId)
-                                                     .build();
+                .userId(userId)
+                .showId(showId)
+                .notificationSettingsId(notificationSettings.getNotificationSettingsId())
+                .build();
 
         final var createdSubscription = subscriptionRepository.insertSubscription(subscriptionToCreate);
 
@@ -126,8 +132,10 @@ public class SubscriptionService {
         final var subscription = getSubscription(subscriptionId);
 
         if (Objects.isNull(subscription)) {
-            throw new EntityNotFoundException("Subscription [ID="+ subscriptionId +"] doesn't exist in system");
+            throw new EntityNotFoundException("Subscription [ID=" + subscriptionId + "] doesn't exist in system");
         }
+
+        notificationSettingsService.deleteNotificationSettings(subscription.getNotificationSettingsId());
 
         subscriptionRepository.deleteSubscription(subscriptionId);
 

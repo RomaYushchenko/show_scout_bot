@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="007.01" author="shalaev" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="show_scout_notification_settings"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="show_scout_notification_settings">
+            <column name="notification_settings_id" type="UUID">
+                <constraints primaryKey="true" primaryKeyName="notification_pk" nullable="false"/>
+            </column>
+            <column name="notification_settings_intervals" type="INTEGER[]">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
