@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
@@ -58,9 +59,7 @@ public class ShowRepository {
     public List<Show> selectShowsByName(final String name) {
         log.trace("selectShowsByName.E: Select shows from table by name:{}", name);
 
-        final List<Show> shows = StreamSupport.stream(showDao.findByShowName(name).spliterator(), false)
-                .map(showMapper::toShow)
-                .toList();
+        final List<Show> shows = showMapper.toShowFromShowsDb(showDao.findByShowName(name));
 
 
         log.trace("selectShowsByName.X: Retrieved {} shows with the name '{}'", shows.size(), name);
@@ -75,9 +74,7 @@ public class ShowRepository {
     public List<Show> selectAllShows() {
         log.trace("selectAllShows.E: Retrieving all shows from the database");
 
-        List<Show> shows = StreamSupport.stream(showDao.findAll().spliterator(), false)
-                .map(showMapper::toShow)
-                .collect(toList());
+        List<Show> shows = showMapper.toShowFromShowsDb(showDao.findAll());
 
         log.trace("selectAllShows.X: Retrieved {} shows", shows.size());
         return shows;

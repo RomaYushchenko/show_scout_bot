@@ -72,20 +72,18 @@ public class ShowRepositoryTest {
     @Test
     void selectShowsByName_nominal() {
         //GIVEN
-        final Iterable<ShowDb> showDbList = List.of(SHOW_DB);
-        final List<Show> showList = List.of(SHOW);
-        when(mockShowDao.findByShowName(SHOW_DB.getShowName())).thenReturn(showDbList);
-        when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
+        when(mockShowDao.findByShowName(SHOW_DB.getShowName())).thenReturn(List.of(SHOW_DB));
+        when(mockShowMapper.toShowFromShowsDb(List.of(SHOW_DB))).thenReturn(List.of(SHOW));
 
         //WHEN
         final List<Show> result = unit.selectShowsByName(SHOW_DB.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(showList);
+                .isEqualTo(List.of(SHOW));
 
         verify(mockShowDao).findByShowName(SHOW_DB.getShowName());
-        verify(mockShowMapper).toShow(SHOW_DB);
+        verify(mockShowMapper).toShowFromShowsDb(List.of(SHOW_DB));
 
         verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
@@ -94,6 +92,8 @@ public class ShowRepositoryTest {
     void selectShowByNameWorkCorrectlyWhenShowsWithGivenIdDoesNotExist() {
         //GIVEN
         when(mockShowDao.findByShowName(SHOW_NAME_DOES_NOT_EXIST)).thenReturn(Collections.emptyList());
+        when(mockShowMapper.toShowFromShowsDb(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
 
         //WHEN
         final List<Show> result = unit.selectShowsByName(SHOW_NAME_DOES_NOT_EXIST);
@@ -102,28 +102,26 @@ public class ShowRepositoryTest {
         assertThat(result).isNotNull().hasSize(0);
 
         verify(mockShowDao).findByShowName(SHOW_NAME_DOES_NOT_EXIST);
+        verify(mockShowMapper).toShowFromShowsDb(Collections.emptyList());
 
-        verifyNoMoreInteractions(mockShowDao);
-        verifyNoInteractions(mockShowMapper);
+        verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
 
     @Test
     void selectAllShows_nominal() {
         //GIVEN
-        final Iterable<ShowDb> showDbList = List.of(SHOW_DB);
-        final List<Show> showList = List.of(SHOW);
-        when(mockShowDao.findAll()).thenReturn(showDbList);
-        when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
+        when(mockShowDao.findAll()).thenReturn(List.of(SHOW_DB));
+        when(mockShowMapper.toShowFromShowsDb(List.of(SHOW_DB))).thenReturn(List.of(SHOW));
 
         //WHEN
         final List<Show> result = unit.selectAllShows();
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(showList);
+                .isEqualTo(List.of(SHOW));
 
         verify(mockShowDao).findAll();
-        verify(mockShowMapper).toShow(SHOW_DB);
+        verify(mockShowMapper).toShowFromShowsDb(List.of(SHOW_DB));
 
         verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
@@ -132,6 +130,8 @@ public class ShowRepositoryTest {
     void selectAllShowsWorkCorrectlyWhenNoShowsInSystem() {
         //GIVEN
         when(mockShowDao.findAll()).thenReturn(Collections.emptyList());
+        when(mockShowMapper.toShowFromShowsDb(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
 
         //WHEN
         final List<Show> result = unit.selectAllShows();
@@ -140,9 +140,9 @@ public class ShowRepositoryTest {
         assertThat(result).isNotNull().hasSize(0);
 
         verify(mockShowDao).findAll();
-        verify(mockShowMapper, never()).toShow(any(ShowDb.class));
+        verify(mockShowMapper).toShowFromShowsDb(Collections.emptyList());
 
-        verifyNoMoreInteractions(mockShowDao);
+        verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
 
     @Test
