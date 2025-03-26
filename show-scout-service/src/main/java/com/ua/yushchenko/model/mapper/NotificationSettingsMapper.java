@@ -27,6 +27,8 @@ public interface NotificationSettingsMapper {
 
     List<NotificationSettingsApi> toNotificationSettingsApis(final List<NotificationSettings> notificationSettingsList);
 
+    List<NotificationSettings> toNotificationSettings(final List<NotificationSettingsDb> notificationSettingsList);
+
     @ObjectFactory
     default NotificationSettings.NotificationSettingsBuilder createDomainBuilder() {
         return NotificationSettings.builder();

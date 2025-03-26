@@ -90,10 +90,9 @@ public class NotificationSettingsRepository {
     public List<NotificationSettings> selectNotificationSettingsListByUserId(final Long userId) {
         log.trace("selectNotificationSettingsListByUserId.E: Select List of NotificationSettings for user {}", userId);
 
-        final var notificationSettings = notificationSettingsDao.findAllNotificationSettingsByUserId(userId)
-                .stream()
-                .map(notificationSettingsMapper::toNotificationSettings)
-                .toList();
+        final var notificationSettings = notificationSettingsMapper
+                .toNotificationSettings(notificationSettingsDao
+                        .findAllNotificationSettingsByUserId(userId));
 
         log.trace("selectNotificationSettingsListByUserId.X: Returned {} NotificationSettings for user {}",
                 notificationSettings.size(), userId);
@@ -108,9 +107,7 @@ public class NotificationSettingsRepository {
     public List<NotificationSettings> selectNotificationSettingsList() {
         log.trace("selectNotificationSettingsList.E: Selecting all NotificationSettings");
 
-        final var notificationSettings = StreamSupport.stream(notificationSettingsDao.findAll().spliterator(), false)
-                .map(notificationSettingsMapper::toNotificationSettings)
-                .toList();
+        final var notificationSettings = notificationSettingsMapper.toNotificationSettings(notificationSettingsDao.findAll());
 
         log.trace("selectNotificationSettingsList.X: Returned all {} NotificationSettings"
                 , notificationSettings.size());
