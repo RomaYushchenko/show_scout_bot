@@ -28,6 +28,8 @@ public interface SubscriptionMapper {
 
     List<SubscriptionApi> toSubscriptionApis(final List<Subscription> subscriptions);
 
+    List<Subscription> toSubscriptions(final List<SubscriptionDb> subscriptions);
+
     @ObjectFactory
     default Subscription.SubscriptionBuilder createDomainBuilder() {
         return Subscription.builder();
