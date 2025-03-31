@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.ShowDao;
 import com.ua.yushchenko.model.domain.Show;
@@ -188,15 +189,58 @@ public class ShowRepositoryTest {
     }
 
     @Test
-    void deleteShowById() {
+    void deleteShowById_nominal() {
         // GIVEN
+        when(mockShowDao.findById(SHOW_ID)).thenReturn(Optional.of(SHOW_DB));
+        when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
         doNothing().when(mockShowDao).deleteById(SHOW_ID);
 
         // WHEN
-        unit.deletedShowById(SHOW_ID);
+        final var result = unit.deletedShowById(SHOW_ID);
 
         // THEN
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(SHOW);
+
+        verify(mockShowDao).findById(SHOW_ID);
+        verify(mockShowMapper).toShow(SHOW_DB);
         verify(mockShowDao).deleteById(SHOW_ID);
+
+        verifyNoMoreInteractions(mockShowDao, mockShowMapper);
+    }
+
+    @Test
+    void showExistById_nominal() {
+        //GIVEN
+        when(mockShowDao.existsById(SHOW_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.showExistById(SHOW_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockShowDao).existsById(SHOW_ID);
+
+        verifyNoMoreInteractions(mockShowDao);
+    }
+
+    @Test
+    void showExistById_nominal_when_show_id_does_not_exist() {
+        //GIVEN
+        final var showIdDoesNotExist = UUID.randomUUID();
+        when(mockShowDao.existsById(showIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.showExistById(showIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockShowDao).existsById(showIdDoesNotExist);
 
         verifyNoMoreInteractions(mockShowDao);
     }

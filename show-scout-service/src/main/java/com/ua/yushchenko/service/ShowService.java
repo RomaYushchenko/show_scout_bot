@@ -63,7 +63,7 @@ public class ShowService {
      * @param name the name of the show
      * @return a list of {@link Show}
      */
-    public List<Show> getShowsByFilter(final String name){
+    public List<Show> getShowsByFilter(final String name) {
         log.debug("getShowsByFilter.E: Get Show by name:{}", name);
 
         final var shows = Objects.isNull(name)
@@ -141,14 +141,14 @@ public class ShowService {
     public Show deletedShow(final UUID showId) {
         log.debug("deleteShow.E: Delete show by ID:{}", showId);
 
-        final Show show = getShowById(showId);
+        final var isShowExist = showRepository.showExistById(showId);
 
-        if (Objects.isNull(show)) {
+        if (!isShowExist) {
             log.warn("deleteShow.X: Show doesn't find in system");
             return null;
         }
 
-        showRepository.deletedShowById(showId);
+        final var show = showRepository.deletedShowById(showId);
 
         log.debug("deleteShow.X: Deleted show:{}", show);
         return show;

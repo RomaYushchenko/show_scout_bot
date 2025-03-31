@@ -92,7 +92,7 @@ public class UserRepository {
     }
 
     /**
-     * Checks if {@link User} exist for a given notification settings ID
+     * Checks if {@link User} exist for a given user ID
      *
      * @param userId ID of {@link User}
      * @return true if user exist, false otherwise

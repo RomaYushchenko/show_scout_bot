@@ -116,12 +116,31 @@ public class ShowRepository {
      * Delete {@link Show}
      *
      * @param showId ID of user
+     * @return deleted show {@link Show}
      */
-    public void deletedShowById(final UUID showId) {
+    public Show deletedShowById(final UUID showId) {
         log.trace("deleteShowById.E: Delete show from table by ID:{}", showId);
+
+        final var show = selectShowById(showId);
 
         showDao.deleteById(showId);
 
         log.trace("deleteShowById.X: Show from table by ID:{} was deleted", showId);
+        return show;
+    }
+
+    /**
+     * Check if {@link Show} exist for a given show ID
+     *
+     * @param showId ID of {@link Show}
+     * @return true if show exist, false otherwise
+     */
+    public boolean showExistById(final UUID showId) {
+        log.trace("showExistById.E: Check if Show exist with provided ID: {}", showId);
+
+        final var showExistById = showDao.existsById(showId);
+
+        log.trace("showExistById.X: Show with ID: {} exist: {}", showId, showExistById);
+        return showExistById;
     }
 }

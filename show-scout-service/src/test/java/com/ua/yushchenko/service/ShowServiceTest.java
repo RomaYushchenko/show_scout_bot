@@ -201,8 +201,8 @@ public class ShowServiceTest {
     @Test
     void deleteShow_nominal() {
         //GIVEN
-        when(mockShowRepository.selectShowById(SHOW_ID)).thenReturn(SHOW);
-        doNothing().when(mockShowRepository).deletedShowById(SHOW_ID);
+        when(mockShowRepository.showExistById(SHOW_ID)).thenReturn(true);
+        when(mockShowRepository.deletedShowById(SHOW_ID)).thenReturn(SHOW);
 
         //WHEN
         final Show result = unit.deletedShow(SHOW_ID);
@@ -211,7 +211,7 @@ public class ShowServiceTest {
         assertThat(result).isNotNull()
                 .isEqualTo(SHOW);
 
-        verify(mockShowRepository).selectShowById(SHOW_ID);
+        verify(mockShowRepository).showExistById(SHOW_ID);
         verify(mockShowRepository).deletedShowById(SHOW_ID);
 
         verifyNoMoreInteractions(mockShowRepository);
@@ -220,7 +220,7 @@ public class ShowServiceTest {
     @Test
     void deleteShowWorksCorrectlyWhenShowWithGivenIdDoesNotExist() {
         //GIVEN
-        when(mockShowRepository.selectShowById(SHOW_ID_DOES_NOT_EXIST)).thenReturn(null);
+        when(mockShowRepository.showExistById(SHOW_ID_DOES_NOT_EXIST)).thenReturn(false);
 
         //WHEN
         final Show result = unit.deletedShow(SHOW_ID_DOES_NOT_EXIST);
@@ -228,7 +228,7 @@ public class ShowServiceTest {
         //THEN
         assertThat(result).isNull();
 
-        verify(mockShowRepository).selectShowById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockShowRepository).showExistById(SHOW_ID_DOES_NOT_EXIST);
         verify(mockShowRepository, never()).deletedShowById(any());
 
         verifyNoMoreInteractions(mockShowRepository);
