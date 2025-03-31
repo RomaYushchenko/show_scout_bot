@@ -89,16 +89,16 @@ public class UserService {
     public User deleteUser(final Long userId) {
         log.debug("deleteUser.E: Delete user by ID:{}", userId);
 
-        final User user = getUserById(userId);
+        final var isUserExist = userRepository.userExistById(userId);
 
-        if (Objects.isNull(user)) {
+        if (!isUserExist) {
             log.warn("deleteUser.X: User doesn't find in system");
             return null;
         }
 
-        userRepository.deleteUserById(userId);
+        final var user = userRepository.deleteUserById(userId);
 
-        log.debug("deleteUser.X: Deleted user:{}", user);
+        log.debug("deleteUser.X: Deleted user :{}", user);
         return user;
     }
 }
