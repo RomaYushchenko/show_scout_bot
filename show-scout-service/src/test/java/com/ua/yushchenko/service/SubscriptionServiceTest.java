@@ -1,6 +1,12 @@
 package com.ua.yushchenko.service;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.TestData.SHOW;
+import static com.ua.yushchenko.TestData.SHOW_ID;
+import static com.ua.yushchenko.TestData.SUBSCRIPTION;
+import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.TestData.USER;
+import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doNothing;
@@ -13,6 +19,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
+import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +44,8 @@ class SubscriptionServiceTest {
     private ShowService mockShowService;
     @Mock
     private NotificationSettingsService mockNotificationSettingsService;
+    @Mock
+    private NotificationSettingEventProducer mockNotificationSettingEventProducer;
 
     @InjectMocks
     private SubscriptionService unit;
@@ -51,9 +60,9 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                .hasSize(1)
-                .first()
-                .isEqualTo(SUBSCRIPTION);
+                                 .hasSize(1)
+                                 .first()
+                                 .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository, never()).selectSubscriptions();
@@ -71,9 +80,9 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                .hasSize(1)
-                .first()
-                .isEqualTo(SUBSCRIPTION);
+                                 .hasSize(1)
+                                 .first()
+                                 .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository, never()).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository).selectSubscriptions();
@@ -91,7 +100,7 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
 
@@ -108,7 +117,7 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
@@ -119,28 +128,32 @@ class SubscriptionServiceTest {
     void createSubscription_nominal() {
         //GIVEN
         final var subscriptionToCreate = SUBSCRIPTION.toBuilder()
-                .subscriptionId(null)
-                .build();
+                                                     .subscriptionId(null)
+                                                     .build();
 
         when(mockUserService.getUserById(USER_ID)).thenReturn(USER);
         when(mockShowService.getShowById(SHOW_ID)).thenReturn(SHOW);
         when(mockNotificationSettingsService.createNotificationSettings())
                 .thenReturn(NOTIFICATION_SETTINGS);
         when(mockSubscriptionRepository.insertSubscription(subscriptionToCreate)).thenReturn(SUBSCRIPTION);
+        doNothing().when(mockNotificationSettingEventProducer)
+                   .sendCreatedEvent(NOTIFICATION_SETTINGS);
 
         //WHEN
         final var subscription = unit.createSubscription(SHOW_ID, USER_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockUserService).getUserById(USER_ID);
         verify(mockShowService).getShowById(SHOW_ID);
         verify(mockNotificationSettingsService).createNotificationSettings();
         verify(mockSubscriptionRepository).insertSubscription(subscriptionToCreate);
+        verify(mockNotificationSettingEventProducer).sendCreatedEvent(NOTIFICATION_SETTINGS);
 
-        verifyNoMoreInteractions(mockUserService, mockShowService, mockNotificationSettingsService, mockSubscriptionRepository);
+        verifyNoMoreInteractions(mockUserService, mockShowService, mockNotificationSettingsService,
+                                 mockSubscriptionRepository, mockNotificationSettingEventProducer);
     }
 
     @Test
@@ -187,19 +200,23 @@ class SubscriptionServiceTest {
         doNothing().when(mockSubscriptionRepository).deleteSubscription(SUBSCRIPTION_ID);
         when(mockNotificationSettingsService.deleteNotificationSettings(SUBSCRIPTION.getNotificationSettingsId()))
                 .thenReturn(NOTIFICATION_SETTINGS);
+        doNothing().when(mockNotificationSettingEventProducer)
+                   .sendDeletedEvent(NOTIFICATION_SETTINGS);
 
         //WHEN
         final var subscription = unit.deleteSubscription(SUBSCRIPTION_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
         verify(mockNotificationSettingsService).deleteNotificationSettings(SUBSCRIPTION.getNotificationSettingsId());
         verify(mockSubscriptionRepository).deleteSubscription(SUBSCRIPTION_ID);
+        verify(mockNotificationSettingEventProducer).sendDeletedEvent(NOTIFICATION_SETTINGS);
 
-        verifyNoMoreInteractions(mockSubscriptionRepository, mockNotificationSettingsService);
+        verifyNoMoreInteractions(mockSubscriptionRepository, mockNotificationSettingsService,
+                                 mockNotificationSettingEventProducer);
     }
 
     @Test

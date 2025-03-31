@@ -20,8 +20,11 @@
     </parent>
 
     <modules>
+        <module>common-show-scout-lib</module>
         <module>show-scout-api-lib</module>
         <module>common-client-lib</module>
+        <module>common-kafka-lib</module>
+        <module>common-kafka-event-lib</module>
         <module>open-show-api-client</module>
         <module>show-scout-service</module>
     </modules>
