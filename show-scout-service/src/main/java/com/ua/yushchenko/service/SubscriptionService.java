@@ -137,7 +137,8 @@ public class SubscriptionService {
         final var subscription = getSubscription(subscriptionId);
 
         if (Objects.isNull(subscription)) {
-            throw new EntityNotFoundException("Subscription [ID=" + subscriptionId + "] doesn't exist in system");
+            log.debug("deleteSubscription.X: User doesn't find in system");
+            return null;
         }
 
         final var deletedNotificationSettings =

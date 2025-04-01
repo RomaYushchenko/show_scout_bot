@@ -7,6 +7,7 @@ import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
+import com.ua.yushchenko.model.domain.Subscription;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -224,13 +226,15 @@ class SubscriptionServiceTest {
         //GIVEN
         when(mockSubscriptionRepository.selectSubscription(SUBSCRIPTION_ID)).thenReturn(null);
 
-        //WHEN //THEN
-        assertThatThrownBy(() -> unit.deleteSubscription(SUBSCRIPTION_ID))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Subscription [ID=%s] doesn't exist in system", SUBSCRIPTION_ID);
+        //WHEN
+        final var result = unit.deleteSubscription(SUBSCRIPTION_ID);
+
+        //THEN
+        assertThat(result)
+                .isNull();
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
-        verify(mockSubscriptionRepository, never()).deleteSubscription(SUBSCRIPTION_ID);
+        verify(mockSubscriptionRepository, never()).deleteSubscription(any());
 
         verifyNoMoreInteractions(mockSubscriptionRepository);
     }
