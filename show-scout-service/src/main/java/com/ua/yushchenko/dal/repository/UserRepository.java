@@ -100,7 +100,7 @@ public class UserRepository {
     public boolean userExistById(final Long userId) {
         log.trace("userExistById.E: Check if User exist with provided ID: {} ", userId);
 
-        boolean userExistById = userDao.existsById(userId);
+        final var userExistById = userDao.existsById(userId);
 
         log.trace("userExistById.X: User with id: {}, exist: {}", userId, userExistById);
         return userExistById;

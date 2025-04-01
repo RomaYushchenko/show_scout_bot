@@ -201,13 +201,54 @@ class NotificationSettingsRepositoryTest {
     @Test
     void deleteNotificationSettings_nominal() {
         //GIVEN
+        when(mockNotificationSettingsDao.findById(NOTIFICATION_SETTINGS_ID))
+                .thenReturn(Optional.of(NOTIFICATION_SETTINGS_DB));
+        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB))
+                .thenReturn(NOTIFICATION_SETTINGS);
         doNothing().when(mockNotificationSettingsDao).deleteById(NOTIFICATION_SETTINGS_ID);
 
         //WHEN
         unit.deleteNotificationSettings(NOTIFICATION_SETTINGS_ID);
 
         //THEN
+        verify(mockNotificationSettingsDao).findById(NOTIFICATION_SETTINGS_ID);
+        verify(mockNotificationSettingsMapper).toNotificationSettings(NOTIFICATION_SETTINGS_DB);
         verify(mockNotificationSettingsDao).deleteById(NOTIFICATION_SETTINGS_ID);
+
+        verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);
+    }
+
+    @Test
+    void notificationSettingsExistById_nominal() {
+        //GIVEN
+        when(mockNotificationSettingsDao.existsById(NOTIFICATION_SETTINGS_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.notificationSettingsExistById(NOTIFICATION_SETTINGS_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockNotificationSettingsDao).existsById(NOTIFICATION_SETTINGS_ID);
+
+        verifyNoMoreInteractions(mockNotificationSettingsDao);
+    }
+
+    @Test
+    void notificationSettingsExistById_nominal_notification_settings_id_does_not_exist() {
+        //GIVEN
+        final var notificationSettingsIdDoesNotExist = UUID.randomUUID();
+        when(mockNotificationSettingsDao.existsById(notificationSettingsIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.notificationSettingsExistById(notificationSettingsIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockNotificationSettingsDao).existsById(notificationSettingsIdDoesNotExist);
 
         verifyNoMoreInteractions(mockNotificationSettingsDao);
     }

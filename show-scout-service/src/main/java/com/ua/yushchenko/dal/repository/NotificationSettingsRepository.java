@@ -138,11 +138,30 @@ public class NotificationSettingsRepository {
      *
      * @param notificationSettingsId ID of {@link NotificationSettings}
      */
-    public void deleteNotificationSettings(final UUID notificationSettingsId) {
+    public NotificationSettings deleteNotificationSettings(final UUID notificationSettingsId) {
         log.trace("deleteNotificationSettings.E: Deleting notificationSettings with id: {}", notificationSettingsId);
+
+        final var notificationSettings = selectNotificationSettings(notificationSettingsId);
 
         notificationSettingsDao.deleteById(notificationSettingsId);
 
         log.trace("deleteNotificationSettings.X: Deleted notificationSettings with id: {}", notificationSettingsId);
+        return notificationSettings;
+    }
+
+    /**
+     * Checks if {@link NotificationSettings} exist for a given notificationSettings ID
+     *
+     * @param notificationSettingsId ID of {@link NotificationSettings}
+     * @return true if notificationSettings exist, false otherwise
+     */
+    public boolean notificationSettingsExistById(final UUID notificationSettingsId) {
+        log.trace("notificationSettingsExistById.E: Check if NotificationSettings exist with provided ID: {} ",
+                notificationSettingsId);
+
+        final var notificationSettingsExistById = notificationSettingsDao.existsById(notificationSettingsId);
+
+        log.trace("notificationSettingsExistById.X: NotificationSettings with id: {}, exist: {}", notificationSettingsId, notificationSettingsExistById);
+        return notificationSettingsExistById;
     }
 }
