@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
+import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
 import com.ua.yushchenko.model.domain.NotificationSettings;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.domain.Subscription;
@@ -34,6 +35,8 @@ public class SubscriptionService {
     private final ShowService showService;
     @NonNull
     private final NotificationSettingsService notificationSettingsService;
+    @NonNull
+    private final NotificationSettingEventProducer notificationSettingEventProducer;
 
     /**
      * Get {@link List} of {@link Subscription} based on filter by User ID. If request params aren't provide, the
@@ -116,6 +119,8 @@ public class SubscriptionService {
 
         final var createdSubscription = subscriptionRepository.insertSubscription(subscriptionToCreate);
 
+        notificationSettingEventProducer.sendCreatedEvent(notificationSettings);
+
         log.debug("createSubscription.X: Created Subscription:{}", createdSubscription);
         return createdSubscription;
     }
@@ -135,9 +140,12 @@ public class SubscriptionService {
             throw new EntityNotFoundException("Subscription [ID=" + subscriptionId + "] doesn't exist in system");
         }
 
-        notificationSettingsService.deleteNotificationSettings(subscription.getNotificationSettingsId());
+        final var deletedNotificationSettings =
+                notificationSettingsService.deleteNotificationSettings(subscription.getNotificationSettingsId());
 
         subscriptionRepository.deleteSubscription(subscriptionId);
+
+        notificationSettingEventProducer.sendDeletedEvent(deletedNotificationSettings);
 
         log.debug("deleteSubscription.X: Deleted Subscription:{}", subscription);
         return subscription;

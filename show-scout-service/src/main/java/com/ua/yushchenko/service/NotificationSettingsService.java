@@ -1,6 +1,7 @@
 package com.ua.yushchenko.service;
 
 import com.ua.yushchenko.dal.repository.NotificationSettingsRepository;
+import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
 import com.ua.yushchenko.model.domain.NotificationSettings;
 import com.ua.yushchenko.model.domain.Subscription;
 import com.ua.yushchenko.model.domain.User;
@@ -27,6 +28,9 @@ public class NotificationSettingsService {
 
     @NonNull
     private final NotificationSettingsRepository notificationSettingsRepository;
+    @NonNull
+    private final NotificationSettingEventProducer notificationSettingEventProducer;
+
     private final Integer DEFAULT_NOTIFICATION_INTERVAL = 1;
 
     /**
@@ -71,6 +75,8 @@ public class NotificationSettingsService {
         }
 
         final var updatedNotificationSettings = notificationSettingsRepository.updateNotificationSettings(notificationSettingsToUpdate);
+
+        notificationSettingEventProducer.sendUpdatedEvent(updatedNotificationSettings);
 
         log.debug("updateNotificationSettings.X: Updated NotificationSettings: {}", updatedNotificationSettings);
         return updatedNotificationSettings;

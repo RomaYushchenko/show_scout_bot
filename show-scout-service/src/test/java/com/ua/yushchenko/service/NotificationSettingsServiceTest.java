@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.dal.repository.NotificationSettingsRepository;
+import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
 import com.ua.yushchenko.model.domain.NotificationSettings;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class NotificationSettingsServiceTest {
     private NotificationSettingsRepository mockNotificationSettingsRepository;
     @Captor
     ArgumentCaptor<NotificationSettings> notificationSettingsArgumentCaptor;
+    @Mock
+    private NotificationSettingEventProducer mockNotificationSettingEventProducer;
+
     @InjectMocks
     private NotificationSettingsService unit;
 
@@ -59,6 +63,8 @@ class NotificationSettingsServiceTest {
                 .thenReturn(NOTIFICATION_SETTINGS);
         when(mockNotificationSettingsRepository.updateNotificationSettings(notificationSettingsToUpdate))
                 .thenReturn(notificationSettingsToUpdate);
+        doNothing().when(mockNotificationSettingEventProducer)
+                .sendUpdatedEvent(notificationSettingsToUpdate);
 
         //WHEN
         final var notificationSettings = unit.updateNotificationSettings(NOTIFICATION_SETTINGS_ID, notificationSettingsToUpdate);
@@ -70,8 +76,9 @@ class NotificationSettingsServiceTest {
 
         verify(mockNotificationSettingsRepository).selectNotificationSettings(NOTIFICATION_SETTINGS_ID);
         verify(mockNotificationSettingsRepository).updateNotificationSettings(notificationSettingsToUpdate);
+        verify(mockNotificationSettingEventProducer).sendUpdatedEvent(notificationSettingsToUpdate);
 
-        verifyNoMoreInteractions(mockNotificationSettingsRepository);
+        verifyNoMoreInteractions(mockNotificationSettingsRepository, mockNotificationSettingEventProducer);
     }
 
     @Test
