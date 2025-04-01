@@ -122,4 +122,39 @@ public class UserServiceTest {
 
         verifyNoMoreInteractions(mockUserRepository);
     }
+
+    @Test
+    void userExistById_nominal() {
+        //GIVEN
+        when(mockUserRepository.userExistById(USER_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.userExistById(USER_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockUserRepository).userExistById(USER_ID);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
+    void userExistById_nominal_user_id_does_not_exist() {
+        //GIVEN
+        final var userIdDoesNotExist = 1234L;
+        when(mockUserRepository.userExistById(userIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.userExistById(userIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockUserRepository).userExistById(userIdDoesNotExist);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
 }

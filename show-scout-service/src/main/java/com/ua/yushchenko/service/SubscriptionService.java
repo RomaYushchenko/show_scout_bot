@@ -97,15 +97,15 @@ public class SubscriptionService {
     public Subscription createSubscription(final UUID showId, final long userId) {
         log.debug("createSubscription.E: Create Subscription with showId:{}, userId:{}", showId, userId);
 
-        final var user = userService.getUserById(userId);
+        final var user = userService.userExistById(userId);
 
-        if (Objects.isNull(user)) {
+        if (!user) {
             throw new EntityNotFoundException("User [ID=" + userId + "] doesn't exist in system");
         }
 
-        final var show = showService.getShowById(showId);
+        final var show = showService.showExistById(showId);
 
-        if (Objects.isNull(show)) {
+        if (!show) {
             throw new EntityNotFoundException("Show [ID=" + showId + "] doesn't exist in system");
         }
 

@@ -101,4 +101,19 @@ public class UserService {
         log.debug("deleteUser.X: Deleted user :{}", user);
         return user;
     }
+
+    /**
+     * Checks if {@link User} exist for a given user ID
+     *
+     * @param userId ID of {@link User}
+     * @return true if user exist, false otherwise
+     */
+    public boolean userExistById(final Long userId) {
+        log.debug("userExistById.E: Check if User exist with provided ID: {} ", userId);
+
+        final var userExistById = userRepository.userExistById(userId);
+
+        log.debug("userExistById.X: User with id: {}, exist: {}", userId, userExistById);
+        return userExistById;
+    }
 }

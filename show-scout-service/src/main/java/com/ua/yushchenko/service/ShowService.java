@@ -153,4 +153,19 @@ public class ShowService {
         log.debug("deleteShow.X: Deleted show:{}", show);
         return show;
     }
+
+    /**
+     * Check if {@link Show} exist for a given show ID
+     *
+     * @param showId ID of {@link Show}
+     * @return true if show exist, false otherwise
+     */
+    public boolean showExistById(final UUID showId) {
+        log.trace("showExistById.E: Check if Show exist with provided ID: {}", showId);
+
+        final var showExistById = showRepository.showExistById(showId);
+
+        log.trace("showExistById.X: Show with ID: {} exist: {}", showId, showExistById);
+        return showExistById;
+    }
 }
