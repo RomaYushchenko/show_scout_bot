@@ -28,8 +28,6 @@ import java.util.UUID;
  * <li>The original air time</li>
  * </ul>
  * <p>
- * Lombok annotations (@Data, @NoArgsConstructor, @AllArgsConstructor, @Builder)
- * are used to generate common boilerplate code like getters, setters, constructors, etc.
  *
  * @author ivanshalaev
  * @version 1.0
