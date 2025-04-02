@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class EpisodeApi {
+public class EpisodeDetailsApi {
 
     int id;
     String url;
