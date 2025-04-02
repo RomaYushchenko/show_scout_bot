@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
-import com.ua.yushchenko.model.domain.NotificationSettings;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.domain.Subscription;
 import com.ua.yushchenko.model.domain.User;
@@ -94,7 +93,7 @@ public class SubscriptionService {
      * @param userId ID of {@link User}
      * @return Created {@link Subscription}
      */
-    public Subscription createSubscription(final UUID showId, final long userId) {
+    public Subscription createSubscription(final UUID showId, final UUID userId) {
         log.debug("createSubscription.E: Create Subscription with showId:{}, userId:{}", showId, userId);
 
         final var user = userService.userExistById(userId);
@@ -112,10 +111,11 @@ public class SubscriptionService {
         final var notificationSettings = notificationSettingsService.createNotificationSettings();
 
         final var subscriptionToCreate = Subscription.builder()
-                .userId(userId)
-                .showId(showId)
-                .notificationSettingsId(notificationSettings.getNotificationSettingsId())
-                .build();
+                                                     .userId(userId)
+                                                     .showId(showId)
+                                                     .notificationSettingsId(
+                                                             notificationSettings.getNotificationSettingsId())
+                                                     .build();
 
         final var createdSubscription = subscriptionRepository.insertSubscription(subscriptionToCreate);
 

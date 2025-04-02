@@ -1,8 +1,21 @@
 package com.ua.yushchenko.dal.repository;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_DB;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_ID;
+import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.NotificationSettingsDao;
 import com.ua.yushchenko.model.mapper.NotificationSettingsMapper;
@@ -13,12 +26,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 @ExtendWith(MockitoExtension.class)
 class NotificationSettingsRepositoryTest {
+
     @Mock
     private NotificationSettingsDao mockNotificationSettingsDao;
     @Mock
@@ -29,8 +39,10 @@ class NotificationSettingsRepositoryTest {
     @Test
     void insertNotificationSettings_nominal() {
         //GIVEN
-        when(mockNotificationSettingsMapper.toNotificationSettingsDb(NOTIFICATION_SETTINGS)).thenReturn(NOTIFICATION_SETTINGS_DB);
-        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB)).thenReturn(NOTIFICATION_SETTINGS);
+        when(mockNotificationSettingsMapper.toNotificationSettingsDb(NOTIFICATION_SETTINGS)).thenReturn(
+                NOTIFICATION_SETTINGS_DB);
+        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB)).thenReturn(
+                NOTIFICATION_SETTINGS);
         when(mockNotificationSettingsDao.save(NOTIFICATION_SETTINGS_DB)).thenReturn(NOTIFICATION_SETTINGS_DB);
 
         //WHEN
@@ -38,7 +50,7 @@ class NotificationSettingsRepositoryTest {
 
         //THEN
         assertThat(notificationSettings).isNotNull()
-                .isEqualTo(NOTIFICATION_SETTINGS);
+                                        .isEqualTo(NOTIFICATION_SETTINGS);
 
         verify(mockNotificationSettingsMapper).toNotificationSettingsDb(NOTIFICATION_SETTINGS);
         verify(mockNotificationSettingsMapper).toNotificationSettings(NOTIFICATION_SETTINGS_DB);
@@ -50,8 +62,10 @@ class NotificationSettingsRepositoryTest {
     @Test
     void updateNotificationSettings_nominal() {
         //GIVEN
-        when(mockNotificationSettingsMapper.toNotificationSettingsDb(NOTIFICATION_SETTINGS)).thenReturn(NOTIFICATION_SETTINGS_DB);
-        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB)).thenReturn(NOTIFICATION_SETTINGS);
+        when(mockNotificationSettingsMapper.toNotificationSettingsDb(NOTIFICATION_SETTINGS)).thenReturn(
+                NOTIFICATION_SETTINGS_DB);
+        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB)).thenReturn(
+                NOTIFICATION_SETTINGS);
         when(mockNotificationSettingsDao.save(NOTIFICATION_SETTINGS_DB)).thenReturn(NOTIFICATION_SETTINGS_DB);
 
         //WHEN
@@ -59,7 +73,7 @@ class NotificationSettingsRepositoryTest {
 
         //THEN
         assertThat(notificationSettings).isNotNull()
-                .isEqualTo(NOTIFICATION_SETTINGS);
+                                        .isEqualTo(NOTIFICATION_SETTINGS);
 
         verify(mockNotificationSettingsMapper).toNotificationSettingsDb(NOTIFICATION_SETTINGS);
         verify(mockNotificationSettingsMapper).toNotificationSettings(NOTIFICATION_SETTINGS_DB);
@@ -112,13 +126,13 @@ class NotificationSettingsRepositoryTest {
     @Test
     void selectNotificationSettingsListByUserId_nominal() {
         //GIVEN
-        when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(USER_ID))
+        when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(TELEGRAM_USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_DB));
         when(mockNotificationSettingsMapper.toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB)))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
-        final var notificationSettings = unit.selectNotificationSettingsListByUserId(USER_ID);
+        final var notificationSettings = unit.selectNotificationSettingsListByUserId(TELEGRAM_USER_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -126,7 +140,7 @@ class NotificationSettingsRepositoryTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS));
 
-        verify(mockNotificationSettingsDao).findAllNotificationSettingsByUserId(USER_ID);
+        verify(mockNotificationSettingsDao).findAllNotificationSettingsByUserId(TELEGRAM_USER_ID);
         verify(mockNotificationSettingsMapper).toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB));
 
         verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);

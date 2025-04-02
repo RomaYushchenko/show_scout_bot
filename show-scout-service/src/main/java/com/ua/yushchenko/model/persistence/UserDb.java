@@ -1,8 +1,9 @@
 package com.ua.yushchenko.model.persistence;
 
+import com.ua.yushchenko.model.persistence.pk.UserPk;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDb {
 
-    @Id
-    @Column(name = "user_id", nullable = false)
-    long userID;
+    @EmbeddedId
+    UserPk id;
 
     @Column(name = "user_name")
     String userName;
@@ -34,5 +34,5 @@ public class UserDb {
     String timeZone;
 
     @Column(name = "chat_id", nullable = false)
-    long chatId;
+    Long chatId;
 }

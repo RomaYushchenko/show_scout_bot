@@ -1,6 +1,7 @@
 package com.ua.yushchenko.api;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -20,12 +21,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserApi {
 
-    private long userID;
+    private UUID userId;
+    private Long telegramUserId;
     private String userName;
     private String firstName;
     private String lastName;
     private String timeZone;
-    private long chatId;
+    private Long chatId;
 
     @JsonIgnore
     public String getFullName() {

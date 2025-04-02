@@ -1,10 +1,16 @@
 package com.ua.yushchenko.dal.repository;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.TestData.USER;
+import static com.ua.yushchenko.TestData.USER_DB;
+import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.UserDao;
 import com.ua.yushchenko.model.domain.User;
@@ -43,7 +49,7 @@ public class UserRepositoryTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER);
+                          .isEqualTo(USER);
 
         verify(mockUserDao).findById(USER_ID);
         verify(mockUserMapper).toUser(USER_DB);
@@ -93,7 +99,7 @@ public class UserRepositoryTest {
     @Test
     void userExistById_nominal_user_id_does_not_exist() {
         //GIVEN
-        final var userIdDoesNotExist = 1234L;
+        final var userIdDoesNotExist = UUID.randomUUID();
         when(mockUserDao.existsById(userIdDoesNotExist)).thenReturn(false);
 
         //WHEN

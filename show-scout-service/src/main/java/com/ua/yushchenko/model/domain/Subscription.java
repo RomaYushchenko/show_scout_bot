@@ -14,6 +14,6 @@ public class Subscription {
 
     UUID subscriptionId;
     UUID showId;
-    long userId;
+    UUID userId;
     UUID notificationSettingsId;
 }
