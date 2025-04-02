@@ -12,4 +12,6 @@
     <include file="006__show_scout_subscription__add_notification_id_column/006.00__master.xml" relativeToChangelogFile="true"/>
     <include file="007__show_scout_notification_settings__create_table/007.00__master.xml" relativeToChangelogFile="true" />
     <include file="008__show_scout_subscription__add_foreign_key_to_notification_table/008.00__master.xml" relativeToChangelogFile="true" />
+    <include file="009__show_scout_episode__create_table/009.00__master.xml" relativeToChangelogFile="true" />
+    <include file="010__show_scout_episode__add_foreign_key_to_show_table/010.00__master.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>
