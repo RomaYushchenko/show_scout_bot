@@ -39,9 +39,7 @@ public class SubscriptionRepository {
     public List<Subscription> selectSubscriptions() {
         log.trace("selectSubscriptions.E: Selecting all subscriptions");
 
-        final var subscriptions = StreamSupport.stream(subscriptionDao.findAll().spliterator(), false)
-                                               .map(subscriptionMapper::toSubscription)
-                                               .toList();
+        final var subscriptions = subscriptionMapper.toSubscriptions(subscriptionDao.findAll());
 
         log.trace("selectSubscriptions.X: Returned {} subscriptions {}", subscriptions.size(), subscriptions);
         return subscriptions;
@@ -56,12 +54,10 @@ public class SubscriptionRepository {
     public List<Subscription> selectSubscriptionsByUserId(final Long userId) {
         log.trace("selectSubscriptionsByUserId.E: Selecting all subscriptions for user {}", userId);
 
-        final var subscriptions = StreamSupport.stream(subscriptionDao.findAllByUserId(userId).spliterator(), false)
-                                               .map(subscriptionMapper::toSubscription)
-                                               .toList();
+        final var subscriptions = subscriptionMapper.toSubscriptions(subscriptionDao.findAllByUserId(userId));
 
         log.trace("selectSubscriptionsByUserId.X: Returned {} subscriptions for user {}. Subscriptions:{}",
-                  subscriptions.size(), userId, subscriptions);
+                subscriptions.size(), userId, subscriptions);
         return subscriptions;
     }
 
@@ -75,8 +71,8 @@ public class SubscriptionRepository {
         log.trace("selectSubscription.E: Selecting subscription with id {}", subscriptionId);
 
         final var subscription = subscriptionDao.findById(subscriptionId)
-                                                .map(subscriptionMapper::toSubscription)
-                                                .orElse(null);
+                .map(subscriptionMapper::toSubscription)
+                .orElse(null);
 
         log.trace("selectSubscription.X: Returned subscription {} with id {}", subscription, subscriptionId);
         return subscription;
@@ -91,11 +87,11 @@ public class SubscriptionRepository {
      */
     public Subscription selectSubscriptionByShowAndUserId(final UUID showId, final Long userId) {
         log.trace("selectSubscriptionByShowAndUserId.E: Selecting subscription with showId:{} and userId:{}",
-                  showId, userId);
+                showId, userId);
 
         final var subscription = subscriptionDao.findSubscriptionDbByShowIdAndUserId(showId, userId)
-                                                .map(subscriptionMapper::toSubscription)
-                                                .orElse(null);
+                .map(subscriptionMapper::toSubscription)
+                .orElse(null);
 
         log.trace("selectSubscriptionByShowAndUserId.X: Returned subscription {}", subscription);
         return subscription;

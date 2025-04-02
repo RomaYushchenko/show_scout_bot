@@ -35,8 +35,8 @@ public class UserRepository {
         log.trace("selectUserById.E: Select user from table by ID:{}", userId);
 
         final User user = userDao.findById(userId)
-                                 .map(userMapper::toUser)
-                                 .orElse(null);
+                .map(userMapper::toUser)
+                .orElse(null);
 
         log.trace("selectUserById.X: User:{}", user);
         return user;
@@ -78,12 +78,31 @@ public class UserRepository {
      * Delete {@link User}
      *
      * @param userId ID of user
+     * @return deleted user {@link User}
      */
-    public void deleteUserById(final Long userId) {
+    public User deleteUserById(final Long userId) {
         log.trace("deleteUserById.E: Delete user from table by ID:{}", userId);
+
+        final var user = selectUserById(userId);
 
         userDao.deleteById(userId);
 
         log.trace("deleteUserById.X: User from table by ID:{} was deleted", userId);
+        return user;
+    }
+
+    /**
+     * Checks if {@link User} exist for a given user ID
+     *
+     * @param userId ID of {@link User}
+     * @return true if user exist, false otherwise
+     */
+    public boolean userExistById(final Long userId) {
+        log.trace("userExistById.E: Check if User exist with provided ID: {} ", userId);
+
+        final var userExistById = userDao.existsById(userId);
+
+        log.trace("userExistById.X: User with id: {}, exist: {}", userId, userExistById);
+        return userExistById;
     }
 }

@@ -1,14 +1,13 @@
 package com.ua.yushchenko.service;
 
 import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
-import static com.ua.yushchenko.TestData.SHOW;
 import static com.ua.yushchenko.TestData.SHOW_ID;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.USER;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
+import com.ua.yushchenko.model.domain.Subscription;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,9 +60,9 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                                 .hasSize(1)
-                                 .first()
-                                 .isEqualTo(SUBSCRIPTION);
+                .hasSize(1)
+                .first()
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository, never()).selectSubscriptions();
@@ -80,9 +80,9 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                                 .hasSize(1)
-                                 .first()
-                                 .isEqualTo(SUBSCRIPTION);
+                .hasSize(1)
+                .first()
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository, never()).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository).selectSubscriptions();
@@ -100,7 +100,7 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                                .isEqualTo(SUBSCRIPTION);
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
 
@@ -117,7 +117,7 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                                .isEqualTo(SUBSCRIPTION);
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
@@ -128,69 +128,71 @@ class SubscriptionServiceTest {
     void createSubscription_nominal() {
         //GIVEN
         final var subscriptionToCreate = SUBSCRIPTION.toBuilder()
-                                                     .subscriptionId(null)
-                                                     .build();
+                .subscriptionId(null)
+                .build();
 
-        when(mockUserService.getUserById(USER_ID)).thenReturn(USER);
-        when(mockShowService.getShowById(SHOW_ID)).thenReturn(SHOW);
+        when(mockUserService.userExistById(USER_ID)).thenReturn(true);
+        when(mockShowService.showExistById(SHOW_ID)).thenReturn(true);
         when(mockNotificationSettingsService.createNotificationSettings())
                 .thenReturn(NOTIFICATION_SETTINGS);
         when(mockSubscriptionRepository.insertSubscription(subscriptionToCreate)).thenReturn(SUBSCRIPTION);
         doNothing().when(mockNotificationSettingEventProducer)
-                   .sendCreatedEvent(NOTIFICATION_SETTINGS);
+                .sendCreatedEvent(NOTIFICATION_SETTINGS);
 
         //WHEN
         final var subscription = unit.createSubscription(SHOW_ID, USER_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
-                                .isEqualTo(SUBSCRIPTION);
+                .isEqualTo(SUBSCRIPTION);
 
-        verify(mockUserService).getUserById(USER_ID);
-        verify(mockShowService).getShowById(SHOW_ID);
+        verify(mockUserService).userExistById(USER_ID);
+        verify(mockShowService).showExistById(SHOW_ID);
         verify(mockNotificationSettingsService).createNotificationSettings();
         verify(mockSubscriptionRepository).insertSubscription(subscriptionToCreate);
         verify(mockNotificationSettingEventProducer).sendCreatedEvent(NOTIFICATION_SETTINGS);
 
         verifyNoMoreInteractions(mockUserService, mockShowService, mockNotificationSettingsService,
-                                 mockSubscriptionRepository, mockNotificationSettingEventProducer);
+                mockSubscriptionRepository, mockNotificationSettingEventProducer);
     }
 
     @Test
     void createSubscription_nominal_user_does_not_exist() {
         //GIVEN
-        when(mockUserService.getUserById(USER_ID)).thenReturn(null);
+        when(mockUserService.userExistById(USER_ID)).thenReturn(false);
 
         //WHEN //THEN
         assertThatThrownBy(() -> unit.createSubscription(SHOW_ID, USER_ID))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(String.format("User [ID=%s] doesn't exist in system", USER_ID));
 
-        verify(mockUserService).getUserById(USER_ID);
+        verify(mockUserService).userExistById(USER_ID);
         verify(mockShowService, never()).getShowById(SHOW_ID);
+        verify(mockNotificationSettingsService, never()).createNotificationSettings();
         verify(mockSubscriptionRepository, never()).insertSubscription(SUBSCRIPTION);
 
         verifyNoMoreInteractions(mockUserService);
-        verifyNoInteractions(mockShowService, mockSubscriptionRepository);
+        verifyNoInteractions(mockShowService, mockNotificationSettingsService, mockSubscriptionRepository);
     }
 
     @Test
     void createSubscription_nominal_show_does_not_exist() {
         //GIVEN
-        when(mockUserService.getUserById(USER_ID)).thenReturn(USER);
-        when(mockShowService.getShowById(SHOW_ID)).thenReturn(null);
+        when(mockUserService.userExistById(USER_ID)).thenReturn(true);
+        when(mockShowService.showExistById(SHOW_ID)).thenReturn(false);
 
         //WHEN //THEN
         assertThatThrownBy(() -> unit.createSubscription(SHOW_ID, USER_ID))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("Show [ID=%s] doesn't exist in system", SHOW_ID);
 
-        verify(mockUserService).getUserById(USER_ID);
-        verify(mockShowService).getShowById(SHOW_ID);
+        verify(mockUserService).userExistById(USER_ID);
+        verify(mockShowService).showExistById(SHOW_ID);
+        verify(mockNotificationSettingsService, never()).createNotificationSettings();
         verify(mockSubscriptionRepository, never()).insertSubscription(SUBSCRIPTION);
 
         verifyNoMoreInteractions(mockUserService, mockShowService);
-        verifyNoInteractions(mockSubscriptionRepository);
+        verifyNoInteractions(mockNotificationSettingsService, mockSubscriptionRepository);
     }
 
     @Test
@@ -201,14 +203,14 @@ class SubscriptionServiceTest {
         when(mockNotificationSettingsService.deleteNotificationSettings(SUBSCRIPTION.getNotificationSettingsId()))
                 .thenReturn(NOTIFICATION_SETTINGS);
         doNothing().when(mockNotificationSettingEventProducer)
-                   .sendDeletedEvent(NOTIFICATION_SETTINGS);
+                .sendDeletedEvent(NOTIFICATION_SETTINGS);
 
         //WHEN
         final var subscription = unit.deleteSubscription(SUBSCRIPTION_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
-                                .isEqualTo(SUBSCRIPTION);
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
         verify(mockNotificationSettingsService).deleteNotificationSettings(SUBSCRIPTION.getNotificationSettingsId());
@@ -216,7 +218,7 @@ class SubscriptionServiceTest {
         verify(mockNotificationSettingEventProducer).sendDeletedEvent(NOTIFICATION_SETTINGS);
 
         verifyNoMoreInteractions(mockSubscriptionRepository, mockNotificationSettingsService,
-                                 mockNotificationSettingEventProducer);
+                mockNotificationSettingEventProducer);
     }
 
     @Test
@@ -224,13 +226,15 @@ class SubscriptionServiceTest {
         //GIVEN
         when(mockSubscriptionRepository.selectSubscription(SUBSCRIPTION_ID)).thenReturn(null);
 
-        //WHEN //THEN
-        assertThatThrownBy(() -> unit.deleteSubscription(SUBSCRIPTION_ID))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Subscription [ID=%s] doesn't exist in system", SUBSCRIPTION_ID);
+        //WHEN
+        final var result = unit.deleteSubscription(SUBSCRIPTION_ID);
+
+        //THEN
+        assertThat(result)
+                .isNull();
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
-        verify(mockSubscriptionRepository, never()).deleteSubscription(SUBSCRIPTION_ID);
+        verify(mockSubscriptionRepository, never()).deleteSubscription(any());
 
         verifyNoMoreInteractions(mockSubscriptionRepository);
     }

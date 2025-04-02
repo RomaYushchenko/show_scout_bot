@@ -90,10 +90,9 @@ public class NotificationSettingsRepository {
     public List<NotificationSettings> selectNotificationSettingsListByUserId(final Long userId) {
         log.trace("selectNotificationSettingsListByUserId.E: Select List of NotificationSettings for user {}", userId);
 
-        final var notificationSettings = notificationSettingsDao.findAllNotificationSettingsByUserId(userId)
-                .stream()
-                .map(notificationSettingsMapper::toNotificationSettings)
-                .toList();
+        final var notificationSettings = notificationSettingsMapper
+                .toNotificationSettings(notificationSettingsDao
+                        .findAllNotificationSettingsByUserId(userId));
 
         log.trace("selectNotificationSettingsListByUserId.X: Returned {} NotificationSettings for user {}",
                 notificationSettings.size(), userId);
@@ -108,9 +107,7 @@ public class NotificationSettingsRepository {
     public List<NotificationSettings> selectNotificationSettingsList() {
         log.trace("selectNotificationSettingsList.E: Selecting all NotificationSettings");
 
-        final var notificationSettings = StreamSupport.stream(notificationSettingsDao.findAll().spliterator(), false)
-                .map(notificationSettingsMapper::toNotificationSettings)
-                .toList();
+        final var notificationSettings = notificationSettingsMapper.toNotificationSettings(notificationSettingsDao.findAll());
 
         log.trace("selectNotificationSettingsList.X: Returned all {} NotificationSettings"
                 , notificationSettings.size());
@@ -141,11 +138,30 @@ public class NotificationSettingsRepository {
      *
      * @param notificationSettingsId ID of {@link NotificationSettings}
      */
-    public void deleteNotificationSettings(final UUID notificationSettingsId) {
+    public NotificationSettings deleteNotificationSettings(final UUID notificationSettingsId) {
         log.trace("deleteNotificationSettings.E: Deleting notificationSettings with id: {}", notificationSettingsId);
+
+        final var notificationSettings = selectNotificationSettings(notificationSettingsId);
 
         notificationSettingsDao.deleteById(notificationSettingsId);
 
         log.trace("deleteNotificationSettings.X: Deleted notificationSettings with id: {}", notificationSettingsId);
+        return notificationSettings;
+    }
+
+    /**
+     * Checks if {@link NotificationSettings} exist for a given notificationSettings ID
+     *
+     * @param notificationSettingsId ID of {@link NotificationSettings}
+     * @return true if notificationSettings exist, false otherwise
+     */
+    public boolean notificationSettingsExistById(final UUID notificationSettingsId) {
+        log.trace("notificationSettingsExistById.E: Check if NotificationSettings exist with provided ID: {} ",
+                notificationSettingsId);
+
+        final var notificationSettingsExistById = notificationSettingsDao.existsById(notificationSettingsId);
+
+        log.trace("notificationSettingsExistById.X: NotificationSettings with id: {}, exist: {}", notificationSettingsId, notificationSettingsExistById);
+        return notificationSettingsExistById;
     }
 }

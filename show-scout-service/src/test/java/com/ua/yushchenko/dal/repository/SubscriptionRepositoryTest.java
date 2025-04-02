@@ -43,19 +43,19 @@ class SubscriptionRepositoryTest {
     void selectSubscriptions_nominal() {
         //GIVEN
         when(mockSubscriptionDao.findAll()).thenReturn(List.of(SUBSCRIPTION_DB));
-        when(mockSubscriptionMapper.toSubscription(SUBSCRIPTION_DB)).thenReturn(SUBSCRIPTION);
+        when(mockSubscriptionMapper.toSubscriptions(List.of(SUBSCRIPTION_DB))).thenReturn(List.of(SUBSCRIPTION));
 
         //WHEN
         final var subscriptions = unit.selectSubscriptions();
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                                 .hasSize(1)
-                                 .first()
-                                 .isEqualTo(SUBSCRIPTION);
+                .hasSize(1)
+                .first()
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionDao).findAll();
-        verify(mockSubscriptionMapper).toSubscription(SUBSCRIPTION_DB);
+        verify(mockSubscriptionMapper).toSubscriptions(List.of(SUBSCRIPTION_DB));
 
         verifyNoMoreInteractions(mockSubscriptionDao, mockSubscriptionMapper);
     }
@@ -64,19 +64,19 @@ class SubscriptionRepositoryTest {
     void selectSubscriptionsByUserId_nominal() {
         //GIVEN
         when(mockSubscriptionDao.findAllByUserId(USER_ID)).thenReturn(List.of(SUBSCRIPTION_DB));
-        when(mockSubscriptionMapper.toSubscription(SUBSCRIPTION_DB)).thenReturn(SUBSCRIPTION);
+        when(mockSubscriptionMapper.toSubscriptions(List.of(SUBSCRIPTION_DB))).thenReturn(List.of(SUBSCRIPTION));
 
         //WHEN
         final var subscriptions = unit.selectSubscriptionsByUserId(USER_ID);
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                                 .hasSize(1)
-                                 .first()
-                                 .isEqualTo(SUBSCRIPTION);
+                .hasSize(1)
+                .first()
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionDao).findAllByUserId(USER_ID);
-        verify(mockSubscriptionMapper).toSubscription(SUBSCRIPTION_DB);
+        verify(mockSubscriptionMapper).toSubscriptions(List.of(SUBSCRIPTION_DB));
 
         verifyNoMoreInteractions(mockSubscriptionDao, mockSubscriptionMapper);
     }
@@ -92,7 +92,7 @@ class SubscriptionRepositoryTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                                .isEqualTo(SUBSCRIPTION);
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionDao).findById(SUBSCRIPTION_ID);
         verify(mockSubscriptionMapper).toSubscription(SUBSCRIPTION_DB);
@@ -112,7 +112,7 @@ class SubscriptionRepositoryTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                                .isEqualTo(SUBSCRIPTION);
+                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionDao).findSubscriptionDbByShowIdAndUserId(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper).toSubscription(SUBSCRIPTION_DB);

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.ShowDao;
 import com.ua.yushchenko.model.domain.Show;
@@ -72,20 +73,18 @@ public class ShowRepositoryTest {
     @Test
     void selectShowsByName_nominal() {
         //GIVEN
-        final Iterable<ShowDb> showDbList = List.of(SHOW_DB);
-        final List<Show> showList = List.of(SHOW);
-        when(mockShowDao.findByShowName(SHOW_DB.getShowName())).thenReturn(showDbList);
-        when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
+        when(mockShowDao.findByShowName(SHOW_DB.getShowName())).thenReturn(List.of(SHOW_DB));
+        when(mockShowMapper.toShowFromShowsDb(List.of(SHOW_DB))).thenReturn(List.of(SHOW));
 
         //WHEN
         final List<Show> result = unit.selectShowsByName(SHOW_DB.getShowName());
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(showList);
+                .isEqualTo(List.of(SHOW));
 
         verify(mockShowDao).findByShowName(SHOW_DB.getShowName());
-        verify(mockShowMapper).toShow(SHOW_DB);
+        verify(mockShowMapper).toShowFromShowsDb(List.of(SHOW_DB));
 
         verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
@@ -94,6 +93,8 @@ public class ShowRepositoryTest {
     void selectShowByNameWorkCorrectlyWhenShowsWithGivenIdDoesNotExist() {
         //GIVEN
         when(mockShowDao.findByShowName(SHOW_NAME_DOES_NOT_EXIST)).thenReturn(Collections.emptyList());
+        when(mockShowMapper.toShowFromShowsDb(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
 
         //WHEN
         final List<Show> result = unit.selectShowsByName(SHOW_NAME_DOES_NOT_EXIST);
@@ -102,28 +103,26 @@ public class ShowRepositoryTest {
         assertThat(result).isNotNull().hasSize(0);
 
         verify(mockShowDao).findByShowName(SHOW_NAME_DOES_NOT_EXIST);
+        verify(mockShowMapper).toShowFromShowsDb(Collections.emptyList());
 
-        verifyNoMoreInteractions(mockShowDao);
-        verifyNoInteractions(mockShowMapper);
+        verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
 
     @Test
     void selectAllShows_nominal() {
         //GIVEN
-        final Iterable<ShowDb> showDbList = List.of(SHOW_DB);
-        final List<Show> showList = List.of(SHOW);
-        when(mockShowDao.findAll()).thenReturn(showDbList);
-        when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
+        when(mockShowDao.findAll()).thenReturn(List.of(SHOW_DB));
+        when(mockShowMapper.toShowFromShowsDb(List.of(SHOW_DB))).thenReturn(List.of(SHOW));
 
         //WHEN
         final List<Show> result = unit.selectAllShows();
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(showList);
+                .isEqualTo(List.of(SHOW));
 
         verify(mockShowDao).findAll();
-        verify(mockShowMapper).toShow(SHOW_DB);
+        verify(mockShowMapper).toShowFromShowsDb(List.of(SHOW_DB));
 
         verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
@@ -132,6 +131,8 @@ public class ShowRepositoryTest {
     void selectAllShowsWorkCorrectlyWhenNoShowsInSystem() {
         //GIVEN
         when(mockShowDao.findAll()).thenReturn(Collections.emptyList());
+        when(mockShowMapper.toShowFromShowsDb(Collections.emptyList()))
+                .thenReturn(Collections.emptyList());
 
         //WHEN
         final List<Show> result = unit.selectAllShows();
@@ -140,9 +141,9 @@ public class ShowRepositoryTest {
         assertThat(result).isNotNull().hasSize(0);
 
         verify(mockShowDao).findAll();
-        verify(mockShowMapper, never()).toShow(any(ShowDb.class));
+        verify(mockShowMapper).toShowFromShowsDb(Collections.emptyList());
 
-        verifyNoMoreInteractions(mockShowDao);
+        verifyNoMoreInteractions(mockShowDao, mockShowMapper);
     }
 
     @Test
@@ -188,15 +189,58 @@ public class ShowRepositoryTest {
     }
 
     @Test
-    void deleteShowById() {
+    void deleteShowById_nominal() {
         // GIVEN
+        when(mockShowDao.findById(SHOW_ID)).thenReturn(Optional.of(SHOW_DB));
+        when(mockShowMapper.toShow(SHOW_DB)).thenReturn(SHOW);
         doNothing().when(mockShowDao).deleteById(SHOW_ID);
 
         // WHEN
-        unit.deletedShowById(SHOW_ID);
+        final var result = unit.deletedShowById(SHOW_ID);
 
         // THEN
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(SHOW);
+
+        verify(mockShowDao).findById(SHOW_ID);
+        verify(mockShowMapper).toShow(SHOW_DB);
         verify(mockShowDao).deleteById(SHOW_ID);
+
+        verifyNoMoreInteractions(mockShowDao, mockShowMapper);
+    }
+
+    @Test
+    void showExistById_nominal() {
+        //GIVEN
+        when(mockShowDao.existsById(SHOW_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.showExistById(SHOW_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockShowDao).existsById(SHOW_ID);
+
+        verifyNoMoreInteractions(mockShowDao);
+    }
+
+    @Test
+    void showExistById_nominal_when_show_id_does_not_exist() {
+        //GIVEN
+        final var showIdDoesNotExist = UUID.randomUUID();
+        when(mockShowDao.existsById(showIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.showExistById(showIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockShowDao).existsById(showIdDoesNotExist);
 
         verifyNoMoreInteractions(mockShowDao);
     }

@@ -131,6 +131,11 @@ public class SubscriptionController {
         log.info("deleteSubscription.E: Delete Subscription by ID:{}", subscriptionId);
 
         final var deletedSubscription = subscriptionService.deleteSubscription(subscriptionId);
+
+        if (Objects.isNull(deletedSubscription)){
+            throw new EntityNotFoundException("Subscription [ID=" + subscriptionId + "] doesn't exist in system");
+        }
+
         final var subscriptionApi = subscriptionMapper.toSubscriptionApi(deletedSubscription);
 
         log.info("deleteSubscription.X: Deleted Subscription:{}", subscriptionApi);
