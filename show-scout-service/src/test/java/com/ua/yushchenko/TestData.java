@@ -17,7 +17,6 @@ import com.ua.yushchenko.model.persistence.NotificationSettingsDb;
 import com.ua.yushchenko.model.persistence.ShowDb;
 import com.ua.yushchenko.model.persistence.SubscriptionDb;
 import com.ua.yushchenko.model.persistence.UserDb;
-import com.ua.yushchenko.model.persistence.pk.UserPk;
 
 public class TestData {
 
@@ -25,7 +24,6 @@ public class TestData {
     public final static Long TELEGRAM_USER_ID = 123L;
     public final static Long CHAT_ID = 123L;
     public final static User USER;
-    public final static UserPk USER_PK;
     public final static UserDb USER_DB;
     public final static UserApi USER_API;
     public final static UUID SHOW_ID = UUID.randomUUID();
@@ -55,13 +53,9 @@ public class TestData {
                    .timeZone("GMT+0000")
                    .build();
 
-        USER_PK = UserPk.builder()
+        USER_DB = UserDb.builder()
                         .userId(USER_ID)
                         .telegramUserId(TELEGRAM_USER_ID)
-                        .build();
-
-        USER_DB = UserDb.builder()
-                        .id(USER_PK)
                         .userName("TestUserName")
                         .firstName("TestName")
                         .lastName("TestLastName")

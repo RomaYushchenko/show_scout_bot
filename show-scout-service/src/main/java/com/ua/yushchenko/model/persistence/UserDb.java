@@ -1,9 +1,12 @@
 package com.ua.yushchenko.model.persistence;
 
-import com.ua.yushchenko.model.persistence.pk.UserPk;
+import java.util.UUID;
+
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +21,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDb {
 
-    @EmbeddedId
-    UserPk id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id", nullable = false)
+    UUID userId;
+
+    @Column(name = "telegram_user_id", nullable = false)
+    Long telegramUserId;
 
     @Column(name = "user_name")
     String userName;
