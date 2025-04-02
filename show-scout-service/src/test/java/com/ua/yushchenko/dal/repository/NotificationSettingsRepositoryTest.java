@@ -113,9 +113,9 @@ class NotificationSettingsRepositoryTest {
     void selectNotificationSettingsListByUserId_nominal() {
         //GIVEN
         when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(USER_ID))
-                .thenReturn(Optional.of(NOTIFICATION_SETTINGS_DB));
-        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB))
-                .thenReturn(NOTIFICATION_SETTINGS);
+                .thenReturn(List.of(NOTIFICATION_SETTINGS_DB));
+        when(mockNotificationSettingsMapper.toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB)))
+                .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
         final var notificationSettings = unit.selectNotificationSettingsListByUserId(USER_ID);
@@ -127,8 +127,7 @@ class NotificationSettingsRepositoryTest {
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS));
 
         verify(mockNotificationSettingsDao).findAllNotificationSettingsByUserId(USER_ID);
-        verify(mockNotificationSettingsMapper, times(1))
-                .toNotificationSettings(NOTIFICATION_SETTINGS_DB);
+        verify(mockNotificationSettingsMapper).toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB));
 
         verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);
     }
@@ -138,7 +137,8 @@ class NotificationSettingsRepositoryTest {
         //GIVEN
         final var userIdDoesNotExist = 1L;
         when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(userIdDoesNotExist))
-                .thenReturn(Optional.empty());
+                .thenReturn(List.of());
+        when(mockNotificationSettingsMapper.toNotificationSettings(List.of())).thenReturn(List.of());
 
         //WHEN
         final var notificationSettings = unit.selectNotificationSettingsListByUserId(userIdDoesNotExist);
@@ -146,12 +146,11 @@ class NotificationSettingsRepositoryTest {
         //THEN
         assertThat(notificationSettings)
                 .isNotNull()
-                .isEmpty();
+                .isEqualTo(List.of());
 
         verify(mockNotificationSettingsDao).findAllNotificationSettingsByUserId(userIdDoesNotExist);
 
-        verifyNoMoreInteractions(mockNotificationSettingsDao);
-        verifyNoInteractions(mockNotificationSettingsMapper);
+        verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);
     }
 
     @Test
@@ -159,8 +158,8 @@ class NotificationSettingsRepositoryTest {
         //GIVEN
         when(mockNotificationSettingsDao.findAll())
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_DB));
-        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB))
-                .thenReturn(NOTIFICATION_SETTINGS);
+        when(mockNotificationSettingsMapper.toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB)))
+                .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
         final var notificationSettings = unit.selectNotificationSettingsList();
@@ -172,7 +171,7 @@ class NotificationSettingsRepositoryTest {
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS));
 
         verify(mockNotificationSettingsDao).findAll();
-        verify(mockNotificationSettingsMapper, times(1)).toNotificationSettings(NOTIFICATION_SETTINGS_DB);
+        verify(mockNotificationSettingsMapper).toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB));
 
         verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);
     }
@@ -202,13 +201,54 @@ class NotificationSettingsRepositoryTest {
     @Test
     void deleteNotificationSettings_nominal() {
         //GIVEN
+        when(mockNotificationSettingsDao.findById(NOTIFICATION_SETTINGS_ID))
+                .thenReturn(Optional.of(NOTIFICATION_SETTINGS_DB));
+        when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_DB))
+                .thenReturn(NOTIFICATION_SETTINGS);
         doNothing().when(mockNotificationSettingsDao).deleteById(NOTIFICATION_SETTINGS_ID);
 
         //WHEN
         unit.deleteNotificationSettings(NOTIFICATION_SETTINGS_ID);
 
         //THEN
+        verify(mockNotificationSettingsDao).findById(NOTIFICATION_SETTINGS_ID);
+        verify(mockNotificationSettingsMapper).toNotificationSettings(NOTIFICATION_SETTINGS_DB);
         verify(mockNotificationSettingsDao).deleteById(NOTIFICATION_SETTINGS_ID);
+
+        verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);
+    }
+
+    @Test
+    void notificationSettingsExistById_nominal() {
+        //GIVEN
+        when(mockNotificationSettingsDao.existsById(NOTIFICATION_SETTINGS_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.notificationSettingsExistById(NOTIFICATION_SETTINGS_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockNotificationSettingsDao).existsById(NOTIFICATION_SETTINGS_ID);
+
+        verifyNoMoreInteractions(mockNotificationSettingsDao);
+    }
+
+    @Test
+    void notificationSettingsExistById_nominal_notification_settings_id_does_not_exist() {
+        //GIVEN
+        final var notificationSettingsIdDoesNotExist = UUID.randomUUID();
+        when(mockNotificationSettingsDao.existsById(notificationSettingsIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.notificationSettingsExistById(notificationSettingsIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockNotificationSettingsDao).existsById(notificationSettingsIdDoesNotExist);
 
         verifyNoMoreInteractions(mockNotificationSettingsDao);
     }

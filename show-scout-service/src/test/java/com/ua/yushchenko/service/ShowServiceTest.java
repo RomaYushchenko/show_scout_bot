@@ -2,7 +2,6 @@ package com.ua.yushchenko.service;
 
 import static com.ua.yushchenko.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.dal.repository.ShowRepository;
@@ -14,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -201,8 +201,8 @@ public class ShowServiceTest {
     @Test
     void deleteShow_nominal() {
         //GIVEN
-        when(mockShowRepository.selectShowById(SHOW_ID)).thenReturn(SHOW);
-        doNothing().when(mockShowRepository).deletedShowById(SHOW_ID);
+        when(mockShowRepository.showExistById(SHOW_ID)).thenReturn(true);
+        when(mockShowRepository.deletedShowById(SHOW_ID)).thenReturn(SHOW);
 
         //WHEN
         final Show result = unit.deletedShow(SHOW_ID);
@@ -211,7 +211,7 @@ public class ShowServiceTest {
         assertThat(result).isNotNull()
                 .isEqualTo(SHOW);
 
-        verify(mockShowRepository).selectShowById(SHOW_ID);
+        verify(mockShowRepository).showExistById(SHOW_ID);
         verify(mockShowRepository).deletedShowById(SHOW_ID);
 
         verifyNoMoreInteractions(mockShowRepository);
@@ -220,7 +220,7 @@ public class ShowServiceTest {
     @Test
     void deleteShowWorksCorrectlyWhenShowWithGivenIdDoesNotExist() {
         //GIVEN
-        when(mockShowRepository.selectShowById(SHOW_ID_DOES_NOT_EXIST)).thenReturn(null);
+        when(mockShowRepository.showExistById(SHOW_ID_DOES_NOT_EXIST)).thenReturn(false);
 
         //WHEN
         final Show result = unit.deletedShow(SHOW_ID_DOES_NOT_EXIST);
@@ -228,8 +228,43 @@ public class ShowServiceTest {
         //THEN
         assertThat(result).isNull();
 
-        verify(mockShowRepository).selectShowById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockShowRepository).showExistById(SHOW_ID_DOES_NOT_EXIST);
         verify(mockShowRepository, never()).deletedShowById(any());
+
+        verifyNoMoreInteractions(mockShowRepository);
+    }
+
+    @Test
+    void showExistById_nominal() {
+        //GIVEN
+        when(mockShowRepository.showExistById(SHOW_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.showExistById(SHOW_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockShowRepository).showExistById(SHOW_ID);
+
+        verifyNoMoreInteractions(mockShowRepository);
+    }
+
+    @Test
+    void showExistById_nominal_when_show_id_does_not_exist() {
+        //GIVEN
+        final var showIdDoesNotExist = UUID.randomUUID();
+        when(mockShowRepository.showExistById(showIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.showExistById(showIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockShowRepository).showExistById(showIdDoesNotExist);
 
         verifyNoMoreInteractions(mockShowRepository);
     }

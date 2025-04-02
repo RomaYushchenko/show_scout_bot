@@ -3,10 +3,7 @@ package com.ua.yushchenko.service;
 import static com.ua.yushchenko.TestData.USER;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
@@ -41,7 +38,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                          .isEqualTo(USER);
+                .isEqualTo(USER);
 
         verify(mockUserRepository).selectUserById(USER_ID);
 
@@ -58,7 +55,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                          .isEqualTo(USER);
+                .isEqualTo(USER);
 
         verify(mockUserRepository).insertUser(USER);
 
@@ -69,8 +66,8 @@ public class UserServiceTest {
     void updateUser_nominal() {
         //GIVEN
         final User updatedUser = USER.toBuilder()
-                                     .userName("TestUserName_2")
-                                     .build();
+                .userName("TestUserName_2")
+                .build();
 
         when(mockUserRepository.selectUserById(USER_ID)).thenReturn(USER);
         when(mockUserRepository.updateUser(updatedUser)).thenReturn(updatedUser);
@@ -80,7 +77,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                          .isEqualTo(updatedUser);
+                .isEqualTo(updatedUser);
 
         verify(mockUserRepository).selectUserById(USER_ID);
         verify(mockUserRepository).updateUser(updatedUser);
@@ -91,18 +88,72 @@ public class UserServiceTest {
     @Test
     void deleteUser_nominal() {
         //GIVEN
-        when(mockUserRepository.selectUserById(USER_ID)).thenReturn(USER);
-        doNothing().when(mockUserRepository).deleteUserById(USER_ID);
+        when(mockUserRepository.userExistById(USER_ID)).thenReturn(true);
+        when(mockUserRepository.deleteUserById(USER_ID)).thenReturn(USER);
 
         //WHEN
         final User result = unit.deleteUser(USER_ID);
 
         //THEN
         assertThat(result).isNotNull()
-                          .isEqualTo(USER);
+                .isEqualTo(USER);
 
-        verify(mockUserRepository).selectUserById(USER_ID);
+        verify(mockUserRepository).userExistById(USER_ID);
         verify(mockUserRepository).deleteUserById(USER_ID);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
+    void deleteUser_nominal_user_id_does_not_exist() {
+        //GIVEN
+        final var userIdDoesNotExist = 1234L;
+        when(mockUserRepository.userExistById(userIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.deleteUser(userIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isNull();
+
+        verify(mockUserRepository).userExistById(userIdDoesNotExist);
+        verify(mockUserRepository, never()).deleteUserById(any());
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
+    void userExistById_nominal() {
+        //GIVEN
+        when(mockUserRepository.userExistById(USER_ID)).thenReturn(true);
+
+        //WHEN
+        final var result = unit.userExistById(USER_ID);
+
+        //THEN
+        assertThat(result)
+                .isTrue();
+
+        verify(mockUserRepository).userExistById(USER_ID);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
+    void userExistById_nominal_user_id_does_not_exist() {
+        //GIVEN
+        final var userIdDoesNotExist = 1234L;
+        when(mockUserRepository.userExistById(userIdDoesNotExist)).thenReturn(false);
+
+        //WHEN
+        final var result = unit.userExistById(userIdDoesNotExist);
+
+        //THEN
+        assertThat(result)
+                .isFalse();
+
+        verify(mockUserRepository).userExistById(userIdDoesNotExist);
 
         verifyNoMoreInteractions(mockUserRepository);
     }

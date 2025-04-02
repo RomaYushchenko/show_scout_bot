@@ -144,13 +144,13 @@ public class NotificationSettingsService {
     public NotificationSettings deleteNotificationSettings(final UUID notificationSettingsId) {
         log.debug("deleteNotificationSettings.E: Delete NotificationSettings by id: {}", notificationSettingsId);
 
-        final var notificationSettings = getNotificationSettings(notificationSettingsId);
+        final var isNotificationSettingsExist = notificationSettingsRepository.notificationSettingsExistById(notificationSettingsId);
 
-        if (Objects.isNull(notificationSettings)) {
+        if (!isNotificationSettingsExist) {
             throw new EntityNotFoundException("NotificationSettings [ID= " + notificationSettingsId + "] doesn't exist in system");
         }
 
-        notificationSettingsRepository.deleteNotificationSettings(notificationSettingsId);
+        final var notificationSettings = notificationSettingsRepository.deleteNotificationSettings(notificationSettingsId);
 
         log.debug("deleteNotificationSettings.X: Deleted NotificationSettings by id: {}", notificationSettingsId);
         return notificationSettings;

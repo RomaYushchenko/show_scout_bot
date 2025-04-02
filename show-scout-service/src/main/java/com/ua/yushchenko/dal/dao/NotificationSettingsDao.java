@@ -4,9 +4,10 @@ import com.ua.yushchenko.model.domain.Subscription;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.persistence.NotificationSettingsDb;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
  * @author ivanshalaev
  * @version v.0.1
  */
-public interface NotificationSettingsDao extends CrudRepository<NotificationSettingsDb, UUID> {
+public interface NotificationSettingsDao extends ListCrudRepository<NotificationSettingsDb, UUID> {
 
     /**
      * Find all {@link NotificationSettingsDb} by user ID
@@ -28,7 +29,7 @@ public interface NotificationSettingsDao extends CrudRepository<NotificationSett
             "JOIN show_scout_subscription s ON s.notification_settings_id = ns.notification_settings_id " +
             "WHERE s.user_id = :userId",
             nativeQuery = true)
-    Optional<NotificationSettingsDb> findAllNotificationSettingsByUserId(@Param("userId") long userId);
+    List<NotificationSettingsDb> findAllNotificationSettingsByUserId(@Param("userId") long userId);
 
     /**
      * Find {@link NotificationSettingsDb} by  subscription ID

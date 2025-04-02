@@ -89,16 +89,31 @@ public class UserService {
     public User deleteUser(final Long userId) {
         log.debug("deleteUser.E: Delete user by ID:{}", userId);
 
-        final User user = getUserById(userId);
+        final var isUserExist = userRepository.userExistById(userId);
 
-        if (Objects.isNull(user)) {
+        if (!isUserExist) {
             log.warn("deleteUser.X: User doesn't find in system");
             return null;
         }
 
-        userRepository.deleteUserById(userId);
+        final var user = userRepository.deleteUserById(userId);
 
-        log.debug("deleteUser.X: Deleted user:{}", user);
+        log.debug("deleteUser.X: Deleted user :{}", user);
         return user;
+    }
+
+    /**
+     * Checks if {@link User} exist for a given user ID
+     *
+     * @param userId ID of {@link User}
+     * @return true if user exist, false otherwise
+     */
+    public boolean userExistById(final Long userId) {
+        log.debug("userExistById.E: Check if User exist with provided ID: {} ", userId);
+
+        final var userExistById = userRepository.userExistById(userId);
+
+        log.debug("userExistById.X: User with id: {}, exist: {}", userId, userExistById);
+        return userExistById;
     }
 }

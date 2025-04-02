@@ -185,9 +185,10 @@ class NotificationSettingsServiceTest {
     @Test
     void deleteNotificationSettings_nominal() {
         //GIVEN
-        when(mockNotificationSettingsRepository.selectNotificationSettings(NOTIFICATION_SETTINGS_ID))
+        when(mockNotificationSettingsRepository.notificationSettingsExistById(NOTIFICATION_SETTINGS_ID))
+                .thenReturn(true);
+        when(mockNotificationSettingsRepository.deleteNotificationSettings(NOTIFICATION_SETTINGS_ID))
                 .thenReturn(NOTIFICATION_SETTINGS);
-        doNothing().when(mockNotificationSettingsRepository).deleteNotificationSettings(NOTIFICATION_SETTINGS_ID);
 
         //WHEN
         final var notificationSettings = unit.deleteNotificationSettings(NOTIFICATION_SETTINGS_ID);
@@ -197,7 +198,7 @@ class NotificationSettingsServiceTest {
                 .isNotNull()
                 .isEqualTo(NOTIFICATION_SETTINGS);
 
-        verify(mockNotificationSettingsRepository).selectNotificationSettings(NOTIFICATION_SETTINGS_ID);
+        verify(mockNotificationSettingsRepository).notificationSettingsExistById(NOTIFICATION_SETTINGS_ID);
         verify(mockNotificationSettingsRepository).deleteNotificationSettings(NOTIFICATION_SETTINGS_ID);
 
         verifyNoMoreInteractions(mockNotificationSettingsRepository);
@@ -207,15 +208,15 @@ class NotificationSettingsServiceTest {
     void deleteNotificationSettings_nominal_notification_settings_does_not_exist() {
         //GIVEN
         final var incorrectNotificationSettingsId = UUID.randomUUID();
-        when(mockNotificationSettingsRepository.selectNotificationSettings(incorrectNotificationSettingsId))
-                .thenReturn(null);
+        when(mockNotificationSettingsRepository.notificationSettingsExistById(incorrectNotificationSettingsId))
+                .thenReturn(false);
 
         //WHEN /THEN
         assertThatThrownBy(() -> unit.deleteNotificationSettings(incorrectNotificationSettingsId))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage("NotificationSettings [ID= %s] doesn't exist in system", incorrectNotificationSettingsId);
 
-        verify(mockNotificationSettingsRepository).selectNotificationSettings(incorrectNotificationSettingsId);
+        verify(mockNotificationSettingsRepository).notificationSettingsExistById(incorrectNotificationSettingsId);
         verify(mockNotificationSettingsRepository, never()).deleteNotificationSettings(any());
 
         verifyNoMoreInteractions(mockNotificationSettingsRepository);
