@@ -4,6 +4,7 @@ import com.ua.yushchenko.model.persistence.EpisodeDB;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -14,4 +15,8 @@ import java.util.UUID;
  */
 @Repository
 public interface EpisodeDao extends ListCrudRepository<EpisodeDB, UUID> {
+
+    List<EpisodeDB> findAllByShowId(final UUID showId);
+
+    void deleteAllByShowId(final UUID showId);
 }
