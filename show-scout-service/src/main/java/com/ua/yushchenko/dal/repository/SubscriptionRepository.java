@@ -2,7 +2,6 @@ package com.ua.yushchenko.dal.repository;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 import com.ua.yushchenko.dal.dao.SubscriptionDao;
 import com.ua.yushchenko.model.domain.Show;
@@ -51,13 +50,13 @@ public class SubscriptionRepository {
      * @param userId ID of {@link User}
      * @return {@link List} of {@link Subscription} for user
      */
-    public List<Subscription> selectSubscriptionsByUserId(final Long userId) {
+    public List<Subscription> selectSubscriptionsByUserId(final UUID userId) {
         log.trace("selectSubscriptionsByUserId.E: Selecting all subscriptions for user {}", userId);
 
         final var subscriptions = subscriptionMapper.toSubscriptions(subscriptionDao.findAllByUserId(userId));
 
         log.trace("selectSubscriptionsByUserId.X: Returned {} subscriptions for user {}. Subscriptions:{}",
-                subscriptions.size(), userId, subscriptions);
+                  subscriptions.size(), userId, subscriptions);
         return subscriptions;
     }
 
@@ -71,8 +70,8 @@ public class SubscriptionRepository {
         log.trace("selectSubscription.E: Selecting subscription with id {}", subscriptionId);
 
         final var subscription = subscriptionDao.findById(subscriptionId)
-                .map(subscriptionMapper::toSubscription)
-                .orElse(null);
+                                                .map(subscriptionMapper::toSubscription)
+                                                .orElse(null);
 
         log.trace("selectSubscription.X: Returned subscription {} with id {}", subscription, subscriptionId);
         return subscription;
@@ -85,13 +84,13 @@ public class SubscriptionRepository {
      * @param userId ID of {@link User}
      * @return {@link Subscription}
      */
-    public Subscription selectSubscriptionByShowAndUserId(final UUID showId, final Long userId) {
+    public Subscription selectSubscriptionByShowAndUserId(final UUID showId, final UUID userId) {
         log.trace("selectSubscriptionByShowAndUserId.E: Selecting subscription with showId:{} and userId:{}",
-                showId, userId);
+                  showId, userId);
 
         final var subscription = subscriptionDao.findSubscriptionDbByShowIdAndUserId(showId, userId)
-                .map(subscriptionMapper::toSubscription)
-                .orElse(null);
+                                                .map(subscriptionMapper::toSubscription)
+                                                .orElse(null);
 
         log.trace("selectSubscriptionByShowAndUserId.X: Returned subscription {}", subscription);
         return subscription;

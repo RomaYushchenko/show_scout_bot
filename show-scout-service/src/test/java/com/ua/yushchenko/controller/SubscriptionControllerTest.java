@@ -4,7 +4,6 @@ import static com.ua.yushchenko.TestData.SHOW_ID;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION_API;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -67,11 +66,11 @@ class SubscriptionControllerTest {
     @Test
     void getSubscriptions_nominal_with_user_id() {
         //GIVEN
-        when(mockSubscriptionService.getSubscriptionsByFilter(TELEGRAM_USER_ID)).thenReturn(List.of(SUBSCRIPTION));
+        when(mockSubscriptionService.getSubscriptionsByFilter(USER_ID)).thenReturn(List.of(SUBSCRIPTION));
         when(mockSubscriptionMapper.toSubscriptionApis(List.of(SUBSCRIPTION))).thenReturn(List.of(SUBSCRIPTION_API));
 
         //WHEN
-        final List<SubscriptionApi> subscriptions = unit.getSubscriptions(TELEGRAM_USER_ID);
+        final List<SubscriptionApi> subscriptions = unit.getSubscriptions(USER_ID);
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
@@ -79,7 +78,7 @@ class SubscriptionControllerTest {
                                  .first()
                                  .isEqualTo(SUBSCRIPTION_API);
 
-        verify(mockSubscriptionService).getSubscriptionsByFilter(TELEGRAM_USER_ID);
+        verify(mockSubscriptionService).getSubscriptionsByFilter(USER_ID);
         verify(mockSubscriptionMapper).toSubscriptionApis(List.of(SUBSCRIPTION));
 
         verifyNoMoreInteractions(mockSubscriptionService, mockSubscriptionMapper);
@@ -124,18 +123,18 @@ class SubscriptionControllerTest {
     @Test
     void getSubscriptionByShowAndUserId_nominal() {
         //GIVEN
-        when(mockSubscriptionService.getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID)).thenReturn(
+        when(mockSubscriptionService.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID)).thenReturn(
                 SUBSCRIPTION);
         when(mockSubscriptionMapper.toSubscriptionApi(SUBSCRIPTION)).thenReturn(SUBSCRIPTION_API);
 
         //WHEN
-        final var subscription = unit.getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        final var subscription = unit.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
                                 .isEqualTo(SUBSCRIPTION_API);
 
-        verify(mockSubscriptionService).getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        verify(mockSubscriptionService).getSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper).toSubscriptionApi(SUBSCRIPTION);
 
         verifyNoMoreInteractions(mockSubscriptionService, mockSubscriptionMapper);
@@ -144,15 +143,15 @@ class SubscriptionControllerTest {
     @Test
     void getSubscriptionByShowAndUserId_nominal_subscription_not_found() {
         //GIVEN
-        when(mockSubscriptionService.getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID)).thenReturn(null);
+        when(mockSubscriptionService.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID)).thenReturn(null);
 
         //WHEN //THEN
-        assertThatThrownBy(() -> unit.getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID))
+        assertThatThrownBy(() -> unit.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(String.format("Subscription by [showId=%s] and [userId=%s] doesn't exist in system",
-                                          SHOW_ID, TELEGRAM_USER_ID));
+                                          SHOW_ID, USER_ID));
 
-        verify(mockSubscriptionService).getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        verify(mockSubscriptionService).getSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper, never()).toSubscriptionApi(SUBSCRIPTION);
 
         verifyNoMoreInteractions(mockSubscriptionService);

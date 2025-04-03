@@ -44,7 +44,7 @@ public class SubscriptionService {
      * @param userId ID of {@link User}
      * @return {@link List} of {@link Subscription}
      */
-    public List<Subscription> getSubscriptionsByFilter(final Long userId) {
+    public List<Subscription> getSubscriptionsByFilter(final UUID userId) {
         log.debug("getSubscriptionsByFilter.E: Get Subscriptions filter by userId:{}", userId);
 
         final var subscriptions = Objects.isNull(userId)
@@ -77,7 +77,7 @@ public class SubscriptionService {
      * @param userId ID of {@link User}
      * @return {@link Subscription} by ID of {@link Show} and {@link User}
      */
-    public Subscription getSubscriptionByShowAndUserId(final UUID showId, final Long userId) {
+    public Subscription getSubscriptionByShowAndUserId(final UUID showId, final UUID userId) {
         log.debug("getSubscriptionByShowAndUserId.E: Get Subscription by showId:{}, userId:{}", showId, userId);
 
         final var subscription = subscriptionRepository.selectSubscriptionByShowAndUserId(showId, userId);

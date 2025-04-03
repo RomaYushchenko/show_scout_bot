@@ -4,7 +4,6 @@ import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
 import static com.ua.yushchenko.TestData.SHOW_ID;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,11 +52,11 @@ class SubscriptionServiceTest {
     @Test
     void getSubscriptionsByFilter_nominal_with_user_id() {
         //GIVEN
-        when(mockSubscriptionRepository.selectSubscriptionsByUserId(TELEGRAM_USER_ID)).thenReturn(
+        when(mockSubscriptionRepository.selectSubscriptionsByUserId(USER_ID)).thenReturn(
                 List.of(SUBSCRIPTION));
 
         //WHEN
-        final var subscriptions = unit.getSubscriptionsByFilter(TELEGRAM_USER_ID);
+        final var subscriptions = unit.getSubscriptionsByFilter(USER_ID);
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
@@ -65,7 +64,7 @@ class SubscriptionServiceTest {
                                  .first()
                                  .isEqualTo(SUBSCRIPTION);
 
-        verify(mockSubscriptionRepository).selectSubscriptionsByUserId(TELEGRAM_USER_ID);
+        verify(mockSubscriptionRepository).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository, never()).selectSubscriptions();
 
         verifyNoMoreInteractions(mockSubscriptionRepository);
@@ -85,7 +84,7 @@ class SubscriptionServiceTest {
                                  .first()
                                  .isEqualTo(SUBSCRIPTION);
 
-        verify(mockSubscriptionRepository, never()).selectSubscriptionsByUserId(TELEGRAM_USER_ID);
+        verify(mockSubscriptionRepository, never()).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository).selectSubscriptions();
 
         verifyNoMoreInteractions(mockSubscriptionRepository);
@@ -111,17 +110,16 @@ class SubscriptionServiceTest {
     @Test
     void getSubscriptionByShowAndUserId_nominal() {
         //GIVEN
-        when(mockSubscriptionRepository.selectSubscriptionByShowAndUserId(SHOW_ID,
-                                                                          TELEGRAM_USER_ID)).thenReturn(SUBSCRIPTION);
+        when(mockSubscriptionRepository.selectSubscriptionByShowAndUserId(SHOW_ID, USER_ID)).thenReturn(SUBSCRIPTION);
 
         //WHEN
-        final var subscription = unit.getSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        final var subscription = unit.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
                                 .isEqualTo(SUBSCRIPTION);
 
-        verify(mockSubscriptionRepository).selectSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        verify(mockSubscriptionRepository).selectSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
         verifyNoMoreInteractions(mockSubscriptionRepository);
     }

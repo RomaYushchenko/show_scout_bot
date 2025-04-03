@@ -4,7 +4,7 @@ import static com.ua.yushchenko.TestData.SHOW_ID;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION_DB;
 import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -63,11 +63,11 @@ class SubscriptionRepositoryTest {
     @Test
     void selectSubscriptionsByUserId_nominal() {
         //GIVEN
-        when(mockSubscriptionDao.findAllByUserId(TELEGRAM_USER_ID)).thenReturn(List.of(SUBSCRIPTION_DB));
+        when(mockSubscriptionDao.findAllByUserId(USER_ID)).thenReturn(List.of(SUBSCRIPTION_DB));
         when(mockSubscriptionMapper.toSubscriptions(List.of(SUBSCRIPTION_DB))).thenReturn(List.of(SUBSCRIPTION));
 
         //WHEN
-        final var subscriptions = unit.selectSubscriptionsByUserId(TELEGRAM_USER_ID);
+        final var subscriptions = unit.selectSubscriptionsByUserId(USER_ID);
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
@@ -75,7 +75,7 @@ class SubscriptionRepositoryTest {
                                  .first()
                                  .isEqualTo(SUBSCRIPTION);
 
-        verify(mockSubscriptionDao).findAllByUserId(TELEGRAM_USER_ID);
+        verify(mockSubscriptionDao).findAllByUserId(USER_ID);
         verify(mockSubscriptionMapper).toSubscriptions(List.of(SUBSCRIPTION_DB));
 
         verifyNoMoreInteractions(mockSubscriptionDao, mockSubscriptionMapper);
@@ -103,18 +103,18 @@ class SubscriptionRepositoryTest {
     @Test
     void selectSubscriptionByShowAndUserId_nominal() {
         //GIVEN
-        when(mockSubscriptionDao.findSubscriptionDbByShowIdAndUserId(SHOW_ID, TELEGRAM_USER_ID))
+        when(mockSubscriptionDao.findSubscriptionDbByShowIdAndUserId(SHOW_ID, USER_ID))
                 .thenReturn(Optional.of(SUBSCRIPTION_DB));
         when(mockSubscriptionMapper.toSubscription(SUBSCRIPTION_DB)).thenReturn(SUBSCRIPTION);
 
         //WHEN
-        final var subscription = unit.selectSubscriptionByShowAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        final var subscription = unit.selectSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
                                 .isEqualTo(SUBSCRIPTION);
 
-        verify(mockSubscriptionDao).findSubscriptionDbByShowIdAndUserId(SHOW_ID, TELEGRAM_USER_ID);
+        verify(mockSubscriptionDao).findSubscriptionDbByShowIdAndUserId(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper).toSubscription(SUBSCRIPTION_DB);
 
         verifyNoMoreInteractions(mockSubscriptionDao, mockSubscriptionMapper);
