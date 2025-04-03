@@ -44,7 +44,7 @@ public class SubscriptionController {
      * @return {@link List} of {@link SubscriptionApi}
      */
     @GetMapping("/subscriptions")
-    public List<SubscriptionApi> getSubscriptions(@RequestParam(required = false) final Long userId) {
+    public List<SubscriptionApi> getSubscriptions(@RequestParam(required = false) final UUID userId) {
         log.info("getSubscriptions.E: Get Subscriptions filter by userId:{}", userId);
 
         final var subscriptions = subscriptionService.getSubscriptionsByFilter(userId);
@@ -85,7 +85,7 @@ public class SubscriptionController {
      */
     @GetMapping("/subscriptions/show/{showId}/user/{userId}")
     public SubscriptionApi getSubscriptionByShowAndUserId(@PathVariable final UUID showId,
-                                                          @PathVariable final Long userId) {
+                                                          @PathVariable final UUID userId) {
         log.info("getSubscriptionsByShowAndUserId.E: Get Subscription by ShowID:{} and UserID:{}", showId, userId);
 
         final var subscription = subscriptionService.getSubscriptionByShowAndUserId(showId, userId);
@@ -110,7 +110,7 @@ public class SubscriptionController {
      */
     @PostMapping("/subscriptions/show/{showId}/user/{userId}")
     public SubscriptionApi createSubscription(@PathVariable final UUID showId,
-                                              @PathVariable final Long userId) {
+                                              @PathVariable final UUID userId) {
         log.info("createSubscription.E: Create Subscription for ShowID:{} and UserID:{}", showId, userId);
 
         final var createdSubscription = subscriptionService.createSubscription(showId, userId);
@@ -132,7 +132,7 @@ public class SubscriptionController {
 
         final var deletedSubscription = subscriptionService.deleteSubscription(subscriptionId);
 
-        if (Objects.isNull(deletedSubscription)){
+        if (Objects.isNull(deletedSubscription)) {
             throw new EntityNotFoundException("Subscription [ID=" + subscriptionId + "] doesn't exist in system");
         }
 

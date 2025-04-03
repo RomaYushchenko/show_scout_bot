@@ -1,7 +1,11 @@
 package com.ua.yushchenko.model.persistence;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,8 +22,12 @@ import lombok.NoArgsConstructor;
 public class UserDb {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id", nullable = false)
-    long userID;
+    UUID userId;
+
+    @Column(name = "telegram_user_id", nullable = false)
+    Long telegramUserId;
 
     @Column(name = "user_name")
     String userName;
@@ -34,5 +42,5 @@ public class UserDb {
     String timeZone;
 
     @Column(name = "chat_id", nullable = false)
-    long chatId;
+    Long chatId;
 }

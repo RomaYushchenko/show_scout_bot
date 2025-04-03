@@ -1,6 +1,7 @@
 package com.ua.yushchenko.service;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
@@ -29,7 +30,7 @@ public class UserService {
      * @param userId ID of {@link User}
      * @return {@link User} by current ID
      */
-    public User getUserById(final Long userId) {
+    public User getUserById(final UUID userId) {
         log.debug("getUserById.E: Get User by ID:{}", userId);
 
         final User user = userRepository.selectUserById(userId);
@@ -60,7 +61,7 @@ public class UserService {
      * @param userToUpdate instance of {@link User} to update
      * @return updated {@link User}
      */
-    public User updateUser(final Long userId, final User userToUpdate) {
+    public User updateUser(final UUID userId, final User userToUpdate) {
         log.debug("updateUser.E: Update user by ID:{}", userId);
         final User user = getUserById(userId);
 
@@ -86,7 +87,7 @@ public class UserService {
      * @param userId ID of {@link User}
      * @return deleted {@link User}
      */
-    public User deleteUser(final Long userId) {
+    public User deleteUser(final UUID userId) {
         log.debug("deleteUser.E: Delete user by ID:{}", userId);
 
         final var isUserExist = userRepository.userExistById(userId);
@@ -108,7 +109,7 @@ public class UserService {
      * @param userId ID of {@link User}
      * @return true if user exist, false otherwise
      */
-    public boolean userExistById(final Long userId) {
+    public boolean userExistById(final UUID userId) {
         log.debug("userExistById.E: Check if User exist with provided ID: {} ", userId);
 
         final var userExistById = userRepository.userExistById(userId);

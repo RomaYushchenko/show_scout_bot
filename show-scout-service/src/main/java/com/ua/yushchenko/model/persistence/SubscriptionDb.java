@@ -28,7 +28,7 @@ public class SubscriptionDb {
     @Column(name = "show_id", nullable = false)
     UUID showId;
     @Column(name = "user_id", nullable = false)
-    long userId;
+    UUID userId;
     @Column(name = "notification_settings_id", nullable = false)
     UUID notificationSettingsId;
 }

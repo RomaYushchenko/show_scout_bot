@@ -8,7 +8,11 @@ import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -50,9 +54,9 @@ class SubscriptionControllerTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                .hasSize(1)
-                .first()
-                .isEqualTo(SUBSCRIPTION_API);
+                                 .hasSize(1)
+                                 .first()
+                                 .isEqualTo(SUBSCRIPTION_API);
 
         verify(mockSubscriptionService).getSubscriptionsByFilter(null);
         verify(mockSubscriptionMapper).toSubscriptionApis(List.of(SUBSCRIPTION));
@@ -70,9 +74,9 @@ class SubscriptionControllerTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                .hasSize(1)
-                .first()
-                .isEqualTo(SUBSCRIPTION_API);
+                                 .hasSize(1)
+                                 .first()
+                                 .isEqualTo(SUBSCRIPTION_API);
 
         verify(mockSubscriptionService).getSubscriptionsByFilter(USER_ID);
         verify(mockSubscriptionMapper).toSubscriptionApis(List.of(SUBSCRIPTION));
@@ -91,7 +95,7 @@ class SubscriptionControllerTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION_API);
+                                .isEqualTo(SUBSCRIPTION_API);
 
         verify(mockSubscriptionService).getSubscription(SUBSCRIPTION_ID);
         verify(mockSubscriptionMapper).toSubscriptionApi(SUBSCRIPTION);
@@ -119,7 +123,8 @@ class SubscriptionControllerTest {
     @Test
     void getSubscriptionByShowAndUserId_nominal() {
         //GIVEN
-        when(mockSubscriptionService.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID)).thenReturn(SUBSCRIPTION);
+        when(mockSubscriptionService.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID)).thenReturn(
+                SUBSCRIPTION);
         when(mockSubscriptionMapper.toSubscriptionApi(SUBSCRIPTION)).thenReturn(SUBSCRIPTION_API);
 
         //WHEN
@@ -127,7 +132,7 @@ class SubscriptionControllerTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION_API);
+                                .isEqualTo(SUBSCRIPTION_API);
 
         verify(mockSubscriptionService).getSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper).toSubscriptionApi(SUBSCRIPTION);
@@ -144,7 +149,7 @@ class SubscriptionControllerTest {
         assertThatThrownBy(() -> unit.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(String.format("Subscription by [showId=%s] and [userId=%s] doesn't exist in system",
-                        SHOW_ID, USER_ID));
+                                          SHOW_ID, USER_ID));
 
         verify(mockSubscriptionService).getSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper, never()).toSubscriptionApi(SUBSCRIPTION);
@@ -164,7 +169,7 @@ class SubscriptionControllerTest {
 
         //THEN
         assertThat(createdSubscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION_API);
+                                       .isEqualTo(SUBSCRIPTION_API);
 
         verify(mockSubscriptionService).createSubscription(SHOW_ID, USER_ID);
         verify(mockSubscriptionMapper).toSubscriptionApi(SUBSCRIPTION);
@@ -183,7 +188,7 @@ class SubscriptionControllerTest {
 
         //THEN
         assertThat(deletedSubscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION_API);
+                                       .isEqualTo(SUBSCRIPTION_API);
 
         verify(mockSubscriptionService).deleteSubscription(SUBSCRIPTION_ID);
         verify(mockSubscriptionMapper).toSubscriptionApi(SUBSCRIPTION);

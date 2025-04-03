@@ -1,9 +1,21 @@
 package com.ua.yushchenko.controller;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_API;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_ID;
+import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.UUID;
 
 import com.ua.yushchenko.api.NotificationSettingsApi;
 import com.ua.yushchenko.model.domain.NotificationSettings;
@@ -16,11 +28,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.UUID;
-
 @ExtendWith(MockitoExtension.class)
 class NotificationSettingsControllerTest {
+
     @Mock
     private NotificationSettingsService mockNotificationSettingsService;
     @Mock
@@ -70,13 +80,13 @@ class NotificationSettingsControllerTest {
     @Test
     void getNotificationSettingsList_nominal_with_user_id() {
         //GIVEN
-        when(mockNotificationSettingsService.getListNotificationSettingsByFilter(USER_ID))
+        when(mockNotificationSettingsService.getListNotificationSettingsByFilter(TELEGRAM_USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
         when(mockNotificationSettingsMapper.toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS)))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_API));
 
         //WHEN
-        final var notificationSettings = unit.getNotificationSettingsList(USER_ID);
+        final var notificationSettings = unit.getNotificationSettingsList(TELEGRAM_USER_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -84,7 +94,7 @@ class NotificationSettingsControllerTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS_API));
 
-        verify(mockNotificationSettingsService).getListNotificationSettingsByFilter(USER_ID);
+        verify(mockNotificationSettingsService).getListNotificationSettingsByFilter(TELEGRAM_USER_ID);
         verify(mockNotificationSettingsMapper).toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS));
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);
@@ -145,7 +155,8 @@ class NotificationSettingsControllerTest {
         //WHEN /THEN
         assertThatThrownBy(() -> unit.getNotificationSettingsBySubscriptionId(incorrectSubscriptionId))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("NotificationSettings by subscriptionId " + incorrectSubscriptionId + " doesn't exist in system");
+                .hasMessage("NotificationSettings by subscriptionId " + incorrectSubscriptionId +
+                                    " doesn't exist in system");
 
         verify(mockNotificationSettingsService).getNotificationSettingsBySubscriptionId(incorrectSubscriptionId);
         verify(mockNotificationSettingsMapper, never()).toNotificationSettingsApi(any());
@@ -158,13 +169,15 @@ class NotificationSettingsControllerTest {
         //GIVEN
         when(mockNotificationSettingsMapper.toNotificationSettings(NOTIFICATION_SETTINGS_API))
                 .thenReturn(NOTIFICATION_SETTINGS);
-        when(mockNotificationSettingsService.updateNotificationSettings(NOTIFICATION_SETTINGS_ID, NOTIFICATION_SETTINGS))
+        when(mockNotificationSettingsService.updateNotificationSettings(NOTIFICATION_SETTINGS_ID,
+                                                                        NOTIFICATION_SETTINGS))
                 .thenReturn(NOTIFICATION_SETTINGS);
         when(mockNotificationSettingsMapper.toNotificationSettingsApi(NOTIFICATION_SETTINGS))
                 .thenReturn(NOTIFICATION_SETTINGS_API);
 
         //WHEN
-        final var notificationSettingsApi = unit.updateNotificationSettings(NOTIFICATION_SETTINGS_ID, NOTIFICATION_SETTINGS_API);
+        final var notificationSettingsApi =
+                unit.updateNotificationSettings(NOTIFICATION_SETTINGS_ID, NOTIFICATION_SETTINGS_API);
 
         //THEN
         assertThat(notificationSettingsApi)
@@ -172,7 +185,8 @@ class NotificationSettingsControllerTest {
                 .isEqualTo(NOTIFICATION_SETTINGS_API);
 
         verify(mockNotificationSettingsMapper).toNotificationSettings(NOTIFICATION_SETTINGS_API);
-        verify(mockNotificationSettingsService).updateNotificationSettings(NOTIFICATION_SETTINGS_ID, NOTIFICATION_SETTINGS);
+        verify(mockNotificationSettingsService).updateNotificationSettings(NOTIFICATION_SETTINGS_ID,
+                                                                           NOTIFICATION_SETTINGS);
         verify(mockNotificationSettingsMapper).toNotificationSettingsApi(NOTIFICATION_SETTINGS);
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);
@@ -183,23 +197,28 @@ class NotificationSettingsControllerTest {
         //GIVEN
         final var incorrectNotificationSettingsId = UUID.randomUUID();
         final var notificationSettings = NOTIFICATION_SETTINGS.toBuilder()
-                .notificationSettingsId(incorrectNotificationSettingsId)
-                .build();
+                                                              .notificationSettingsId(incorrectNotificationSettingsId)
+                                                              .build();
         final var notificationSettingsApi = NOTIFICATION_SETTINGS_API.toBuilder()
-                .notificationSettingsId(incorrectNotificationSettingsId)
-                .build();
+                                                                     .notificationSettingsId(
+                                                                             incorrectNotificationSettingsId)
+                                                                     .build();
         when(mockNotificationSettingsMapper.toNotificationSettings(notificationSettingsApi))
                 .thenReturn(notificationSettings);
-        when(mockNotificationSettingsService.updateNotificationSettings(incorrectNotificationSettingsId, notificationSettings))
+        when(mockNotificationSettingsService.updateNotificationSettings(incorrectNotificationSettingsId,
+                                                                        notificationSettings))
                 .thenReturn(null);
 
         //WHEN /THEN
-        assertThatThrownBy(() -> unit.updateNotificationSettings(incorrectNotificationSettingsId, notificationSettingsApi))
+        assertThatThrownBy(
+                () -> unit.updateNotificationSettings(incorrectNotificationSettingsId, notificationSettingsApi))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("NotificationSettings with notificationSettingsId: " + incorrectNotificationSettingsId + " doesn't exist in system");
+                .hasMessage("NotificationSettings with notificationSettingsId: " + incorrectNotificationSettingsId +
+                                    " doesn't exist in system");
 
         verify(mockNotificationSettingsMapper).toNotificationSettings(notificationSettingsApi);
-        verify(mockNotificationSettingsService).updateNotificationSettings(incorrectNotificationSettingsId, notificationSettings);
+        verify(mockNotificationSettingsService).updateNotificationSettings(incorrectNotificationSettingsId,
+                                                                           notificationSettings);
         verify(mockNotificationSettingsMapper, never()).toNotificationSettingsApi(any());
 
         verifyNoMoreInteractions(mockNotificationSettingsMapper, mockNotificationSettingsService);
@@ -211,11 +230,14 @@ class NotificationSettingsControllerTest {
         final var incorrectNotificationSettingsId = UUID.randomUUID();
 
         //WHEN /THEN
-        assertThatThrownBy(() -> unit.updateNotificationSettings(incorrectNotificationSettingsId, NOTIFICATION_SETTINGS_API))
+        assertThatThrownBy(
+                () -> unit.updateNotificationSettings(incorrectNotificationSettingsId, NOTIFICATION_SETTINGS_API))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("PathVariable notificationSettingsId: " + incorrectNotificationSettingsId
-                        + " does not match with RequestBody notificationSettingsApi.getNotificationSettingsId(): "
-                        + NOTIFICATION_SETTINGS_API.getNotificationSettingsId());
+                                    +
+                                    " does not match with RequestBody notificationSettingsApi" +
+                                    ".getNotificationSettingsId(): "
+                                    + NOTIFICATION_SETTINGS_API.getNotificationSettingsId());
 
         verify(mockNotificationSettingsMapper, never()).toNotificationSettings(any(NotificationSettingsApi.class));
         verify(mockNotificationSettingsService, never()).updateNotificationSettings(any(), any());

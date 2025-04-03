@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
-import com.ua.yushchenko.model.domain.Subscription;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,16 +52,17 @@ class SubscriptionServiceTest {
     @Test
     void getSubscriptionsByFilter_nominal_with_user_id() {
         //GIVEN
-        when(mockSubscriptionRepository.selectSubscriptionsByUserId(USER_ID)).thenReturn(List.of(SUBSCRIPTION));
+        when(mockSubscriptionRepository.selectSubscriptionsByUserId(USER_ID)).thenReturn(
+                List.of(SUBSCRIPTION));
 
         //WHEN
         final var subscriptions = unit.getSubscriptionsByFilter(USER_ID);
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                .hasSize(1)
-                .first()
-                .isEqualTo(SUBSCRIPTION);
+                                 .hasSize(1)
+                                 .first()
+                                 .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository, never()).selectSubscriptions();
@@ -80,9 +80,9 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscriptions).isNotEmpty()
-                .hasSize(1)
-                .first()
-                .isEqualTo(SUBSCRIPTION);
+                                 .hasSize(1)
+                                 .first()
+                                 .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository, never()).selectSubscriptionsByUserId(USER_ID);
         verify(mockSubscriptionRepository).selectSubscriptions();
@@ -100,7 +100,7 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
 
@@ -117,7 +117,7 @@ class SubscriptionServiceTest {
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscriptionByShowAndUserId(SHOW_ID, USER_ID);
 
@@ -128,8 +128,8 @@ class SubscriptionServiceTest {
     void createSubscription_nominal() {
         //GIVEN
         final var subscriptionToCreate = SUBSCRIPTION.toBuilder()
-                .subscriptionId(null)
-                .build();
+                                                     .subscriptionId(null)
+                                                     .build();
 
         when(mockUserService.userExistById(USER_ID)).thenReturn(true);
         when(mockShowService.showExistById(SHOW_ID)).thenReturn(true);
@@ -137,14 +137,14 @@ class SubscriptionServiceTest {
                 .thenReturn(NOTIFICATION_SETTINGS);
         when(mockSubscriptionRepository.insertSubscription(subscriptionToCreate)).thenReturn(SUBSCRIPTION);
         doNothing().when(mockNotificationSettingEventProducer)
-                .sendCreatedEvent(NOTIFICATION_SETTINGS);
+                   .sendCreatedEvent(NOTIFICATION_SETTINGS);
 
         //WHEN
         final var subscription = unit.createSubscription(SHOW_ID, USER_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockUserService).userExistById(USER_ID);
         verify(mockShowService).showExistById(SHOW_ID);
@@ -153,7 +153,7 @@ class SubscriptionServiceTest {
         verify(mockNotificationSettingEventProducer).sendCreatedEvent(NOTIFICATION_SETTINGS);
 
         verifyNoMoreInteractions(mockUserService, mockShowService, mockNotificationSettingsService,
-                mockSubscriptionRepository, mockNotificationSettingEventProducer);
+                                 mockSubscriptionRepository, mockNotificationSettingEventProducer);
     }
 
     @Test
@@ -203,14 +203,14 @@ class SubscriptionServiceTest {
         when(mockNotificationSettingsService.deleteNotificationSettings(SUBSCRIPTION.getNotificationSettingsId()))
                 .thenReturn(NOTIFICATION_SETTINGS);
         doNothing().when(mockNotificationSettingEventProducer)
-                .sendDeletedEvent(NOTIFICATION_SETTINGS);
+                   .sendDeletedEvent(NOTIFICATION_SETTINGS);
 
         //WHEN
         final var subscription = unit.deleteSubscription(SUBSCRIPTION_ID);
 
         //THEN
         assertThat(subscription).isNotNull()
-                .isEqualTo(SUBSCRIPTION);
+                                .isEqualTo(SUBSCRIPTION);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
         verify(mockNotificationSettingsService).deleteNotificationSettings(SUBSCRIPTION.getNotificationSettingsId());
@@ -218,7 +218,7 @@ class SubscriptionServiceTest {
         verify(mockNotificationSettingEventProducer).sendDeletedEvent(NOTIFICATION_SETTINGS);
 
         verifyNoMoreInteractions(mockSubscriptionRepository, mockNotificationSettingsService,
-                mockNotificationSettingEventProducer);
+                                 mockNotificationSettingEventProducer);
     }
 
     @Test

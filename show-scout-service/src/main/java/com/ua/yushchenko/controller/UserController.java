@@ -1,6 +1,7 @@
 package com.ua.yushchenko.controller;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import com.ua.yushchenko.api.UserApi;
 import com.ua.yushchenko.model.domain.User;
@@ -37,14 +38,14 @@ public class UserController {
     /**
      * Get {@link UserApi} by ID
      *
-     * @param userID ID of user
+     * @param userId ID of user
      * @return {@link UserApi}
      */
     @GetMapping("/users/{userId}")
-    public UserApi getUser(@PathVariable("userId") final Long userID) {
-        log.info("getUser.E: Get User by ID:{}", userID);
+    public UserApi getUser(@PathVariable("userId") final UUID userId) {
+        log.info("getUser.E: Get User by ID:{}", userId);
 
-        final User user = userService.getUserById(userID);
+        final User user = userService.getUserById(userId);
 
         if (Objects.isNull(user)) {
             throw new EntityNotFoundException("User doesn't exist in system");
@@ -77,26 +78,26 @@ public class UserController {
     /**
      * Update {@link UserApi}
      *
-     * @param userID  ID of user
+     * @param userId  ID of user
      * @param userApi instance of {@link UserApi} to update
      * @return updated {@link UserApi}
      */
     @PutMapping("/users/{userId}")
-    public UserApi updateUser(@PathVariable("userId") final Long userID,
+    public UserApi updateUser(@PathVariable("userId") final UUID userId,
                               @RequestBody final UserApi userApi) {
-        log.info("updateUser.E: Update user by ID:{}", userID);
+        log.info("updateUser.E: Update user by ID:{}", userId);
 
-        if (!Objects.equals(userID, userApi.getUserID())) {
-            throw new IllegalArgumentException("PathVariable userId: " + userID
-                    + " does not match with RequestBody userApi.getUserID(): "
-                    + userApi.getUserID());
+        if (!Objects.equals(userId, userApi.getUserId())) {
+            throw new IllegalArgumentException("PathVariable userId: " + userId
+                                                       + " does not match with RequestBody userApi.getUserId: "
+                                                       + userApi.getUserId());
         }
 
         final User userToUpdate = userMapper.toUser(userApi);
-        final User updatedUser = userService.updateUser(userID, userToUpdate);
+        final User updatedUser = userService.updateUser(userId, userToUpdate);
 
         if (Objects.isNull(updatedUser)) {
-            throw new EntityNotFoundException("User with userId: " + userID + " doesn't exist in system");
+            throw new EntityNotFoundException("User with userId: " + userId + " doesn't exist in system");
         }
 
         final UserApi updatedUserApi = userMapper.toUserApi(updatedUser);
@@ -108,14 +109,14 @@ public class UserController {
     /**
      * Delete {@link UserApi} by ID
      *
-     * @param userID ID of user
+     * @param userId ID of user
      * @return deleted {@link UserApi}
      */
     @DeleteMapping("/users/{userId}")
-    public UserApi deleteUser(@PathVariable("userId") final Long userID) {
-        log.info("deleteUser.E: Delete user by ID:{}", userID);
+    public UserApi deleteUser(@PathVariable("userId") final UUID userId) {
+        log.info("deleteUser.E: Delete user by ID:{}", userId);
 
-        final User deletedUser = userService.deleteUser(userID);
+        final User deletedUser = userService.deleteUser(userId);
 
         if (Objects.isNull(deletedUser)) {
             throw new EntityNotFoundException("User doesn't exist in system");
