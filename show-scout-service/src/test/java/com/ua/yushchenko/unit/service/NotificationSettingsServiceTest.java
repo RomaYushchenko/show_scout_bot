@@ -1,9 +1,9 @@
-package com.ua.yushchenko.service;
+package com.ua.yushchenko.unit.service;
 
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_ID;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_ID;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
@@ -19,6 +19,7 @@ import java.util.UUID;
 import com.ua.yushchenko.dal.repository.NotificationSettingsRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
 import com.ua.yushchenko.model.domain.NotificationSettings;
+import com.ua.yushchenko.service.NotificationSettingsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,8 +1,8 @@
-package com.ua.yushchenko.dal.repository;
+package com.ua.yushchenko.unit.dal.repository;
 
-import static com.ua.yushchenko.TestData.USER;
-import static com.ua.yushchenko.TestData.USER_DB;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.USER;
+import static com.ua.yushchenko.unit.TestData.USER_DB;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -15,6 +15,7 @@ import java.util.UUID;
 import com.ua.yushchenko.dal.dao.UserDao;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
+import com.ua.yushchenko.dal.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

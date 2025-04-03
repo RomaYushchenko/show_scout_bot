@@ -1,10 +1,11 @@
-package com.ua.yushchenko.controller;
+package com.ua.yushchenko.unit.controller;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.unit.TestData.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.api.ShowApi;
+import com.ua.yushchenko.controller.ShowController;
 import com.ua.yushchenko.model.mapper.ShowMapper;
 import com.ua.yushchenko.service.ShowService;
 import jakarta.persistence.EntityNotFoundException;

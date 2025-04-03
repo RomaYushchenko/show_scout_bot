@@ -1,10 +1,10 @@
-package com.ua.yushchenko.dal.repository;
+package com.ua.yushchenko.unit.dal.repository;
 
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_DB;
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_ID;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_DB;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_ID;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
@@ -20,6 +20,7 @@ import java.util.UUID;
 import com.ua.yushchenko.dal.dao.NotificationSettingsDao;
 import com.ua.yushchenko.model.mapper.NotificationSettingsMapper;
 import com.ua.yushchenko.model.persistence.NotificationSettingsDb;
+import com.ua.yushchenko.dal.repository.NotificationSettingsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

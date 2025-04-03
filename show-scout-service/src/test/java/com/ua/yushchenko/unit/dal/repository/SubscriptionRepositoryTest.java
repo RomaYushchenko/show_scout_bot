@@ -1,10 +1,10 @@
-package com.ua.yushchenko.dal.repository;
+package com.ua.yushchenko.unit.dal.repository;
 
-import static com.ua.yushchenko.TestData.SHOW_ID;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_DB;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.SHOW_ID;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_DB;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import com.ua.yushchenko.dal.dao.SubscriptionDao;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
+import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

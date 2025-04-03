@@ -1,10 +1,10 @@
-package com.ua.yushchenko.service;
+package com.ua.yushchenko.unit.service;
 
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
-import static com.ua.yushchenko.TestData.SHOW_ID;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.unit.TestData.SHOW_ID;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,6 +19,10 @@ import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
+import com.ua.yushchenko.service.NotificationSettingsService;
+import com.ua.yushchenko.service.ShowService;
+import com.ua.yushchenko.service.SubscriptionService;
+import com.ua.yushchenko.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

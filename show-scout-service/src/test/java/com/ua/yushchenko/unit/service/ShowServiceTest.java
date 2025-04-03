@@ -1,11 +1,12 @@
-package com.ua.yushchenko.service;
+package com.ua.yushchenko.unit.service;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.unit.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 import com.ua.yushchenko.dal.repository.ShowRepository;
 import com.ua.yushchenko.model.domain.Show;
+import com.ua.yushchenko.service.ShowService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

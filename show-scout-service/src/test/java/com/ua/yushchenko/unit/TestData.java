@@ -1,4 +1,4 @@
-package com.ua.yushchenko;
+package com.ua.yushchenko.unit;
 
 import java.util.List;
 import java.util.UUID;
