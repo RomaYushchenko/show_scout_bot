@@ -68,7 +68,13 @@ public class UserController {
         log.info("createUser.E: Create user");
 
         final User userToCreate = userMapper.toUser(userApi);
+
         final User createdUser = userService.createUser(userToCreate);
+
+        if (Objects.isNull(createdUser)) {
+            throw new EntityNotFoundException("User has been already created");
+        }
+
         final UserApi createdUserApi = userMapper.toUserApi(createdUser);
 
         log.info("createUser.X: Created user:{}", createdUserApi);

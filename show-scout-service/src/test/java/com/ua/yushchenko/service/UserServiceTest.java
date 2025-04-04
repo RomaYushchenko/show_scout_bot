@@ -1,8 +1,10 @@
 package com.ua.yushchenko.service;
 
+import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
 import static com.ua.yushchenko.TestData.USER;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -52,8 +54,26 @@ public class UserServiceTest {
     }
 
     @Test
+    void getUserByTelegramUserId_nominal() {
+        //GIVEN
+        when(mockUserRepository.selectUserByTelegramUserId(TELEGRAM_USER_ID)).thenReturn(USER);
+
+        //WHEN
+        final User result = unit.getUserByTelegramUserId(TELEGRAM_USER_ID);
+
+        //THEN
+        assertThat(result).isNotNull()
+                          .isEqualTo(USER);
+
+        verify(mockUserRepository).selectUserByTelegramUserId(TELEGRAM_USER_ID);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
     void createUser_nominal() {
         //GIVEN
+        when(mockUserRepository.selectUserByTelegramUserId(TELEGRAM_USER_ID)).thenReturn(null);
         when(mockUserRepository.insertUser(USER)).thenReturn(USER);
 
         //WHEN
@@ -63,7 +83,41 @@ public class UserServiceTest {
         assertThat(result).isNotNull()
                           .isEqualTo(USER);
 
+        verify(mockUserRepository).selectUserByTelegramUserId(TELEGRAM_USER_ID);
         verify(mockUserRepository).insertUser(USER);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
+    void createUser_nominal_telegram_user_id_is_required() {
+        //GIVEN
+        final var user = USER.toBuilder()
+                             .telegramUserId(null)
+                             .build();
+        //WHEN //THEN
+        assertThatThrownBy(() -> unit.createUser(user))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Telegram user ID is required");
+
+        verify(mockUserRepository, never()).insertUser(user);
+
+        verifyNoMoreInteractions(mockUserRepository);
+    }
+
+    @Test
+    void createUser_nominal_already_created() {
+        //GIVEN
+        when(mockUserRepository.selectUserByTelegramUserId(TELEGRAM_USER_ID)).thenReturn(USER);
+
+        //WHEN
+        final User result = unit.createUser(USER);
+
+        //THEN
+        assertThat(result).isNull();
+
+        verify(mockUserRepository).selectUserByTelegramUserId(TELEGRAM_USER_ID);
+        verify(mockUserRepository, never()).insertUser(USER);
 
         verifyNoMoreInteractions(mockUserRepository);
     }

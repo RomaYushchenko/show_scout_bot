@@ -40,15 +40,40 @@ public class UserService {
     }
 
     /**
+     * Get {@link User} by current ID of Telegram User
+     *
+     * @param telegramUserId ID of Telegram User
+     * @return {@link User} by current ID of Telegram User
+     */
+    public User getUserByTelegramUserId(final Long telegramUserId) {
+        log.debug("getUserByTelegramUserId.E: Get User by ID:{}", telegramUserId);
+
+        final User user = userRepository.selectUserByTelegramUserId(telegramUserId);
+
+        log.debug("getUserByTelegramUserId.X: User:{}", user);
+        return user;
+    }
+
+    /**
      * Create {@link User}
      *
-     * @param user instance of {@link User} to create
+     * @param userToCreate instance of {@link User} to create
      * @return created {@link User}
      */
-    public User createUser(final User user) {
+    public User createUser(final User userToCreate) {
         log.debug("createUser.E: Create new user");
 
-        final User createdUser = userRepository.insertUser(user);
+        if (Objects.isNull(userToCreate.getTelegramUserId())) {
+            throw new IllegalArgumentException("Telegram user ID is required");
+        }
+
+        final var user = getUserByTelegramUserId(userToCreate.getTelegramUserId());
+
+        if (Objects.nonNull(user)) {
+            return null;
+        }
+
+        final User createdUser = userRepository.insertUser(userToCreate);
 
         log.debug("createUser.X: Created user:{}", createdUser);
         return createdUser;
