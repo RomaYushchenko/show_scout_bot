@@ -19,6 +19,7 @@ import com.ua.yushchenko.controller.UserController;
 import com.ua.yushchenko.model.mapper.UserMapper;
 import com.ua.yushchenko.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author romanyushchenko
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 

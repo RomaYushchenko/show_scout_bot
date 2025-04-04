@@ -14,6 +14,7 @@ import com.ua.yushchenko.it.config.BaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.http.HttpEntity;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+@Tag("integration")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ITUserTest extends BaseIntegrationTest {
 

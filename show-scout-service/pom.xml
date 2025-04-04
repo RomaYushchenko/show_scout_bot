@@ -155,7 +155,32 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <groups>${testGroups}</groups>
+                    <excludedGroups>${excludeGroups}</excludedGroups>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>unit-tests</id>
+            <properties>
+                <testGroups>unit</testGroups>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-tests</id>
+            <properties>
+                <testGroups>integration</testGroups>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

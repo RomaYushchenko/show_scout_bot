@@ -9,6 +9,7 @@ import com.ua.yushchenko.controller.ShowController;
 import com.ua.yushchenko.model.mapper.ShowMapper;
 import com.ua.yushchenko.service.ShowService;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class ShowControllerTest {
     @Mock

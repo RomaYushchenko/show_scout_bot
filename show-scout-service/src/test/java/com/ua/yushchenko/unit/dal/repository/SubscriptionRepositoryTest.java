@@ -17,6 +17,7 @@ import java.util.Optional;
 import com.ua.yushchenko.dal.dao.SubscriptionDao;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author romanyushchenko
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 class SubscriptionRepositoryTest {
 

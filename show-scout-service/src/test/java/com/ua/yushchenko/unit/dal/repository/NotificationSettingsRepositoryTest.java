@@ -21,12 +21,14 @@ import com.ua.yushchenko.dal.dao.NotificationSettingsDao;
 import com.ua.yushchenko.model.mapper.NotificationSettingsMapper;
 import com.ua.yushchenko.model.persistence.NotificationSettingsDb;
 import com.ua.yushchenko.dal.repository.NotificationSettingsRepository;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 class NotificationSettingsRepositoryTest {
 
