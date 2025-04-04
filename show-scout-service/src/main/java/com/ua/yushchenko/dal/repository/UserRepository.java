@@ -1,5 +1,6 @@
 package com.ua.yushchenko.dal.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.UserDao;
@@ -106,5 +107,22 @@ public class UserRepository {
 
         log.trace("userExistById.X: User with id: {}, exist: {}", userId, userExistById);
         return userExistById;
+    }
+
+    /**
+     * Select all Users
+     *
+     * @return List of {@link User}
+     */
+    public List<User> selectAllUsers() {
+        log.trace("selectAllUsers.E: select all users");
+
+        final List<User> users = userDao.findAll()
+                                        .stream()
+                                        .map(userMapper::toUser)
+                                        .toList();
+
+        log.trace("selectAllUsers.X: Users:{}", users);
+        return users;
     }
 }

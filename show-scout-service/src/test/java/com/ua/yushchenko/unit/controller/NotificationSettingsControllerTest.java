@@ -1,10 +1,10 @@
-package com.ua.yushchenko.controller;
+package com.ua.yushchenko.unit.controller;
 
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_API;
-import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_ID;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_API;
+import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_ID;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
@@ -18,16 +18,19 @@ import java.util.List;
 import java.util.UUID;
 
 import com.ua.yushchenko.api.NotificationSettingsApi;
+import com.ua.yushchenko.controller.NotificationSettingsController;
 import com.ua.yushchenko.model.domain.NotificationSettings;
 import com.ua.yushchenko.model.mapper.NotificationSettingsMapper;
 import com.ua.yushchenko.service.NotificationSettingsService;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 class NotificationSettingsControllerTest {
 

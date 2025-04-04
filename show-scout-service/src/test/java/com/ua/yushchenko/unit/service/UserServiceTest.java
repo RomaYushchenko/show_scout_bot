@@ -1,7 +1,7 @@
-package com.ua.yushchenko.service;
+package com.ua.yushchenko.unit.service;
 
-import static com.ua.yushchenko.TestData.USER;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.USER;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
@@ -13,6 +13,8 @@ import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
+import com.ua.yushchenko.service.UserService;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author romanyushchenko
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 

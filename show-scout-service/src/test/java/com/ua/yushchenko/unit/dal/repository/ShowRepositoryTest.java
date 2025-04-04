@@ -1,6 +1,6 @@
-package com.ua.yushchenko.dal.repository;
+package com.ua.yushchenko.unit.dal.repository;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.unit.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -13,6 +13,8 @@ import com.ua.yushchenko.dal.dao.ShowDao;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.mapper.ShowMapper;
 import com.ua.yushchenko.model.persistence.ShowDb;
+import com.ua.yushchenko.dal.repository.ShowRepository;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author ivanshalaev
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class ShowRepositoryTest {
     @Mock
