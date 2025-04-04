@@ -9,13 +9,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.UserDao;
+import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
-import com.ua.yushchenko.dal.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -113,5 +114,25 @@ public class UserRepositoryTest {
         verify(mockUserDao).existsById(userIdDoesNotExist);
 
         verifyNoMoreInteractions(mockUserDao);
+    }
+
+    @Test
+    void selectAllUsers_nominal() {
+        //GIVEN
+        when(mockUserDao.findAll()).thenReturn(List.of(USER_DB));
+        when(mockUserMapper.toUser(USER_DB)).thenReturn(USER);
+
+        //WHEN
+        final var result = unit.selectAllUsers();
+
+        //THEN
+        assertThat(result).isNotNull()
+                          .hasSize(1)
+                          .isEqualTo(List.of(USER));
+
+        verify(mockUserDao).findAll();
+        verify(mockUserMapper).toUser(USER_DB);
+
+        verifyNoMoreInteractions(mockUserDao, mockUserMapper);
     }
 }
