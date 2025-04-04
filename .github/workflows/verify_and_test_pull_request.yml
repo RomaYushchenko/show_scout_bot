@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
 
       - name: 🛠 Build with Maven
         run: mvn clean install -DskipTests
@@ -34,7 +34,7 @@ jobs:
       - name: ☕ Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
 
       - name: 🔬 Run Unit Tests
@@ -87,7 +87,7 @@ jobs:
       - name: ☕ Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
 
       - name: 🧪 Run Integration Tests
