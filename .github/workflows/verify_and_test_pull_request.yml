@@ -80,15 +80,15 @@ jobs:
           KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
         options: --network-alias kafka
 
-      steps:
-        - name: 📥 Checkout code
-          uses: actions/checkout@v3
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
 
-        - name: ☕ Set up JDK
-          uses: actions/setup-java@v3
-          with:
-            java-version: '21'
-            distribution: 'temurin'
+      - name: ☕ Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
 
-        - name: 🧪 Run Integration Tests
-          run: mvn test -DtestGroups=integration
+      - name: 🧪 Run Integration Tests
+        run: mvn test -DtestGroups=integration
