@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
+import com.ua.yushchenko.service.UserService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
