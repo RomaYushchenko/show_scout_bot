@@ -13,7 +13,8 @@ import com.ua.yushchenko.model.persistence.*;
 
 public class TestData {
 
-    public final static Long USER_ID = 123L;
+    public final static UUID USER_ID = UUID.randomUUID();
+    public final static Long TELEGRAM_USER_ID = 123L;
     public final static Long CHAT_ID = 123L;
     public final static User USER;
     public final static UserDb USER_DB;
@@ -40,103 +41,106 @@ public class TestData {
     static {
 
         USER = User.builder()
-                .userID(USER_ID)
-                .userName("TestUserName")
-                .firstName("TestName")
-                .lastName("TestLastName")
-                .chatId(CHAT_ID)
-                .timeZone("GMT+0000")
-                .build();
+                   .userId(USER_ID)
+                   .telegramUserId(TELEGRAM_USER_ID)
+                   .userName("TestUserName")
+                   .firstName("TestName")
+                   .lastName("TestLastName")
+                   .chatId(CHAT_ID)
+                   .timeZone("GMT+0000")
+                   .build();
 
         USER_DB = UserDb.builder()
-                .userID(USER_ID)
-                .userName("TestUserName")
-                .firstName("TestName")
-                .lastName("TestLastName")
-                .chatId(CHAT_ID)
-                .timeZone("GMT+0000")
-                .build();
+                        .userId(USER_ID)
+                        .telegramUserId(TELEGRAM_USER_ID)
+                        .userName("TestUserName")
+                        .firstName("TestName")
+                        .lastName("TestLastName")
+                        .chatId(CHAT_ID)
+                        .timeZone("GMT+0000")
+                        .build();
 
         USER_API = UserApi.builder()
-                .userID(USER_ID)
-                .userName("TestUserName")
-                .firstName("TestName")
-                .lastName("TestLastName")
-                .chatId(CHAT_ID)
-                .timeZone("GMT+0000")
-                .build();
+                          .userId(USER_ID)
+                          .telegramUserId(TELEGRAM_USER_ID)
+                          .userName("TestUserName")
+                          .firstName("TestName")
+                          .lastName("TestLastName")
+                          .chatId(CHAT_ID)
+                          .timeZone("GMT+0000")
+                          .build();
 
         SHOW = Show.builder()
-                .showID(SHOW_ID)
-                .showName("TestShowName")
-                .genres(List.of(Genre.ADVENTURE, Genre.CRIME))
-                .summary("Test summery")
-                .platform("Test platform")
-                .score(123.123f)
-                .showStatus(ShowStatus.RUNNING)
-                .img("Test img")
-                .build();
+                   .showID(SHOW_ID)
+                   .showName("TestShowName")
+                   .genres(List.of(Genre.ADVENTURE, Genre.CRIME))
+                   .summary("Test summery")
+                   .platform("Test platform")
+                   .score(123.123f)
+                   .showStatus(ShowStatus.RUNNING)
+                   .img("Test img")
+                   .build();
 
         SHOW_DB = ShowDb.builder()
-                .showID(SHOW_ID)
-                .showName("TestShowName")
-                .genres(List.of(Genre.ADVENTURE, Genre.CRIME))
-                .summary("Test summery")
-                .platform("Test platform")
-                .score(123.123f)
-                .showStatus(ShowStatus.RUNNING)
-                .img("Test img")
-                .build();
+                        .showID(SHOW_ID)
+                        .showName("TestShowName")
+                        .genres(List.of(Genre.ADVENTURE, Genre.CRIME))
+                        .summary("Test summery")
+                        .platform("Test platform")
+                        .score(123.123f)
+                        .showStatus(ShowStatus.RUNNING)
+                        .img("Test img")
+                        .build();
 
         SHOW_API = ShowApi.builder()
-                .showID(SHOW_ID)
-                .showName("TestShowName")
-                .genres(List.of(Genre.ADVENTURE, Genre.CRIME))
-                .summary("Test summery")
-                .platform("Test platform")
-                .score(123.123f)
-                .showStatus(ShowStatus.RUNNING)
-                .img("Test img")
-                .build();
+                          .showID(SHOW_ID)
+                          .showName("TestShowName")
+                          .genres(List.of(Genre.ADVENTURE, Genre.CRIME))
+                          .summary("Test summery")
+                          .platform("Test platform")
+                          .score(123.123f)
+                          .showStatus(ShowStatus.RUNNING)
+                          .img("Test img")
+                          .build();
 
         NOTIFICATION_SETTINGS = NotificationSettings.builder()
-                .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
-                .notificationSettingsIntervals(List.of(1))
-                .enabled(true)
-                .build();
+                                                    .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
+                                                    .notificationSettingsIntervals(List.of(1))
+                                                    .enabled(true)
+                                                    .build();
 
         NOTIFICATION_SETTINGS_DB = NotificationSettingsDb.builder()
-                .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
-                .notificationSettingsIntervals(List.of(1))
-                .enabled(true)
-                .build();
+                                                         .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
+                                                         .notificationSettingsIntervals(List.of(1))
+                                                         .enabled(true)
+                                                         .build();
 
         NOTIFICATION_SETTINGS_API = NotificationSettingsApi.builder()
-                .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
-                .notificationSettingsIntervals(List.of(1))
-                .enabled(true)
-                .build();
+                                                           .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
+                                                           .notificationSettingsIntervals(List.of(1))
+                                                           .enabled(true)
+                                                           .build();
 
         SUBSCRIPTION = Subscription.builder()
-                .subscriptionId(SUBSCRIPTION_ID)
-                .showId(SHOW_ID)
-                .userId(USER_ID)
-                .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
-                .build();
+                                   .subscriptionId(SUBSCRIPTION_ID)
+                                   .showId(SHOW_ID)
+                                   .userId(USER_ID)
+                                   .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
+                                   .build();
 
         SUBSCRIPTION_DB = SubscriptionDb.builder()
-                .subscriptionId(SUBSCRIPTION_ID)
-                .showId(SHOW_ID)
-                .userId(USER_ID)
-                .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
-                .build();
+                                        .subscriptionId(SUBSCRIPTION_ID)
+                                        .showId(SHOW_ID)
+                                        .userId(USER_ID)
+                                        .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
+                                        .build();
 
         SUBSCRIPTION_API = SubscriptionApi.builder()
-                .subscriptionId(SUBSCRIPTION_ID)
-                .showId(SHOW_ID)
-                .userId(USER_ID)
-                .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
-                .build();
+                                          .subscriptionId(SUBSCRIPTION_ID)
+                                          .showId(SHOW_ID)
+                                          .userId(USER_ID)
+                                          .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
+                                          .build();
 
         EPISODE = Episode.builder()
                 .episodeID(EPISODE_ID)

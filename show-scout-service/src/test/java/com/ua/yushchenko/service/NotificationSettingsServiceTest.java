@@ -1,9 +1,20 @@
 package com.ua.yushchenko.service;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS;
+import static com.ua.yushchenko.TestData.NOTIFICATION_SETTINGS_ID;
+import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.NotificationSettingsRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
@@ -17,11 +28,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.UUID;
-
 @ExtendWith(MockitoExtension.class)
 class NotificationSettingsServiceTest {
+
     @Mock
     private NotificationSettingsRepository mockNotificationSettingsRepository;
     @Captor
@@ -36,7 +45,7 @@ class NotificationSettingsServiceTest {
     void createNotificationSettings_nominal() {
         //GIVEN
         when(mockNotificationSettingsRepository
-                .insertNotificationSettings(notificationSettingsArgumentCaptor.capture()))
+                     .insertNotificationSettings(notificationSettingsArgumentCaptor.capture()))
                 .thenReturn(NOTIFICATION_SETTINGS);
         //WHEN
         final var notificationSettings = unit.createNotificationSettings();
@@ -64,10 +73,11 @@ class NotificationSettingsServiceTest {
         when(mockNotificationSettingsRepository.updateNotificationSettings(notificationSettingsToUpdate))
                 .thenReturn(notificationSettingsToUpdate);
         doNothing().when(mockNotificationSettingEventProducer)
-                .sendUpdatedEvent(notificationSettingsToUpdate);
+                   .sendUpdatedEvent(notificationSettingsToUpdate);
 
         //WHEN
-        final var notificationSettings = unit.updateNotificationSettings(NOTIFICATION_SETTINGS_ID, notificationSettingsToUpdate);
+        final var notificationSettings =
+                unit.updateNotificationSettings(NOTIFICATION_SETTINGS_ID, notificationSettingsToUpdate);
 
         //THEN
         assertThat(notificationSettings)
@@ -124,11 +134,11 @@ class NotificationSettingsServiceTest {
     @Test
     void getListNotificationSettingsByFilter_nominal_with_user_id() {
         //GIVEN
-        when(mockNotificationSettingsRepository.selectNotificationSettingsListByUserId(USER_ID))
+        when(mockNotificationSettingsRepository.selectNotificationSettingsListByUserId(TELEGRAM_USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
-        final var notificationSettings = unit.getListNotificationSettingsByFilter(USER_ID);
+        final var notificationSettings = unit.getListNotificationSettingsByFilter(TELEGRAM_USER_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -136,7 +146,7 @@ class NotificationSettingsServiceTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS));
 
-        verify(mockNotificationSettingsRepository).selectNotificationSettingsListByUserId(USER_ID);
+        verify(mockNotificationSettingsRepository).selectNotificationSettingsListByUserId(TELEGRAM_USER_ID);
         verify(mockNotificationSettingsRepository, never()).selectNotificationSettingsList();
 
         verifyNoMoreInteractions(mockNotificationSettingsRepository);
@@ -158,7 +168,7 @@ class NotificationSettingsServiceTest {
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS));
 
         verify(mockNotificationSettingsRepository).selectNotificationSettingsList();
-        verify(mockNotificationSettingsRepository, never()).selectNotificationSettingsListByUserId(USER_ID);
+        verify(mockNotificationSettingsRepository, never()).selectNotificationSettingsListByUserId(TELEGRAM_USER_ID);
 
         verifyNoMoreInteractions(mockNotificationSettingsRepository);
     }

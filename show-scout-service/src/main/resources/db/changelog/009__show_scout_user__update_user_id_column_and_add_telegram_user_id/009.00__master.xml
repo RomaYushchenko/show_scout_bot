@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="009.01__show_scout_user__rename_user_id_to_telegram_user_id_column.xml"
+             relativeToChangelogFile="true"/>
+    <include file="009.02__show_scout_user__add_new_user_id_column.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

@@ -3,7 +3,6 @@ package com.ua.yushchenko.dal.repository;
 import com.ua.yushchenko.dal.dao.EpisodeDao;
 import com.ua.yushchenko.model.domain.Episode;
 import com.ua.yushchenko.model.mapper.EpisodeMapper;
-import com.ua.yushchenko.model.persistence.EpisodeDB;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

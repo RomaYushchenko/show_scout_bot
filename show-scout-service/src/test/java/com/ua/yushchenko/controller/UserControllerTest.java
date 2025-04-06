@@ -5,7 +5,14 @@ import static com.ua.yushchenko.TestData.USER_API;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.UUID;
 
 import com.ua.yushchenko.api.UserApi;
 import com.ua.yushchenko.model.mapper.UserMapper;
@@ -45,7 +52,7 @@ public class UserControllerTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER_API);
+                          .isEqualTo(USER_API);
 
         verify(mockUserService).getUserById(USER_ID);
         verify(mockUserMapper).toUserApi(USER);
@@ -65,7 +72,7 @@ public class UserControllerTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER_API);
+                          .isEqualTo(USER_API);
 
         verify(mockUserMapper).toUser(USER_API);
         verify(mockUserService).createUser(USER);
@@ -86,7 +93,7 @@ public class UserControllerTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER_API);
+                          .isEqualTo(USER_API);
 
         verify(mockUserMapper).toUser(USER_API);
         verify(mockUserService).updateUser(USER_ID, USER);
@@ -98,13 +105,13 @@ public class UserControllerTest {
     @Test
     void updateUser_nominal_with_incorrect_user_id() {
         //GIVEN
-        final var incorrectUserId = 1L;
+        final var incorrectUserId = UUID.randomUUID();
         final var userToUpdate = USER.toBuilder()
-                .userID(incorrectUserId)
-                .build();
+                                     .userId(incorrectUserId)
+                                     .build();
         final var userToUpdateApi = USER_API.toBuilder()
-                .userID(incorrectUserId)
-                .build();
+                                            .userId(incorrectUserId)
+                                            .build();
         when(mockUserMapper.toUser(userToUpdateApi)).thenReturn(userToUpdate);
         when(mockUserService.updateUser(incorrectUserId, userToUpdate)).thenReturn(null);
 
@@ -123,14 +130,14 @@ public class UserControllerTest {
     @Test
     void updateUser_nominal_with_user_id_as_parameter_does_not_match_with_user_id_to_update() {
         //GIVEN
-        final var incorrectUserId = 1L;
+        final var incorrectUserId = UUID.randomUUID();
 
         //WHEN /THEN
         assertThatThrownBy(() -> unit.updateUser(incorrectUserId, USER_API))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("PathVariable userId: " + incorrectUserId
-                        + " does not match with RequestBody userApi.getUserID(): "
-                        + USER_API.getUserID());
+                                    + " does not match with RequestBody userApi.getUserId: "
+                                    + USER_API.getUserId());
 
         verify(mockUserMapper, never()).toUser(any(UserApi.class));
         verify(mockUserMapper, never()).toUserApi(any());
@@ -150,7 +157,7 @@ public class UserControllerTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER_API);
+                          .isEqualTo(USER_API);
 
         verify(mockUserService).deleteUser(USER_ID);
         verify(mockUserMapper).toUserApi(USER);

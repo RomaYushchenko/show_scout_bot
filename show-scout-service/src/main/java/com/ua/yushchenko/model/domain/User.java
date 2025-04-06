@@ -1,5 +1,7 @@
 package com.ua.yushchenko.model.domain;
 
+import java.util.UUID;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,10 +15,11 @@ import lombok.Data;
 @Builder(toBuilder = true)
 public class User {
 
-    long userID;
+    UUID userId;
+    Long telegramUserId;
     String userName;
     String firstName;
     String lastName;
     String timeZone;
-    long chatId;
+    Long chatId;
 }

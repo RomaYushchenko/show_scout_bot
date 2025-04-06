@@ -1,5 +1,7 @@
 package com.ua.yushchenko.dal.repository;
 
+import java.util.UUID;
+
 import com.ua.yushchenko.dal.dao.UserDao;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
@@ -31,12 +33,12 @@ public class UserRepository {
      * @param userId ID of user
      * @return {@link User} by current ID
      */
-    public User selectUserById(final Long userId) {
+    public User selectUserById(final UUID userId) {
         log.trace("selectUserById.E: Select user from table by ID:{}", userId);
 
         final User user = userDao.findById(userId)
-                .map(userMapper::toUser)
-                .orElse(null);
+                                 .map(userMapper::toUser)
+                                 .orElse(null);
 
         log.trace("selectUserById.X: User:{}", user);
         return user;
@@ -80,7 +82,7 @@ public class UserRepository {
      * @param userId ID of user
      * @return deleted user {@link User}
      */
-    public User deleteUserById(final Long userId) {
+    public User deleteUserById(final UUID userId) {
         log.trace("deleteUserById.E: Delete user from table by ID:{}", userId);
 
         final var user = selectUserById(userId);
@@ -97,7 +99,7 @@ public class UserRepository {
      * @param userId ID of {@link User}
      * @return true if user exist, false otherwise
      */
-    public boolean userExistById(final Long userId) {
+    public boolean userExistById(final UUID userId) {
         log.trace("userExistById.E: Check if User exist with provided ID: {} ", userId);
 
         final var userExistById = userDao.existsById(userId);

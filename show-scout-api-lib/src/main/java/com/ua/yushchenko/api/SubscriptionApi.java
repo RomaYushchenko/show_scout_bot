@@ -21,6 +21,6 @@ public class SubscriptionApi {
 
     private UUID subscriptionId;
     private UUID showId;
-    private long userId;
+    private UUID userId;
     private UUID notificationSettingsId;
 }

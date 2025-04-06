@@ -3,7 +3,13 @@ package com.ua.yushchenko.service;
 import static com.ua.yushchenko.TestData.USER;
 import static com.ua.yushchenko.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
@@ -38,7 +44,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER);
+                          .isEqualTo(USER);
 
         verify(mockUserRepository).selectUserById(USER_ID);
 
@@ -55,7 +61,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER);
+                          .isEqualTo(USER);
 
         verify(mockUserRepository).insertUser(USER);
 
@@ -66,8 +72,8 @@ public class UserServiceTest {
     void updateUser_nominal() {
         //GIVEN
         final User updatedUser = USER.toBuilder()
-                .userName("TestUserName_2")
-                .build();
+                                     .userName("TestUserName_2")
+                                     .build();
 
         when(mockUserRepository.selectUserById(USER_ID)).thenReturn(USER);
         when(mockUserRepository.updateUser(updatedUser)).thenReturn(updatedUser);
@@ -77,7 +83,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(updatedUser);
+                          .isEqualTo(updatedUser);
 
         verify(mockUserRepository).selectUserById(USER_ID);
         verify(mockUserRepository).updateUser(updatedUser);
@@ -96,7 +102,7 @@ public class UserServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(USER);
+                          .isEqualTo(USER);
 
         verify(mockUserRepository).userExistById(USER_ID);
         verify(mockUserRepository).deleteUserById(USER_ID);
@@ -107,7 +113,7 @@ public class UserServiceTest {
     @Test
     void deleteUser_nominal_user_id_does_not_exist() {
         //GIVEN
-        final var userIdDoesNotExist = 1234L;
+        final var userIdDoesNotExist = UUID.randomUUID();
         when(mockUserRepository.userExistById(userIdDoesNotExist)).thenReturn(false);
 
         //WHEN
@@ -143,7 +149,7 @@ public class UserServiceTest {
     @Test
     void userExistById_nominal_user_id_does_not_exist() {
         //GIVEN
-        final var userIdDoesNotExist = 1234L;
+        final var userIdDoesNotExist = UUID.randomUUID();
         when(mockUserRepository.userExistById(userIdDoesNotExist)).thenReturn(false);
 
         //WHEN

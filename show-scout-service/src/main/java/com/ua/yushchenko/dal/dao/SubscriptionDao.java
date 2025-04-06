@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SubscriptionDao extends ListCrudRepository<SubscriptionDb, UUID> {
 
-    List<SubscriptionDb> findAllByUserId(final Long userId);
+    List<SubscriptionDb> findAllByUserId(final UUID userId);
 
-    Optional<SubscriptionDb> findSubscriptionDbByShowIdAndUserId(final UUID showId, final Long userId);
+    Optional<SubscriptionDb> findSubscriptionDbByShowIdAndUserId(final UUID showId, final UUID userId);
 }

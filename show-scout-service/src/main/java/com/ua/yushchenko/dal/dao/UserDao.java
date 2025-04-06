@@ -1,5 +1,7 @@
 package com.ua.yushchenko.dal.dao;
 
+import java.util.UUID;
+
 import com.ua.yushchenko.model.persistence.UserDb;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,5 +13,6 @@ import org.springframework.stereotype.Repository;
  * @version v.0.1
  */
 @Repository
-public interface UserDao extends ListCrudRepository<UserDb, Long> {
+public interface UserDao extends ListCrudRepository<UserDb, UUID> {
+
 }

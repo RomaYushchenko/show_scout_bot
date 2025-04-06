@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="010.01" author="yushchenko" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="show_scout_subscription" columnName="user_id"/>
+        </preConditions>
+
+        <dropColumn tableName="show_scout_subscription" columnName="user_id"/>
+
+        <addColumn tableName="show_scout_subscription">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="show_scout_subscription"
+                baseColumnNames="user_id"
+                constraintName="fk_subscription_user"
+                referencedTableName="show_scout_user"
+                referencedColumnNames="user_id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>
