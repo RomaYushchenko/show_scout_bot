@@ -45,6 +45,23 @@ public class UserRepository {
     }
 
     /**
+     * Select {@link User} by current ID of Telegram User
+     *
+     * @param telegramUserId ID of Telegram User
+     * @return {@link User} by current ID of Telegram User
+     */
+    public User selectUserByTelegramUserId(final Long telegramUserId) {
+        log.trace("selectUserByTelegramUserId.E: Select user from table by telegramId:{}", telegramUserId);
+
+        final User user = userDao.findByTelegramUserId(telegramUserId)
+                                 .map(userMapper::toUser)
+                                 .orElse(null);
+
+        log.trace("selectUserByTelegramUserId.X: User:{}", user);
+        return user;
+    }
+
+    /**
      * Insert {@link User}
      *
      * @param userToInsert instance of {@link User} to insert
