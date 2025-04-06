@@ -85,6 +85,24 @@ public class UserControllerTest {
     }
 
     @Test
+    void createUser_nominal_already_created() {
+        //GIVEN
+        when(mockUserMapper.toUser(USER_API)).thenReturn(USER);
+        when(mockUserService.createUser(USER)).thenReturn(null);
+
+        //WHEN //THEN
+        assertThatThrownBy(() -> unit.createUser(USER_API))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("User has been already created");
+
+        verify(mockUserMapper).toUser(USER_API);
+        verify(mockUserService).createUser(USER);
+        verify(mockUserMapper, never()).toUserApi(USER);
+
+        verifyNoMoreInteractions(mockUserService, mockUserMapper);
+    }
+
+    @Test
     void updateUser_nominal() {
         //GIVEN
         when(mockUserMapper.toUser(USER_API)).thenReturn(USER);

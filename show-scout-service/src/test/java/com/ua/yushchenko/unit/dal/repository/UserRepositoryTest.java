@@ -1,9 +1,9 @@
 package com.ua.yushchenko.unit.dal.repository;
 
+import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
 import static com.ua.yushchenko.unit.TestData.USER;
 import static com.ua.yushchenko.unit.TestData.USER_DB;
-import static com.ua.yushchenko.unit.TestData.USER_ID;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.ua.yushchenko.unit.TestData.USER_ID;tThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -56,6 +56,25 @@ public class UserRepositoryTest {
                           .isEqualTo(USER);
 
         verify(mockUserDao).findById(USER_ID);
+        verify(mockUserMapper).toUser(USER_DB);
+
+        verifyNoMoreInteractions(mockUserDao, mockUserMapper);
+    }
+
+    @Test
+    void selectUserByTelegramUserId_nominal() {
+        //GIVEN
+        when(mockUserDao.findByTelegramUserId(TELEGRAM_USER_ID)).thenReturn(Optional.of(USER_DB));
+        when(mockUserMapper.toUser(USER_DB)).thenReturn(USER);
+
+        //WHEN
+        final User result = unit.selectUserByTelegramUserId(TELEGRAM_USER_ID);
+
+        //THEN
+        assertThat(result).isNotNull()
+                          .isEqualTo(USER);
+
+        verify(mockUserDao).findByTelegramUserId(TELEGRAM_USER_ID);
         verify(mockUserMapper).toUser(USER_DB);
 
         verifyNoMoreInteractions(mockUserDao, mockUserMapper);

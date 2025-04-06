@@ -1,5 +1,6 @@
 package com.ua.yushchenko.dal.dao;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.ua.yushchenko.model.persistence.UserDb;
@@ -15,4 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDao extends ListCrudRepository<UserDb, UUID> {
 
+    Optional<UserDb> findByTelegramUserId(Long telegramUserId);
 }
