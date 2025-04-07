@@ -1,10 +1,10 @@
-package com.ua.yushchenko.controller;
+package com.ua.yushchenko.unit.controller;
 
-import static com.ua.yushchenko.TestData.SHOW_ID;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_API;
-import static com.ua.yushchenko.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.SHOW_ID;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_API;
+import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,9 +17,11 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import com.ua.yushchenko.api.SubscriptionApi;
+import com.ua.yushchenko.controller.SubscriptionController;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
 import com.ua.yushchenko.service.SubscriptionService;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author romanyushchenko
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 class SubscriptionControllerTest {
 

@@ -1,21 +1,24 @@
-package com.ua.yushchenko.dal.repository;
+package com.ua.yushchenko.unit.dal.repository;
 
-import static com.ua.yushchenko.TestData.TELEGRAM_USER_ID;
-import static com.ua.yushchenko.TestData.USER;
-import static com.ua.yushchenko.TestData.USER_DB;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.unit.TestData.USER;
+import static com.ua.yushchenko.unit.TestData.USER_DB;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.dao.UserDao;
+import com.ua.yushchenko.dal.repository.UserRepository;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,6 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author romanyushchenko
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class UserRepositoryTest {
 
@@ -132,5 +136,25 @@ public class UserRepositoryTest {
         verify(mockUserDao).existsById(userIdDoesNotExist);
 
         verifyNoMoreInteractions(mockUserDao);
+    }
+
+    @Test
+    void selectAllUsers_nominal() {
+        //GIVEN
+        when(mockUserDao.findAll()).thenReturn(List.of(USER_DB));
+        when(mockUserMapper.toUser(USER_DB)).thenReturn(USER);
+
+        //WHEN
+        final var result = unit.selectAllUsers();
+
+        //THEN
+        assertThat(result).isNotNull()
+                          .hasSize(1)
+                          .isEqualTo(List.of(USER));
+
+        verify(mockUserDao).findAll();
+        verify(mockUserMapper).toUser(USER_DB);
+
+        verifyNoMoreInteractions(mockUserDao, mockUserMapper);
     }
 }
