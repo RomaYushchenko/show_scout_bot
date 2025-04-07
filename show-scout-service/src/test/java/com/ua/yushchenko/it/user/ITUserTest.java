@@ -24,6 +24,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Integration test for testing using functionality
+ *
+ * @author romanyushchenko
+ * @version 0.1
+ */
 @Tag("integration")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ITUserTest extends BaseIntegrationTest {
