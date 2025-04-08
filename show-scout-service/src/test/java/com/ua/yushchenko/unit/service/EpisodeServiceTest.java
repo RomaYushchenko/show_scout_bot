@@ -1,8 +1,8 @@
-package com.ua.yushchenko.service;
+package com.ua.yushchenko.unit.service;
 
-import static com.ua.yushchenko.TestData.EPISODE_ID;
-import static com.ua.yushchenko.TestData.EPISODE;
-import static com.ua.yushchenko.TestData.SHOW_ID;
+import static com.ua.yushchenko.unit.TestData.EPISODE_ID;
+import static com.ua.yushchenko.unit.TestData.EPISODE;
+import static com.ua.yushchenko.unit.TestData.SHOW_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
@@ -13,6 +13,8 @@ import static org.mockito.Mockito.when;
 
 import com.ua.yushchenko.dal.repository.EpisodeRepository;
 import com.ua.yushchenko.model.domain.Episode;
+import com.ua.yushchenko.service.EpisodeService;
+import com.ua.yushchenko.service.ShowService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

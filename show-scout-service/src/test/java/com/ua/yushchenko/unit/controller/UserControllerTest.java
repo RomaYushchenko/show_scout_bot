@@ -1,8 +1,8 @@
-package com.ua.yushchenko.controller;
+package com.ua.yushchenko.unit.controller;
 
-import static com.ua.yushchenko.TestData.USER;
-import static com.ua.yushchenko.TestData.USER_API;
-import static com.ua.yushchenko.TestData.USER_ID;
+import static com.ua.yushchenko.unit.TestData.USER;
+import static com.ua.yushchenko.unit.TestData.USER_API;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
@@ -15,9 +15,11 @@ import static org.mockito.Mockito.when;
 import java.util.UUID;
 
 import com.ua.yushchenko.api.UserApi;
+import com.ua.yushchenko.controller.UserController;
 import com.ua.yushchenko.model.mapper.UserMapper;
 import com.ua.yushchenko.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author romanyushchenko
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
@@ -77,6 +80,24 @@ public class UserControllerTest {
         verify(mockUserMapper).toUser(USER_API);
         verify(mockUserService).createUser(USER);
         verify(mockUserMapper).toUserApi(USER);
+
+        verifyNoMoreInteractions(mockUserService, mockUserMapper);
+    }
+
+    @Test
+    void createUser_nominal_already_created() {
+        //GIVEN
+        when(mockUserMapper.toUser(USER_API)).thenReturn(USER);
+        when(mockUserService.createUser(USER)).thenReturn(null);
+
+        //WHEN //THEN
+        assertThatThrownBy(() -> unit.createUser(USER_API))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("User has been already created");
+
+        verify(mockUserMapper).toUser(USER_API);
+        verify(mockUserService).createUser(USER);
+        verify(mockUserMapper, never()).toUserApi(USER);
 
         verifyNoMoreInteractions(mockUserService, mockUserMapper);
     }

@@ -1,8 +1,9 @@
-package com.ua.yushchenko.dal.repository;
+package com.ua.yushchenko.unit.dal.repository;
 
-import static com.ua.yushchenko.TestData.*;
+import static com.ua.yushchenko.unit.TestData.*;
 
 import com.ua.yushchenko.dal.dao.EpisodeDao;
+import com.ua.yushchenko.dal.repository.EpisodeRepository;
 import com.ua.yushchenko.model.mapper.EpisodeMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
