@@ -7,9 +7,12 @@ import static com.ua.yushchenko.it.ITData.USER_ID;
 import static com.ua.yushchenko.it.ITData.USER_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ua.yushchenko.api.UserApi;
+import com.ua.yushchenko.exceptions.model.AbstractApiException;
 import com.ua.yushchenko.it.config.BaseIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +78,7 @@ public class ITUserTest extends BaseIntegrationTest {
 
         @Test
         @DisplayName("Verify returning user by ID")
-        void getInformationAboutUser() {
+        void getInformationAboutUser() throws JsonProcessingException {
             final var createdUser = postUserRequest(USER_API).getBody();
 
             final var userResponse = getUserRequest(createdUser.getUserId());
@@ -94,7 +97,7 @@ public class ITUserTest extends BaseIntegrationTest {
         void userDoesNotExist() {
             final var userResponse = getUserRequest(USER_ID);
 
-            assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -161,7 +164,7 @@ public class ITUserTest extends BaseIntegrationTest {
         void userDoesNotExist() {
             final var deletedUserResponse = deletedUserRequest(USER_ID);
 
-            assertThat(deletedUserResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            assertThat(deletedUserResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         }
     }
 

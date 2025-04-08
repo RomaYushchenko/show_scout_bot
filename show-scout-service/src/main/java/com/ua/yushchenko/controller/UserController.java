@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.api.UserApi;
+import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
 import com.ua.yushchenko.service.UserService;
@@ -48,7 +49,7 @@ public class UserController {
         final User user = userService.getUserById(userId);
 
         if (Objects.isNull(user)) {
-            throw new EntityNotFoundException("User doesn't exist in system");
+            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", String.valueOf(userId));
         }
 
         final UserApi userApi = userMapper.toUserApi(user);
@@ -125,7 +126,7 @@ public class UserController {
         final User deletedUser = userService.deleteUser(userId);
 
         if (Objects.isNull(deletedUser)) {
-            throw new EntityNotFoundException("User doesn't exist in system");
+            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", String.valueOf(userId));
         }
 
         final UserApi deletedUserApi = userMapper.toUserApi(deletedUser);

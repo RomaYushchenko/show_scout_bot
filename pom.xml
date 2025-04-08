@@ -56,7 +56,7 @@
 
         <!-- Lombok Library -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
+            <groupId>org.projectlombok</groupId>ђ
             <artifactId>lombok</artifactId>
             <version>${show.scout.lombok.version}</version>
             <scope>provided</scope>
