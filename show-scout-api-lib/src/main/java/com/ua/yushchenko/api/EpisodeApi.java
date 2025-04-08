@@ -23,7 +23,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class EpisodeApi {
     UUID episodeID;
     UUID showId;
