@@ -1,6 +1,7 @@
 package com.ua.yushchenko.service;
 
 import com.ua.yushchenko.dal.repository.ShowRepository;
+import com.ua.yushchenko.model.domain.Episode;
 import com.ua.yushchenko.model.domain.Show;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,9 @@ public class ShowService {
 
     @NonNull
     private ShowRepository showRepository;
+
+    @NonNull
+    private EpisodeService episodeService;
 
     /**
      * Get {@link Show} by current ID
@@ -147,6 +151,8 @@ public class ShowService {
             log.warn("deleteShow.X: Show doesn't find in system");
             return null;
         }
+
+        final var deletedEpisodes = episodeService.deleteEpisodesByShowId(showId);
 
         final var show = showRepository.deletedShowById(showId);
 

@@ -194,7 +194,7 @@ class EpisodeServiceTest {
                 .build();
 
         when(mockShowService.showExistById(SHOW_ID)).thenReturn(true);
-        when(mockEpisodeRepository.insertEpisode(any(Episode.class))).thenReturn(EPISODE);
+        when(mockEpisodeRepository.insertEpisode(any())).thenReturn(EPISODE);
 
         //WHEN
         final var createdEpisode = unit.createEpisode(episodeToBuild, SHOW_ID);
