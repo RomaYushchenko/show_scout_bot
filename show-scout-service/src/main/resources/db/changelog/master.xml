@@ -20,4 +20,7 @@
              relativeToChangelogFile="true"/>
     <include file="010__show_scout_subscription__update_user_id_column/010.00__master.xml"
              relativeToChangelogFile="true"/>
+    <include file="011__show_scout_episode__create_table/011.00__master.xml" relativeToChangelogFile="true"/>
+    <include file="012__show_scout_episode__add_foreign_key_to_show_table/012.00__master.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

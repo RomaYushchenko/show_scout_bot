@@ -1,22 +1,15 @@
 package com.ua.yushchenko.unit;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
-import com.ua.yushchenko.api.NotificationSettingsApi;
-import com.ua.yushchenko.api.ShowApi;
-import com.ua.yushchenko.api.SubscriptionApi;
-import com.ua.yushchenko.api.UserApi;
+import com.ua.yushchenko.api.*;
 import com.ua.yushchenko.enums.Genre;
 import com.ua.yushchenko.enums.ShowStatus;
-import com.ua.yushchenko.model.domain.NotificationSettings;
-import com.ua.yushchenko.model.domain.Show;
-import com.ua.yushchenko.model.domain.Subscription;
-import com.ua.yushchenko.model.domain.User;
-import com.ua.yushchenko.model.persistence.NotificationSettingsDb;
-import com.ua.yushchenko.model.persistence.ShowDb;
-import com.ua.yushchenko.model.persistence.SubscriptionDb;
-import com.ua.yushchenko.model.persistence.UserDb;
+import com.ua.yushchenko.model.domain.*;
+import com.ua.yushchenko.model.persistence.*;
 
 public class TestData {
 
@@ -40,6 +33,10 @@ public class TestData {
     public final static Subscription SUBSCRIPTION;
     public final static SubscriptionDb SUBSCRIPTION_DB;
     public final static SubscriptionApi SUBSCRIPTION_API;
+    public final static UUID EPISODE_ID = UUID.randomUUID();
+    public final static Episode EPISODE;
+    public final static EpisodeDB EPISODE_DB;
+    public final static EpisodeApi EPISODE_API;
 
     static {
 
@@ -144,6 +141,39 @@ public class TestData {
                                           .userId(USER_ID)
                                           .notificationSettingsId(NOTIFICATION_SETTINGS_ID)
                                           .build();
+
+        EPISODE = Episode.builder()
+                .episodeID(EPISODE_ID)
+                .showId(SHOW_ID)
+                .episodeName("Test name")
+                .summary("Test summery")
+                .season(1)
+                .episodeNumber(1)
+                .airDate(LocalDate.MIN)
+                .airTime(LocalTime.MIN)
+                .build();
+
+        EPISODE_DB = EpisodeDB.builder()
+                .episodeID(EPISODE_ID)
+                .showId(SHOW_ID)
+                .episodeName("Test name")
+                .summary("Test summery")
+                .season(1)
+                .episodeNumber(1)
+                .airDate(LocalDate.MIN)
+                .airTime(LocalTime.MIN)
+                .build();
+
+        EPISODE_API = EpisodeApi.builder()
+                .episodeID(EPISODE_ID)
+                .showId(SHOW_ID)
+                .episodeName("Test name")
+                .summary("Test summery")
+                .season(1)
+                .episodeNumber(1)
+                .airDate(LocalDate.MIN)
+                .airTime(LocalTime.MIN)
+                .build();
     }
 
 }

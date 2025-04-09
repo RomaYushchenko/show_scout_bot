@@ -4,6 +4,7 @@ import static com.ua.yushchenko.unit.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+import com.ua.yushchenko.dal.repository.EpisodeRepository;
 import com.ua.yushchenko.dal.repository.ShowRepository;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.service.ShowService;
@@ -27,8 +28,13 @@ import java.util.UUID;
 @Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class ShowServiceTest {
+
     @Mock
     private ShowRepository mockShowRepository;
+
+    @Mock
+    private EpisodeRepository mockEpisodeRepository;
+
     @InjectMocks
     private ShowService unit;
 
@@ -205,6 +211,7 @@ public class ShowServiceTest {
     void deleteShow_nominal() {
         //GIVEN
         when(mockShowRepository.showExistById(SHOW_ID)).thenReturn(true);
+        when(mockEpisodeRepository.deleteEpisodesByShowId(SHOW_ID)).thenReturn(List.of(EPISODE));
         when(mockShowRepository.deletedShowById(SHOW_ID)).thenReturn(SHOW);
 
         //WHEN
@@ -215,9 +222,10 @@ public class ShowServiceTest {
                 .isEqualTo(SHOW);
 
         verify(mockShowRepository).showExistById(SHOW_ID);
+        verify(mockEpisodeRepository).deleteEpisodesByShowId(SHOW_ID);
         verify(mockShowRepository).deletedShowById(SHOW_ID);
 
-        verifyNoMoreInteractions(mockShowRepository);
+        verifyNoMoreInteractions(mockShowRepository, mockEpisodeRepository);
     }
 
     @Test
@@ -232,6 +240,7 @@ public class ShowServiceTest {
         assertThat(result).isNull();
 
         verify(mockShowRepository).showExistById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockEpisodeRepository, never()).deleteEpisodesByShowId(any());
         verify(mockShowRepository, never()).deletedShowById(any());
 
         verifyNoMoreInteractions(mockShowRepository);

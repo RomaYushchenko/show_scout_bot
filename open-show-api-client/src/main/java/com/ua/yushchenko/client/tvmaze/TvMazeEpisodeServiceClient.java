@@ -2,7 +2,7 @@ package com.ua.yushchenko.client.tvmaze;
 
 import java.util.List;
 
-import com.ua.yushchenko.api.tvmaze.EpisodeApi;
+import com.ua.yushchenko.api.tvmaze.EpisodeDetailsApi;
 import com.ua.yushchenko.common.client.config.FeignConfig;
 import lombok.NonNull;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,20 +22,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface TvMazeEpisodeServiceClient {
 
     /**
-     * Get {@link List} of {@link EpisodeApi} by ID of show
+     * Get {@link List} of {@link EpisodeDetailsApi} by ID of show
      *
      * @param showId ID of show
-     * @return {@link List} of {@link EpisodeApi} by ID of show
+     * @return {@link List} of {@link EpisodeDetailsApi} by ID of show
      */
     @GetMapping("/shows/{showId}/episodes")
-    List<EpisodeApi> getEpisodesByShowId(@NonNull @PathVariable("showId") final String showId);
+    List<EpisodeDetailsApi> getEpisodesByShowId(@NonNull @PathVariable("showId") final String showId);
 
     /**
-     * Get {@link  EpisodeApi} by ID of episode
+     * Get {@link  EpisodeDetailsApi} by ID of episode
      *
      * @param episodeId ID of episode
-     * @return {@link  EpisodeApi} by ID of episode
+     * @return {@link  EpisodeDetailsApi} by ID of episode
      */
     @GetMapping("/episodes/{episodeId}")
-    EpisodeApi getEpisodeById(@NonNull @PathVariable("episodeId") final String episodeId);
+    EpisodeDetailsApi getEpisodeById(@NonNull @PathVariable("episodeId") final String episodeId);
 }
