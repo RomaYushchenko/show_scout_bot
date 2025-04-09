@@ -61,7 +61,7 @@ public class NotificationSettingsController {
      * @return {@link List} of {@link NotificationSettingsApi}
      */
     @GetMapping("/notificationSettings")
-    public List<NotificationSettingsApi> getNotificationSettingsList(@RequestParam(required = false) final Long userId) {
+    public List<NotificationSettingsApi> getNotificationSettingsList(@RequestParam(required = false) final UUID userId) {
         log.info("getNotificationSettingsList.E: Get NotificationSettingsApi by userId: {}", userId);
 
         final var notificationSettings = notificationSettingsService.getListNotificationSettingsByFilter(userId);

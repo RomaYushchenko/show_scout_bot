@@ -5,6 +5,7 @@ import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_DB;
 import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_ID;
 import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
 import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
@@ -129,13 +130,13 @@ class NotificationSettingsRepositoryTest {
     @Test
     void selectNotificationSettingsListByUserId_nominal() {
         //GIVEN
-        when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(TELEGRAM_USER_ID))
+        when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_DB));
         when(mockNotificationSettingsMapper.toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB)))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
 
         //WHEN
-        final var notificationSettings = unit.selectNotificationSettingsListByUserId(TELEGRAM_USER_ID);
+        final var notificationSettings = unit.selectNotificationSettingsListByUserId(USER_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -143,7 +144,7 @@ class NotificationSettingsRepositoryTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS));
 
-        verify(mockNotificationSettingsDao).findAllNotificationSettingsByUserId(TELEGRAM_USER_ID);
+        verify(mockNotificationSettingsDao).findAllNotificationSettingsByUserId(USER_ID);
         verify(mockNotificationSettingsMapper).toNotificationSettings(List.of(NOTIFICATION_SETTINGS_DB));
 
         verifyNoMoreInteractions(mockNotificationSettingsDao, mockNotificationSettingsMapper);
@@ -152,7 +153,7 @@ class NotificationSettingsRepositoryTest {
     @Test
     void selectNotificationSettingsListByUserIdWorkCorrectlyWhenUserIdDoesNotExist() {
         //GIVEN
-        final var userIdDoesNotExist = 1L;
+        final var userIdDoesNotExist = UUID.randomUUID();
         when(mockNotificationSettingsDao.findAllNotificationSettingsByUserId(userIdDoesNotExist))
                 .thenReturn(List.of());
         when(mockNotificationSettingsMapper.toNotificationSettings(List.of())).thenReturn(List.of());
