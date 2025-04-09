@@ -1,5 +1,6 @@
 package com.ua.yushchenko.it.config;
 
+import com.ua.yushchenko.common.configuration.ShowScoutObjectMapper;
 import com.ua.yushchenko.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,8 +34,8 @@ public class BaseIntegrationTest {
                     .withPassword("postgres");
 
     @Container
-    public static final KafkaContainer KAFKA_CONTAINER = new KafkaContainer(
-            DockerImageName.parse("confluentinc/cp-kafka:7.5.0"));
+    public static final KafkaContainer KAFKA_CONTAINER =
+            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.0"));
 
     static {
         POSTGRESQL_CONTAINER.start();
@@ -54,11 +55,8 @@ public class BaseIntegrationTest {
 
     @Autowired
     protected TestRestTemplate restTemplate;
-
+    @Autowired
+    protected ShowScoutObjectMapper objectMapper;
     @Autowired
     protected UserRepository userRepository;
-
-    protected String url(String path) {
-        return "http://localhost:" + port + path;
-    }
 }

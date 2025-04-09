@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -18,9 +17,9 @@ import java.util.List;
 
 import com.ua.yushchenko.api.SubscriptionApi;
 import com.ua.yushchenko.controller.SubscriptionController;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
 import com.ua.yushchenko.service.SubscriptionService;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -113,7 +112,7 @@ class SubscriptionControllerTest {
 
         //WHEN //THEN
         assertThatThrownBy(() -> unit.getSubscription(SUBSCRIPTION_ID))
-                .isInstanceOf(EntityNotFoundException.class)
+                .isInstanceOf(ShowScoutNotFoundException.class)
                 .hasMessage(String.format("Subscription by %s doesn't exist in system", SUBSCRIPTION_ID));
 
         verify(mockSubscriptionService).getSubscription(SUBSCRIPTION_ID);
@@ -150,7 +149,7 @@ class SubscriptionControllerTest {
 
         //WHEN //THEN
         assertThatThrownBy(() -> unit.getSubscriptionByShowAndUserId(SHOW_ID, USER_ID))
-                .isInstanceOf(EntityNotFoundException.class)
+                .isInstanceOf(ShowScoutNotFoundException.class)
                 .hasMessage(String.format("Subscription by [showId=%s] and [userId=%s] doesn't exist in system",
                                           SHOW_ID, USER_ID));
 
@@ -197,22 +196,5 @@ class SubscriptionControllerTest {
         verify(mockSubscriptionMapper).toSubscriptionApi(SUBSCRIPTION);
 
         verifyNoMoreInteractions(mockSubscriptionService, mockSubscriptionMapper);
-    }
-
-    @Test
-    void deleteSubscription_nominal_subscription_does_not_exist() {
-        //GIVEN
-        when(mockSubscriptionService.deleteSubscription(SUBSCRIPTION_ID)).thenReturn(null);
-
-        //WHEN //THEN
-        assertThatThrownBy(() -> unit.deleteSubscription(SUBSCRIPTION_ID))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Subscription [ID=%s] doesn't exist in system", SUBSCRIPTION_ID);
-
-        verify(mockSubscriptionService).deleteSubscription(SUBSCRIPTION_ID);
-        verify(mockSubscriptionMapper, never()).toSubscriptionApi(any());
-
-        verifyNoMoreInteractions(mockSubscriptionService);
-        verifyNoInteractions(mockSubscriptionMapper);
     }
 }

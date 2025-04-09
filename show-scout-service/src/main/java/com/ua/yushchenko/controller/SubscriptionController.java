@@ -7,9 +7,9 @@ import java.util.UUID;
 import com.ua.yushchenko.api.ShowApi;
 import com.ua.yushchenko.api.SubscriptionApi;
 import com.ua.yushchenko.api.UserApi;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
 import com.ua.yushchenko.service.SubscriptionService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -67,7 +67,7 @@ public class SubscriptionController {
         final var subscription = subscriptionService.getSubscription(subscriptionId);
 
         if (Objects.isNull(subscription)) {
-            throw new EntityNotFoundException("Subscription by " + subscriptionId + " doesn't exist in system");
+            throw new ShowScoutNotFoundException("Subscription by %s doesn't exist in system", subscriptionId);
         }
 
         final var subscriptionApi = subscriptionMapper.toSubscriptionApi(subscription);
@@ -91,8 +91,8 @@ public class SubscriptionController {
         final var subscription = subscriptionService.getSubscriptionByShowAndUserId(showId, userId);
 
         if (Objects.isNull(subscription)) {
-            throw new EntityNotFoundException(
-                    "Subscription by [showId=" + showId + "] and [userId=" + userId + "] doesn't exist in system");
+            throw new ShowScoutNotFoundException("Subscription by [showId=%s] and [userId=%s] doesn't exist in system",
+                                                 showId, userId);
         }
 
         final var subscriptionApi = subscriptionMapper.toSubscriptionApi(subscription);
@@ -131,11 +131,6 @@ public class SubscriptionController {
         log.info("deleteSubscription.E: Delete Subscription by ID:{}", subscriptionId);
 
         final var deletedSubscription = subscriptionService.deleteSubscription(subscriptionId);
-
-        if (Objects.isNull(deletedSubscription)) {
-            throw new EntityNotFoundException("Subscription [ID=" + subscriptionId + "] doesn't exist in system");
-        }
-
         final var subscriptionApi = subscriptionMapper.toSubscriptionApi(deletedSubscription);
 
         log.info("deleteSubscription.X: Deleted Subscription:{}", subscriptionApi);
