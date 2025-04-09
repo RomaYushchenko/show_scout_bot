@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ShowScoutNotFoundExceptionHandler {
 
     @ExceptionHandler(ShowScoutNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(final ShowScoutNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleNotFound(final ShowScoutNotFoundException ex) {
         return ResponseEntity.status(ex.getHttpStatus())
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ErrorResponse(ex.getHttpStatus(), ex.getMessage()));

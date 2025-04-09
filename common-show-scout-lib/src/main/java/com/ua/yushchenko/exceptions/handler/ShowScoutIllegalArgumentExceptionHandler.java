@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ShowScoutIllegalArgumentExceptionHandler {
 
     @ExceptionHandler(ShowScoutIllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(final ShowScoutIllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(final ShowScoutIllegalArgumentException ex) {
         return ResponseEntity.status(ex.getHttpStatus())
                              .contentType(MediaType.APPLICATION_JSON)
                              .body(new ErrorResponse(ex.getHttpStatus(), ex.getMessage()));
