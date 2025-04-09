@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
+import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.domain.Subscription;
 import com.ua.yushchenko.model.domain.User;
@@ -99,13 +100,13 @@ public class SubscriptionService {
         final var user = userService.userExistById(userId);
 
         if (!user) {
-            throw new EntityNotFoundException("User [ID=" + userId + "] doesn't exist in system");
+            throw new ShowScoutNotFoundException("User [ID=%s] doesn't exist in system", userId);
         }
 
         final var show = showService.showExistById(showId);
 
         if (!show) {
-            throw new EntityNotFoundException("Show [ID=" + showId + "] doesn't exist in system");
+            throw new ShowScoutNotFoundException("Show [ID=%s] doesn't exist in system", showId);
         }
 
         final var notificationSettings = notificationSettingsService.createNotificationSettings();
@@ -137,8 +138,7 @@ public class SubscriptionService {
         final var subscription = getSubscription(subscriptionId);
 
         if (Objects.isNull(subscription)) {
-            log.debug("deleteSubscription.X: User doesn't find in system");
-            return null;
+            throw new ShowScoutNotFoundException("Subscription [ID=%s] doesn't exist in system", subscriptionId);
         }
 
         final var deletedNotificationSettings =

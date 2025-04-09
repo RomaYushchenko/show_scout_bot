@@ -19,11 +19,11 @@ import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
+import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.service.NotificationSettingsService;
 import com.ua.yushchenko.service.ShowService;
 import com.ua.yushchenko.service.SubscriptionService;
 import com.ua.yushchenko.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -169,7 +169,7 @@ class SubscriptionServiceTest {
 
         //WHEN //THEN
         assertThatThrownBy(() -> unit.createSubscription(SHOW_ID, USER_ID))
-                .isInstanceOf(EntityNotFoundException.class)
+                .isInstanceOf(ShowScoutNotFoundException.class)
                 .hasMessage(String.format("User [ID=%s] doesn't exist in system", USER_ID));
 
         verify(mockUserService).userExistById(USER_ID);
@@ -189,7 +189,7 @@ class SubscriptionServiceTest {
 
         //WHEN //THEN
         assertThatThrownBy(() -> unit.createSubscription(SHOW_ID, USER_ID))
-                .isInstanceOf(EntityNotFoundException.class)
+                .isInstanceOf(ShowScoutNotFoundException.class)
                 .hasMessage("Show [ID=%s] doesn't exist in system", SHOW_ID);
 
         verify(mockUserService).userExistById(USER_ID);
@@ -232,12 +232,10 @@ class SubscriptionServiceTest {
         //GIVEN
         when(mockSubscriptionRepository.selectSubscription(SUBSCRIPTION_ID)).thenReturn(null);
 
-        //WHEN
-        final var result = unit.deleteSubscription(SUBSCRIPTION_ID);
-
-        //THEN
-        assertThat(result)
-                .isNull();
+        //WHEN //THEN
+        assertThatThrownBy(() -> unit.deleteSubscription(SUBSCRIPTION_ID))
+                .isInstanceOf(ShowScoutNotFoundException.class)
+                .hasMessage("Subscription [ID=%s] doesn't exist in system", SUBSCRIPTION_ID);
 
         verify(mockSubscriptionRepository).selectSubscription(SUBSCRIPTION_ID);
         verify(mockSubscriptionRepository, never()).deleteSubscription(any());
