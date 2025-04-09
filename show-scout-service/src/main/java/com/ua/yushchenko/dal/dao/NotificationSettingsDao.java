@@ -29,7 +29,7 @@ public interface NotificationSettingsDao extends ListCrudRepository<Notification
             "JOIN show_scout_subscription s ON s.notification_settings_id = ns.notification_settings_id " +
             "WHERE s.user_id = :userId",
             nativeQuery = true)
-    List<NotificationSettingsDb> findAllNotificationSettingsByUserId(@Param("userId") long userId);
+    List<NotificationSettingsDb> findAllNotificationSettingsByUserId(@Param("userId") UUID userId);
 
     /**
      * Find {@link NotificationSettingsDb} by  subscription ID

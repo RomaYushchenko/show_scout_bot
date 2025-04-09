@@ -87,7 +87,7 @@ public class NotificationSettingsRepository {
      * @param userId ID of {@link User}
      * @return List of {@link NotificationSettings} for the user
      */
-    public List<NotificationSettings> selectNotificationSettingsListByUserId(final Long userId) {
+    public List<NotificationSettings> selectNotificationSettingsListByUserId(final UUID userId) {
         log.trace("selectNotificationSettingsListByUserId.E: Select List of NotificationSettings for user {}", userId);
 
         final var notificationSettings = notificationSettingsMapper
