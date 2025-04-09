@@ -7,25 +7,17 @@ import static com.ua.yushchenko.it.ITData.USER_ID;
 import static com.ua.yushchenko.it.ITData.USER_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ua.yushchenko.api.UserApi;
-import com.ua.yushchenko.exceptions.model.AbstractApiException;
 import com.ua.yushchenko.it.config.BaseIntegrationTest;
+import com.ua.yushchenko.it.provider.UserServiceClientProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 /**
  * Integration test for testing using functionality
@@ -37,8 +29,12 @@ import org.springframework.http.ResponseEntity;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ITUserTest extends BaseIntegrationTest {
 
+    private UserServiceClientProvider userServiceClientProvider;
+
     @BeforeEach
     void cleanUp() {
+        userServiceClientProvider = new UserServiceClientProvider(restTemplate, objectMapper, port);
+
         userRepository.selectAllUsers()
                       .forEach(user -> userRepository.deleteUserById(user.getUserId()));
     }
@@ -50,7 +46,7 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify that new user was created")
         void registrationNewUser() {
-            final var response = postUserRequest(USER_API);
+            final var response = userServiceClientProvider.postUserRequest(USER_API);
 
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(response.getBody()).extracting(UserApi::getTelegramUserId,
@@ -64,9 +60,9 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify that new user has already existed")
         void registrationNewUserAlreadyExisted() {
-            postUserRequest(USER_API);
+            userServiceClientProvider.postUserRequest(USER_API);
 
-            final var response = postUserRequest(USER_API);
+            final var response = userServiceClientProvider.postUserRequest(USER_API);
 
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -79,9 +75,9 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify returning user by ID")
         void getInformationAboutUser() throws JsonProcessingException {
-            final var createdUser = postUserRequest(USER_API).getBody();
+            final var createdUser = userServiceClientProvider.postUserRequest(USER_API).getBody();
 
-            final var userResponse = getUserRequest(createdUser.getUserId());
+            final var userResponse = userServiceClientProvider.getUserRequest(createdUser.getUserId());
 
             assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(userResponse.getBody()).extracting(UserApi::getTelegramUserId,
@@ -95,7 +91,7 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify that user doesn't exist in system")
         void userDoesNotExist() {
-            final var userResponse = getUserRequest(USER_ID);
+            final var userResponse = userServiceClientProvider.getUserRequest(USER_ID);
 
             assertThat(userResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         }
@@ -108,7 +104,7 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify that user was updated")
         void updateInformationAboutUser() {
-            final var createdUserResponse = postUserRequest(USER_API);
+            final var createdUserResponse = userServiceClientProvider.postUserRequest(USER_API);
 
             assertThat(createdUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -117,7 +113,7 @@ public class ITUserTest extends BaseIntegrationTest {
                                                         .timeZone("+6")
                                                         .build();
 
-            final var updatedUserResponse = putUserRequest(userToUpdate);
+            final var updatedUserResponse = userServiceClientProvider.putUserRequest(userToUpdate);
 
             assertThat(updatedUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertThat(updatedUserResponse.getBody()).extracting(UserApi::getTelegramUserId,
@@ -135,7 +131,7 @@ public class ITUserTest extends BaseIntegrationTest {
                                           .userId(USER_ID)
                                           .build();
 
-            final var updatedUserResponse = putUserRequest(invalidUser);
+            final var updatedUserResponse = userServiceClientProvider.putUserRequest(invalidUser);
 
             assertThat(updatedUserResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -148,13 +144,13 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify that user was deleted")
         void removeUser() {
-            final var createdUserResponse = postUserRequest(USER_API);
+            final var createdUserResponse = userServiceClientProvider.postUserRequest(USER_API);
 
             assertThat(createdUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
             final var userId = createdUserResponse.getBody().getUserId();
 
-            final var deletedUserResponse = deletedUserRequest(userId);
+            final var deletedUserResponse = userServiceClientProvider.deletedUserRequest(userId);
 
             assertThat(deletedUserResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         }
@@ -162,42 +158,9 @@ public class ITUserTest extends BaseIntegrationTest {
         @Test
         @DisplayName("Verify that user was not deleted")
         void userDoesNotExist() {
-            final var deletedUserResponse = deletedUserRequest(USER_ID);
+            final var deletedUserResponse = userServiceClientProvider.deletedUserRequest(USER_ID);
 
             assertThat(deletedUserResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         }
-    }
-
-    private ResponseEntity<UserApi> getUserRequest(final UUID userId) {
-        return restTemplate.getForEntity(url("/users/" + userId.toString()), UserApi.class);
-    }
-
-    private ResponseEntity<UserApi> postUserRequest(final UserApi userApi) {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return restTemplate.exchange(url("/users"),
-                                     HttpMethod.POST,
-                                     new HttpEntity<>(userApi, headers),
-                                     UserApi.class);
-    }
-
-    private ResponseEntity<UserApi> putUserRequest(final UserApi userApi) {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return restTemplate.exchange(url("/users/" + userApi.getUserId().toString()),
-                                     HttpMethod.PUT,
-                                     new HttpEntity<>(userApi, headers),
-                                     UserApi.class);
-    }
-
-    private ResponseEntity<UserApi> deletedUserRequest(final UUID userId) {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return restTemplate.exchange(url("/users/" + userId),
-                                     HttpMethod.DELETE,
-                                     new HttpEntity<>(headers),
-                                     UserApi.class);
     }
 }

@@ -2,6 +2,12 @@ package com.ua.yushchenko.exceptions.model;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * Defines error occurs if entity with given Id was not found
+ *
+ * @author romanyushchenko
+ * @version 0.1
+ */
 public class ShowScoutNotFoundException extends AbstractApiException {
 
     public ShowScoutNotFoundException(final String message) {
