@@ -4,8 +4,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
-import com.ua.yushchenko.exceptions.model.ShowScoutIllegalArgumentException;
-import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutIllegalArgumentException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.User;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

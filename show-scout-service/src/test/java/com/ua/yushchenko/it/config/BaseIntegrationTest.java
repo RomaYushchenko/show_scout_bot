@@ -1,6 +1,6 @@
 package com.ua.yushchenko.it.config;
 
-import com.ua.yushchenko.configuration.ShowScoutObjectMapper;
+import com.ua.yushchenko.common.configuration.ShowScoutObjectMapper;
 import com.ua.yushchenko.dal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.ua.yushchenko.api.ShowApi;
 import com.ua.yushchenko.api.SubscriptionApi;
 import com.ua.yushchenko.api.UserApi;
-import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
 import com.ua.yushchenko.service.SubscriptionService;
 import lombok.NonNull;

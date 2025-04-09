@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.ua.yushchenko.dal.repository.SubscriptionRepository;
 import com.ua.yushchenko.events.producer.NotificationSettingEventProducer;
-import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.service.NotificationSettingsService;
 import com.ua.yushchenko.service.ShowService;
 import com.ua.yushchenko.service.SubscriptionService;

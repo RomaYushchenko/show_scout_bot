@@ -4,12 +4,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.api.UserApi;
-import com.ua.yushchenko.exceptions.model.ShowScoutIllegalArgumentException;
-import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
 import com.ua.yushchenko.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

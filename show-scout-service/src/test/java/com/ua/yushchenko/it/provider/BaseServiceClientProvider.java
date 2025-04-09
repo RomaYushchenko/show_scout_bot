@@ -1,6 +1,6 @@
 package com.ua.yushchenko.it.provider;
 
-import com.ua.yushchenko.configuration.ShowScoutObjectMapper;
+import com.ua.yushchenko.common.configuration.ShowScoutObjectMapper;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 /**

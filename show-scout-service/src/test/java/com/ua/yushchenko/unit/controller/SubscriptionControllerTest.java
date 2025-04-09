@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -18,10 +17,9 @@ import java.util.List;
 
 import com.ua.yushchenko.api.SubscriptionApi;
 import com.ua.yushchenko.controller.SubscriptionController;
-import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.mapper.SubscriptionMapper;
 import com.ua.yushchenko.service.SubscriptionService;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

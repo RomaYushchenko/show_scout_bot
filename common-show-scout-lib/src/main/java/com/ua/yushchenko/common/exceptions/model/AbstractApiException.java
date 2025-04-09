@@ -1,4 +1,4 @@
-package com.ua.yushchenko.exceptions.model;
+package com.ua.yushchenko.common.exceptions.model;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

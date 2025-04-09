@@ -1,4 +1,4 @@
-package com.ua.yushchenko.configuration;
+package com.ua.yushchenko.common.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

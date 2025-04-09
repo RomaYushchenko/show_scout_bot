@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
-import com.ua.yushchenko.exceptions.model.ShowScoutIllegalArgumentException;
-import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutIllegalArgumentException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.service.UserService;
 import org.junit.jupiter.api.Tag;
