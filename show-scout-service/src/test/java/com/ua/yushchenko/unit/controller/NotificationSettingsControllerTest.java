@@ -4,7 +4,7 @@ import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS;
 import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_API;
 import static com.ua.yushchenko.unit.TestData.NOTIFICATION_SETTINGS_ID;
 import static com.ua.yushchenko.unit.TestData.SUBSCRIPTION_ID;
-import static com.ua.yushchenko.unit.TestData.TELEGRAM_USER_ID;
+import static com.ua.yushchenko.unit.TestData.USER_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.any;
@@ -83,13 +83,13 @@ class NotificationSettingsControllerTest {
     @Test
     void getNotificationSettingsList_nominal_with_user_id() {
         //GIVEN
-        when(mockNotificationSettingsService.getListNotificationSettingsByFilter(TELEGRAM_USER_ID))
+        when(mockNotificationSettingsService.getListNotificationSettingsByFilter(USER_ID))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS));
         when(mockNotificationSettingsMapper.toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS)))
                 .thenReturn(List.of(NOTIFICATION_SETTINGS_API));
 
         //WHEN
-        final var notificationSettings = unit.getNotificationSettingsList(TELEGRAM_USER_ID);
+        final var notificationSettings = unit.getNotificationSettingsList(USER_ID);
 
         //THEN
         assertThat(notificationSettings)
@@ -97,7 +97,7 @@ class NotificationSettingsControllerTest {
                 .hasSize(1)
                 .isEqualTo(List.of(NOTIFICATION_SETTINGS_API));
 
-        verify(mockNotificationSettingsService).getListNotificationSettingsByFilter(TELEGRAM_USER_ID);
+        verify(mockNotificationSettingsService).getListNotificationSettingsByFilter(USER_ID);
         verify(mockNotificationSettingsMapper).toNotificationSettingsApis(List.of(NOTIFICATION_SETTINGS));
 
         verifyNoMoreInteractions(mockNotificationSettingsService, mockNotificationSettingsMapper);

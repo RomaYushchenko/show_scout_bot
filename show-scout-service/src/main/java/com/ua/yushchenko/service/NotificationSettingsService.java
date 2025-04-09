@@ -105,7 +105,7 @@ public class NotificationSettingsService {
      * @param userId ID of {@link User}
      * @return {@link List} of {@link NotificationSettings}
      */
-    public List<NotificationSettings> getListNotificationSettingsByFilter(final Long userId) {
+    public List<NotificationSettings> getListNotificationSettingsByFilter(final UUID userId) {
         log.debug("getListNotificationSettingsByFilter.E: Get all NotificationSettings for user: {}", userId);
 
         final var notificationSettings = Objects.isNull(userId)
