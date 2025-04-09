@@ -4,9 +4,9 @@ import static com.ua.yushchenko.unit.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+import com.ua.yushchenko.dal.repository.EpisodeRepository;
 import com.ua.yushchenko.dal.repository.ShowRepository;
 import com.ua.yushchenko.model.domain.Show;
-import com.ua.yushchenko.service.EpisodeService;
 import com.ua.yushchenko.service.ShowService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class ShowServiceTest {
     private ShowRepository mockShowRepository;
 
     @Mock
-    private EpisodeService mockEpisodeService;
+    private EpisodeRepository mockEpisodeRepository;
 
     @InjectMocks
     private ShowService unit;
@@ -211,7 +211,7 @@ public class ShowServiceTest {
     void deleteShow_nominal() {
         //GIVEN
         when(mockShowRepository.showExistById(SHOW_ID)).thenReturn(true);
-        when(mockEpisodeService.deleteEpisodesByShowId(SHOW_ID)).thenReturn(List.of(EPISODE));
+        when(mockEpisodeRepository.deleteEpisodesByShowId(SHOW_ID)).thenReturn(List.of(EPISODE));
         when(mockShowRepository.deletedShowById(SHOW_ID)).thenReturn(SHOW);
 
         //WHEN
@@ -222,10 +222,10 @@ public class ShowServiceTest {
                 .isEqualTo(SHOW);
 
         verify(mockShowRepository).showExistById(SHOW_ID);
-        verify(mockEpisodeService).deleteEpisodesByShowId(SHOW_ID);
+        verify(mockEpisodeRepository).deleteEpisodesByShowId(SHOW_ID);
         verify(mockShowRepository).deletedShowById(SHOW_ID);
 
-        verifyNoMoreInteractions(mockShowRepository, mockEpisodeService);
+        verifyNoMoreInteractions(mockShowRepository, mockEpisodeRepository);
     }
 
     @Test
@@ -240,7 +240,7 @@ public class ShowServiceTest {
         assertThat(result).isNull();
 
         verify(mockShowRepository).showExistById(SHOW_ID_DOES_NOT_EXIST);
-        verify(mockEpisodeService, never()).deleteEpisodesByShowId(any());
+        verify(mockEpisodeRepository, never()).deleteEpisodesByShowId(any());
         verify(mockShowRepository, never()).deletedShowById(any());
 
         verifyNoMoreInteractions(mockShowRepository);

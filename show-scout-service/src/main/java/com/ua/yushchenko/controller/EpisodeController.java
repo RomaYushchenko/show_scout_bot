@@ -81,7 +81,7 @@ public class EpisodeController {
      * @param showId     ID of {@link Show}
      * @return created {@link EpisodeApi}
      */
-    @PostMapping("/episode/show{showId}")
+    @PostMapping("/episode/show/{showId}")
     public EpisodeApi createEpisode(@RequestBody final EpisodeApi episodeApi,
                                     @PathVariable final UUID showId) {
         log.info("createEpisode.E: Create episode: {} with showId: {}", episodeApi, showId);

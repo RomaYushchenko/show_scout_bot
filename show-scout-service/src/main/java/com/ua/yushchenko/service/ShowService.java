@@ -1,5 +1,6 @@
 package com.ua.yushchenko.service;
 
+import com.ua.yushchenko.dal.repository.EpisodeRepository;
 import com.ua.yushchenko.dal.repository.ShowRepository;
 import com.ua.yushchenko.model.domain.Episode;
 import com.ua.yushchenko.model.domain.Show;
@@ -25,9 +26,9 @@ public class ShowService {
 
     @NonNull
     private ShowRepository showRepository;
-
+    //TODO: Temoprarely use EpisodeRepositoy beckose we have the dependency cycle.
     @NonNull
-    private EpisodeService episodeService;
+    private EpisodeRepository episodeRepository;
 
     /**
      * Get {@link Show} by current ID
@@ -152,7 +153,7 @@ public class ShowService {
             return null;
         }
 
-        final var deletedEpisodes = episodeService.deleteEpisodesByShowId(showId);
+        final var deletedEpisodes = episodeRepository.deleteEpisodesByShowId(showId);
 
         final var show = showRepository.deletedShowById(showId);
 
