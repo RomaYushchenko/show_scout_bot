@@ -16,6 +16,7 @@ import com.ua.yushchenko.model.domain.Episode;
 import com.ua.yushchenko.service.EpisodeService;
 import com.ua.yushchenko.service.ShowService;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author ivanshalaev
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 class EpisodeServiceTest {
 

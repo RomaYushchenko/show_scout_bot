@@ -5,6 +5,7 @@ import static com.ua.yushchenko.unit.TestData.*;
 import com.ua.yushchenko.dal.dao.EpisodeDao;
 import com.ua.yushchenko.dal.repository.EpisodeRepository;
 import com.ua.yushchenko.model.mapper.EpisodeMapper;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.*;
  * @author ivanshalaev
  * @version 0.1
  */
+@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 class EpisodeRepositoryTest {
 
