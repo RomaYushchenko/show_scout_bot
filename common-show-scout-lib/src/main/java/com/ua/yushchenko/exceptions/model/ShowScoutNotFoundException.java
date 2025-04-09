@@ -14,7 +14,7 @@ public class ShowScoutNotFoundException extends AbstractApiException {
         super(message, HttpStatus.NOT_FOUND);
     }
 
-    public ShowScoutNotFoundException(final String message, final String ... args) {
+    public ShowScoutNotFoundException(final String message, final Object ... args) {
         super(String.format(message, args), HttpStatus.NOT_FOUND);
     }
 }

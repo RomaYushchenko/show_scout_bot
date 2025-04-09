@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.api.UserApi;
+import com.ua.yushchenko.exceptions.model.ShowScoutIllegalArgumentException;
 import com.ua.yushchenko.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.User;
 import com.ua.yushchenko.model.mapper.UserMapper;
@@ -49,7 +50,7 @@ public class UserController {
         final User user = userService.getUserById(userId);
 
         if (Objects.isNull(user)) {
-            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", String.valueOf(userId));
+            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", userId);
         }
 
         final UserApi userApi = userMapper.toUserApi(user);
@@ -69,13 +70,7 @@ public class UserController {
         log.info("createUser.E: Create user");
 
         final User userToCreate = userMapper.toUser(userApi);
-
         final User createdUser = userService.createUser(userToCreate);
-
-        if (Objects.isNull(createdUser)) {
-            throw new EntityNotFoundException("User has been already created");
-        }
-
         final UserApi createdUserApi = userMapper.toUserApi(createdUser);
 
         log.info("createUser.X: Created user:{}", createdUserApi);
@@ -94,19 +89,8 @@ public class UserController {
                               @RequestBody final UserApi userApi) {
         log.info("updateUser.E: Update user by ID:{}", userId);
 
-        if (!Objects.equals(userId, userApi.getUserId())) {
-            throw new IllegalArgumentException("PathVariable userId: " + userId
-                                                       + " does not match with RequestBody userApi.getUserId: "
-                                                       + userApi.getUserId());
-        }
-
         final User userToUpdate = userMapper.toUser(userApi);
         final User updatedUser = userService.updateUser(userId, userToUpdate);
-
-        if (Objects.isNull(updatedUser)) {
-            throw new EntityNotFoundException("User with userId: " + userId + " doesn't exist in system");
-        }
-
         final UserApi updatedUserApi = userMapper.toUserApi(updatedUser);
 
         log.info("updateUser.X: Updated user:{}", updatedUserApi);
@@ -124,11 +108,6 @@ public class UserController {
         log.info("deleteUser.E: Delete user by ID:{}", userId);
 
         final User deletedUser = userService.deleteUser(userId);
-
-        if (Objects.isNull(deletedUser)) {
-            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", String.valueOf(userId));
-        }
-
         final UserApi deletedUserApi = userMapper.toUserApi(deletedUser);
 
         log.info("deleteUser.X: Deleted user:{}", deletedUserApi);

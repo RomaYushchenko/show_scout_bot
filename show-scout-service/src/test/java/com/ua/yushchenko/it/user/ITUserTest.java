@@ -64,7 +64,7 @@ public class ITUserTest extends BaseIntegrationTest {
 
             final var response = userServiceClientProvider.postUserRequest(USER_API);
 
-            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -133,7 +133,7 @@ public class ITUserTest extends BaseIntegrationTest {
 
             final var updatedUserResponse = userServiceClientProvider.putUserRequest(invalidUser);
 
-            assertThat(updatedUserResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            assertThat(updatedUserResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         }
     }
 
