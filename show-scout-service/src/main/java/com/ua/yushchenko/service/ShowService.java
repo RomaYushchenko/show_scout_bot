@@ -1,15 +1,17 @@
 package com.ua.yushchenko.service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import com.ua.yushchenko.common.exceptions.model.ShowScoutIllegalArgumentException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.dal.repository.ShowRepository;
 import com.ua.yushchenko.model.domain.Show;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Service that exposes the base functionality for interacting with {@link Show} data
@@ -52,7 +54,7 @@ public class ShowService {
         final List<Show> shows = showRepository.selectShowsByName(name);
 
         log.debug("getShowByName.X: Retrieved {} shows with the name '{}': {}",
-                shows.size(), name, shows);
+                  shows.size(), name, shows);
         return shows;
     }
 
@@ -71,7 +73,7 @@ public class ShowService {
                 : showRepository.selectShowsByName(name);
 
         log.debug("getShowsByFilter.X: Retrieved {} shows with the name '{}': {}",
-                shows.size(), name, shows);
+                  shows.size(), name, shows);
         return shows;
     }
 
@@ -114,11 +116,15 @@ public class ShowService {
     public Show updateShow(final UUID showId, final Show showToUpdate) {
         log.debug("updateShow.E: Update show by ID:{}", showId);
 
+        if (!Objects.equals(showId, showToUpdate.getShowID())) {
+            throw new ShowScoutIllegalArgumentException(
+                    "Id of show %s does not match with params show.showId: %s", showId, showToUpdate.getShowID());
+        }
+
         final Show show = showRepository.selectShowById(showId);
 
         if (Objects.isNull(show)) {
-            log.warn("updateShow.X: Show doesn't find in system");
-            return null;
+            throw new ShowScoutNotFoundException("Show by %s doesn't exist in system", showId);
         }
 
         if (Objects.equals(showToUpdate, show)) {
@@ -144,8 +150,7 @@ public class ShowService {
         final var isShowExist = showRepository.showExistById(showId);
 
         if (!isShowExist) {
-            log.warn("deleteShow.X: Show doesn't find in system");
-            return null;
+            throw new ShowScoutNotFoundException("Show by %s doesn't exist in system", showId);
         }
 
         final var show = showRepository.deletedShowById(showId);

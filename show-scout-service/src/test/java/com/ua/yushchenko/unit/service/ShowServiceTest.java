@@ -1,9 +1,22 @@
 package com.ua.yushchenko.unit.service;
 
-import static com.ua.yushchenko.unit.TestData.*;
+import static com.ua.yushchenko.unit.TestData.SHOW;
+import static com.ua.yushchenko.unit.TestData.SHOW_ID;
+import static com.ua.yushchenko.unit.TestData.SHOW_ID_DOES_NOT_EXIST;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
+import java.util.List;
+import java.util.UUID;
+
+import com.ua.yushchenko.common.exceptions.model.ShowScoutIllegalArgumentException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.dal.repository.ShowRepository;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.service.ShowService;
@@ -13,9 +26,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -27,6 +37,7 @@ import java.util.UUID;
 @Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class ShowServiceTest {
+
     @Mock
     private ShowRepository mockShowRepository;
     @InjectMocks
@@ -42,7 +53,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(show).isNotNull()
-                .isEqualTo(SHOW);
+                        .isEqualTo(SHOW);
 
         verify(mockShowRepository).selectShowById(SHOW_ID);
 
@@ -60,7 +71,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(shows);
+                          .isEqualTo(shows);
         verify(mockShowRepository).selectShowsByName(SHOW.getShowName());
 
         verifyNoMoreInteractions(mockShowRepository);
@@ -77,7 +88,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(shows);
+                          .isEqualTo(shows);
 
         verify(mockShowRepository).selectAllShows();
 
@@ -135,7 +146,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(SHOW);
+                          .isEqualTo(SHOW);
 
         verify(mockShowRepository).insertShow(SHOW);
 
@@ -146,8 +157,8 @@ public class ShowServiceTest {
     void updateShow_nominal() {
         //GIVEN
         final Show updatedShow = SHOW.toBuilder()
-                .showName("TestShowName_2")
-                .build();
+                                     .showName("TestShowName_2")
+                                     .build();
 
         when(mockShowRepository.selectShowById(SHOW_ID)).thenReturn(SHOW);
         when(mockShowRepository.updateShow(updatedShow)).thenReturn(updatedShow);
@@ -157,7 +168,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(updatedShow);
+                          .isEqualTo(updatedShow);
 
         verify(mockShowRepository).selectShowById(SHOW_ID);
         verify(mockShowRepository).updateShow(updatedShow);
@@ -166,17 +177,31 @@ public class ShowServiceTest {
     }
 
     @Test
+    void updateShow_nominal_with_show_id_dose_not_match_with_show_id_to_update() {
+        //GIVEN
+        //WHEN /THEN
+        assertThatThrownBy(() -> unit.updateShow(SHOW_ID_DOES_NOT_EXIST, SHOW))
+                .isInstanceOf(ShowScoutIllegalArgumentException.class)
+                .hasMessage("Id of show " + SHOW_ID_DOES_NOT_EXIST + " does not match with params show.showId: " +
+                                    SHOW.getShowID());
+
+        verify(mockShowRepository, never()).selectShowById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockShowRepository, never()).updateShow(any());
+
+        verifyNoInteractions(mockShowRepository);
+    }
+
+    @Test
     void updateShowWorksCorrectlyWhenShowWithGivenIdDoesNotExist() {
         //GIVEN
-        when(mockShowRepository.selectShowById(SHOW_ID_DOES_NOT_EXIST)).thenReturn(null);
+        when(mockShowRepository.selectShowById(SHOW_ID)).thenReturn(null);
 
         //WHEN
-        Show result = unit.updateShow(SHOW_ID_DOES_NOT_EXIST, SHOW);
+        assertThatThrownBy(() -> unit.updateShow(SHOW_ID, SHOW))
+                .isInstanceOf(ShowScoutNotFoundException.class)
+                .hasMessage("Show by " + SHOW_ID + " doesn't exist in system");
 
-        //THEN
-        assertThat(result).isNull();
-
-        verify(mockShowRepository).selectShowById(SHOW_ID_DOES_NOT_EXIST);
+        verify(mockShowRepository).selectShowById(SHOW_ID);
         verify(mockShowRepository, never()).updateShow(any());
 
         verifyNoMoreInteractions(mockShowRepository);
@@ -193,7 +218,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(SHOW);
+                          .isEqualTo(SHOW);
 
         verify(mockShowRepository).selectShowById(SHOW_ID);
         verify(mockShowRepository, never()).updateShow(any());
@@ -212,7 +237,7 @@ public class ShowServiceTest {
 
         //THEN
         assertThat(result).isNotNull()
-                .isEqualTo(SHOW);
+                          .isEqualTo(SHOW);
 
         verify(mockShowRepository).showExistById(SHOW_ID);
         verify(mockShowRepository).deletedShowById(SHOW_ID);
@@ -225,11 +250,11 @@ public class ShowServiceTest {
         //GIVEN
         when(mockShowRepository.showExistById(SHOW_ID_DOES_NOT_EXIST)).thenReturn(false);
 
-        //WHEN
-        final Show result = unit.deletedShow(SHOW_ID_DOES_NOT_EXIST);
+        //WHEN /THEN
+        assertThatThrownBy(() -> unit.deletedShow(SHOW_ID_DOES_NOT_EXIST))
+                .isInstanceOf(ShowScoutNotFoundException.class)
+                .hasMessage("Show by " + SHOW_ID_DOES_NOT_EXIST + " doesn't exist in system");
 
-        //THEN
-        assertThat(result).isNull();
 
         verify(mockShowRepository).showExistById(SHOW_ID_DOES_NOT_EXIST);
         verify(mockShowRepository, never()).deletedShowById(any());
