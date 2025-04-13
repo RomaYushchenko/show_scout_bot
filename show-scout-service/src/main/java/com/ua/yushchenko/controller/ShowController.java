@@ -1,6 +1,7 @@
 package com.ua.yushchenko.controller;
 
 import com.ua.yushchenko.api.ShowApi;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.Show;
 import com.ua.yushchenko.model.mapper.ShowMapper;
 import com.ua.yushchenko.service.ShowService;
@@ -43,7 +44,7 @@ public class ShowController {
         final Show show = showService.getShowById(showId);
 
         if (Objects.isNull(show)) {
-            throw new EntityNotFoundException("Show by " + showId + " doesn't exist in system");
+            throw new ShowScoutNotFoundException("Show by %s doesn't exist in system", showId);
         }
 
         final ShowApi showApi = showMapper.toShowApi(show);
@@ -100,19 +101,8 @@ public class ShowController {
                               @RequestBody final ShowApi showApi) {
         log.info("updateShow.E: Update show by ID:{}", showId);
 
-        if (!Objects.equals(showId,showApi.getShowID())){
-            throw new IllegalArgumentException("PathVariable showId: " + showId
-                    + " does not match with RequestBody showApi.getShowID(): "
-                    + showApi.getShowID());
-        }
-
         final Show showToUpdate = showMapper.toShow(showApi);
         final Show updatedShow = showService.updateShow(showId, showToUpdate);
-
-        if (Objects.isNull(updatedShow)) {
-            throw new EntityNotFoundException("Show by " + showId + " doesn't exist in system");
-        }
-
         final ShowApi updatedShowApi = showMapper.toShowApi(updatedShow);
 
         log.info("updateShow.X: Updated show:{}", updatedShowApi);
@@ -130,11 +120,6 @@ public class ShowController {
         log.info("deleteShow.E: Delete show by ID:{}", showId);
 
         final Show deletedShow = showService.deletedShow(showId);
-
-        if (Objects.isNull(deletedShow)) {
-            throw new EntityNotFoundException("Show by " + showId + " doesn't exist in system");
-        }
-
         final ShowApi deletedShowApi = showMapper.toShowApi(deletedShow);
 
         log.info("deleteShow.X: Deleted show:{}", deletedShowApi);

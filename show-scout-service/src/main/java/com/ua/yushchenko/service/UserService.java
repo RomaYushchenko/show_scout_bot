@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.ua.yushchenko.dal.repository.UserRepository;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutIllegalArgumentException;
+import com.ua.yushchenko.common.exceptions.model.ShowScoutNotFoundException;
 import com.ua.yushchenko.model.domain.User;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -63,14 +65,16 @@ public class UserService {
     public User createUser(final User userToCreate) {
         log.debug("createUser.E: Create new user");
 
-        if (Objects.isNull(userToCreate.getTelegramUserId())) {
-            throw new IllegalArgumentException("Telegram user ID is required");
+        final var telegramUserId = userToCreate.getTelegramUserId();
+
+        if (Objects.isNull(telegramUserId)) {
+            throw new ShowScoutIllegalArgumentException("Telegram user ID is required");
         }
 
-        final var user = getUserByTelegramUserId(userToCreate.getTelegramUserId());
+        final var user = getUserByTelegramUserId(telegramUserId);
 
         if (Objects.nonNull(user)) {
-            return null;
+            throw new ShowScoutIllegalArgumentException("User exist in system by TelegramID: %s", telegramUserId);
         }
 
         final User createdUser = userRepository.insertUser(userToCreate);
@@ -88,11 +92,16 @@ public class UserService {
      */
     public User updateUser(final UUID userId, final User userToUpdate) {
         log.debug("updateUser.E: Update user by ID:{}", userId);
+
+        if (!Objects.equals(userId, userToUpdate.getUserId())) {
+            throw new ShowScoutIllegalArgumentException(
+                    "Id of user %s does not match with params user.userId: %s", userId, userToUpdate.getUserId());
+        }
+
         final User user = getUserById(userId);
 
         if (Objects.isNull(user)) {
-            log.warn("updateUser.X: User doesn't find in system");
-            return null;
+            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", userId);
         }
 
         if (Objects.equals(userToUpdate, user)) {
@@ -118,8 +127,7 @@ public class UserService {
         final var isUserExist = userRepository.userExistById(userId);
 
         if (!isUserExist) {
-            log.warn("deleteUser.X: User doesn't find in system");
-            return null;
+            throw new ShowScoutNotFoundException("User by %s doesn't exist in system", userId);
         }
 
         final var user = userRepository.deleteUserById(userId);
