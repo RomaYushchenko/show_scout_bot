@@ -42,7 +42,7 @@
         <spring-cloud-starter-openfeign.version>4.1.1</spring-cloud-starter-openfeign.version>
         <feign.version>12.1</feign.version>
 
-        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <show.scout.lombok.version>1.18.26</show.scout.lombok.version>
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
     </properties>
